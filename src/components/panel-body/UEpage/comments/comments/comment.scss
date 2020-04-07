@@ -1,0 +1,38 @@
+div.Comment {
+  padding: 0px;
+  p.title {
+    font-size: large;
+    line-height: 1.8;
+    font-weight: bold;
+    margin: 0px;
+    width: 100%;
+  }
+  div.border {
+    display: flex;
+    height: 175px;
+    width: 80%;
+
+    div.text {
+      width: 80%;
+      margin: 15px;
+      margin-left: 0px;
+      padding: 15px;
+      border-radius: 25px;
+      border-style: solid;
+      border-width: thin;
+      border-color: black;
+    }
+  }
+
+  button {
+    justify-content: space-between;
+    align-self: center;
+    font-size: 15px;
+    height: 30px;
+    width: 120px;
+    border-radius: 5px;
+    background-color: #2072b8;
+    color: white;
+    border: hidden;
+  }
+}

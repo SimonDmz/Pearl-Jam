@@ -1,0 +1,7 @@
+{
+  "urlQueen": "insert-Queen-url-here",
+  "urlPearlApi_comment": "url de l'api de Pearl",
+  "urlPearlApi": "",
+  "authenticationModeComment": "The mode of authentication. Currently, App is supporting 'anonymous'",
+  "authenticationMode": "anonymous"
+}

@@ -1,0 +1,7 @@
+{
+  "urlQueen": "https://localhost-develop-queen-sic.dev.innovation.insee.eu",
+  "urlPearlApi_comment": "url du l'api de Pearl",
+  "urlPearlApi": "",
+  "authenticationModeComment": "The mode of authentication. Currently, App is supporting 'anonymous'",
+  "authenticationMode": "anonymous"
+}

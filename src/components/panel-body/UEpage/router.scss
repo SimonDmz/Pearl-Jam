@@ -1,0 +1,36 @@
+.ue-info {
+  margin: -2.5em auto 0 auto;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  .row {
+    border: 1px solid lightgray;
+    border-radius: 25px;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    margin-right: 2.5em;
+    background-color: white;
+    span {
+      //margin-left: 1em;
+      display: flex;
+
+      &.comment {
+        color: grey;
+        justify-self: flex-end;
+        font-style: italic;
+      }
+    }
+  }
+  span,
+  .ue-state {
+    // margin-left: auto;
+    font-weight: bold;
+    font-size: 120%;
+    color: black;
+    padding: 0.5em;
+    //border: solid 1px #2072b8;
+    //border-radius: 10px;
+  }
+}
