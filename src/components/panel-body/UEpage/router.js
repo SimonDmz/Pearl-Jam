@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Route, Redirect, useHistory } from 'react-router-dom';
+import convertSUStateInToDo from 'common-tools/functions/convertSUStateInToDo';
 import PropTypes from 'prop-types';
 import D from 'i18n';
-import { findSuStateValueByType } from 'common-tools/enum/SUStateEnum';
 import Navigation from './navigation';
 import Details from './details';
 import Comments from './comments';
@@ -24,29 +24,31 @@ const Router = ({ match, saveUE }) => {
   return (
     <div className="panel-body ue">
       <div className="ue-info">
-        <div className="row">
-          <span>{ue.questionnaire ? ue.questionnaire : D.loading}</span>
-          <span>{ue.id ? `Echantillon  ${ue.id}` : D.loading}</span>
-          <span className="ue-state">
-            {ue.state ? findSuStateValueByType(ue.state) : D.loading}
-          </span>
+        <div className="infos">
+          <div className="row">
+            <span>{ue.questionnaire ? ue.questionnaire : D.loading}</span>
+            <span>{ue.id ? `${D.suSample}  ${ue.id}` : D.loading}</span>
+            <span>{ue.id ? `VOOOOOO${ue.id}` : D.loading}</span>
+          </div>
+          <div className="row">
+            <span>{ue.lastName ? `${ue.lastName}` : D.loading}</span>
+            <span>{ue.firstName ? `${ue.firstName}` : D.loading}</span>
+            <span>{ue.address ? ue.address.city : D.loading}</span>
+          </div>
+          <div className="row">
+            <span className="ue-state">
+              {ue.state ? convertSUStateInToDo(ue.state) : D.loading}
+            </span>
+            <span className="comment ">Planifié le --/--/----</span>
+          </div>
         </div>
-        <div className="row">
-          <span>{ue.lastName ? `${ue.lastName}` : D.loading}</span>
-          <span>{ue.lastName ? `${ue.firstName}` : D.loading}</span>
-          <span>{ue.address ? ue.address.city : D.loading}</span>
-        </div>
-        <div className="row">
-          <span>Yolo</span>
-          <span className="comment ">Planifié le 30/03/2020</span>
-        </div>
-      </div>
 
-      <div className="button-ue">
-        <button type="button" onClick={openQueen}>
-          {D.questionnaireButton}
-        </button>
-        <button type="button">{D.sendButton}</button>
+        <div className="button-ue">
+          <button type="button" onClick={openQueen}>
+            {D.questionnaireButton}
+          </button>
+          <button type="button">{D.sendButton}</button>
+        </div>
       </div>
 
       <div className="sub-page">

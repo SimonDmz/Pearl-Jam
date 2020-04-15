@@ -1,36 +1,59 @@
 .ue-info {
-  margin: -2.5em auto 0 auto;
-  width: 80%;
+  margin: -2.5em auto 10px auto;
+  width: 90%;
+  height: 7em;
   display: flex;
   flex-direction: row;
-  .row {
-    border: 1px solid lightgray;
-    border-radius: 25px;
-    padding: 1em;
+  justify-content: flex-start;
+  .infos {
     display: flex;
-    flex-direction: column;
-    flex: auto;
-    margin-right: 2.5em;
-    background-color: white;
-    span {
-      //margin-left: 1em;
+    flex: 3;
+    flex-direction: row;
+    .row {
+      background-color: white;
+      border: 1px solid gray;
+      border-radius: 25px;
+      padding: 0.5em 1em;
+      margin-right: 1em;
       display: flex;
+      flex: auto;
+      flex-direction: column;
+      justify-content: space-evenly;
+      span {
+        font-size: 140%;
+        display: flex;
+        flex-direction: column;
+        text-shadow: grey 1px 1px;
 
-      &.comment {
-        color: grey;
-        justify-self: flex-end;
-        font-style: italic;
+        &.ue-state {
+          color: black;
+          justify-self: flex-start;
+          flex: 1;
+        }
+
+        &.comment {
+          color: grey;
+          justify-self: flex-end;
+          font-style: italic;
+          text-shadow: none;
+          font-weight: thin;
+        }
       }
     }
   }
-  span,
-  .ue-state {
-    // margin-left: auto;
-    font-weight: bold;
-    font-size: 120%;
-    color: black;
-    padding: 0.5em;
-    //border: solid 1px #2072b8;
-    //border-radius: 10px;
+  .button-ue {
+    justify-content: flex-end;
+    display: flex;
+    margin-top: 2em;
+    margin-bottom: 2em;
+
+    button {
+      margin-right: 2em;
+      color: white;
+      padding: 0.5em 1em 0.5em 1em;
+      display: flex;
+      border: none;
+      float: 1;
+    }
   }
 }

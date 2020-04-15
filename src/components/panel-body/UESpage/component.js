@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import D from 'i18n';
 import PageList from './pageList';
+import Search from './search';
+import './ues.scss';
 
 const UESPage = () => {
   const [surveyUnits, setSurveyUnits] = useState([]);
-
+  const [filter, setFilter] = useState('');
+  const [searchEchoes, setSearchEchoes] = useState([0, 0]);
   const [init, setInit] = useState(false);
 
   useEffect(() => {
@@ -18,9 +22,45 @@ const UESPage = () => {
     if (!init) {
       surveyUnitDBService.getAll().then(units => {
         setSurveyUnits(units);
+        setSearchEchoes([units.length, units.length]);
       });
     }
   }, [init, surveyUnits]);
+
+  useEffect(() => {
+    const suPromise = surveyUnitDBService.getAll();
+    let totalEchoes = 0;
+    let matchingEchoes = totalEchoes;
+
+    if (filter === '') {
+      suPromise.then(units => {
+        setSurveyUnits(units);
+        totalEchoes = units.length;
+      });
+    } else {
+      suPromise
+        .then(us => {
+          totalEchoes = us.length;
+          return us;
+        })
+        .then(units => {
+          const filteredSU = units.filter(unit => {
+            const filterCondition =
+              unit.firstName.toLowerCase().includes(filter) ||
+              unit.lastName.toLowerCase().includes(filter) ||
+              unit.id
+                .toString()
+                .toLowerCase()
+                .includes(filter);
+            return filterCondition;
+          });
+          matchingEchoes = filteredSU.length;
+          setSurveyUnits(filteredSU);
+          setSearchEchoes([matchingEchoes, totalEchoes]);
+        });
+    }
+    setSearchEchoes([matchingEchoes, totalEchoes]);
+  }, [filter]);
 
   const addSu = () => {
     const su = {
@@ -37,10 +77,14 @@ const UESPage = () => {
         city: 'Maxéville',
       },
       phone: ['06 95 68 45 95', '03 87 73 22 00'],
-      questionnaire: 'vqs',
+      sampleId: '1',
+      questionnaire: 'VQS 2021',
+      collectionStartDate: '2021-06-01',
+      collectionEndDate: '2021-07-31',
+      priority: true,
       state: suStateEnum.NOT_STARTED.type,
       interviewerComment: '',
-      demComment: 'Attention au chien.',
+      managementComment: 'Beware of the dog.',
       questionnaireState: '',
     };
     // update the store
@@ -53,6 +97,18 @@ const UESPage = () => {
 
   return (
     <div className="panel-body ues">
+      <div className="column">
+        <div className="filters">
+          <div className="button-ue">
+            <button type="button" onClick={() => setFilter('')}>
+              {D.showAll}
+            </button>
+            {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>}
+            <Search setFilter={setFilter} />
+          </div>
+        </div>
+        <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
+      </div>
       <PageList surveyUnits={surveyUnits} />
       <button type="button" onClick={addSu}>
         Add new ue

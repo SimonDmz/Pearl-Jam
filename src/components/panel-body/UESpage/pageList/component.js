@@ -1,35 +1,26 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import toDoEnum from 'common-tools/enum/SUToDoEnum';
+import convertSUStateInToDo from 'common-tools/functions/convertSUStateInToDo';
+import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 
 const PageList = ({ surveyUnits, uesByPage }) => {
   const [page, setPage] = useState(0);
   const history = useHistory();
 
-  const etatUEToAFaire = suState => {
-    if (
-      [
-        suStateEnum.NOT_STARTED.type,
-        suStateEnum.IN_PREPARATION.type,
-        suStateEnum.AT_LEAST_ONE_CONTACT.type,
-      ].includes(suState)
-    ) {
-      return toDoEnum.CONTACT;
-    }
-    if (suState === suStateEnum.APPOINTMENT_MADE.type) {
-      return toDoEnum.SURVEY;
-    }
-    if (suState === suStateEnum.QUESTIONNAIRE_STARTED.type) {
-      return toDoEnum.FINALIZE;
-    }
-    if (suState === suStateEnum.WAITING_FOR_VALIDATION.type) {
-      return toDoEnum.TRANSMIT;
-    }
-    if (suState === suStateEnum.WAITING_FOR_SYNCHRONIZATION.type) {
-      return toDoEnum.SYNCHRONIZE;
-    }
+  const intervalInDays = su => {
+    const { collectionStartDate, collectionEndDate } = su;
+
+    const remainingDays = formatDistanceStrict(
+      new Date(collectionStartDate),
+      new Date(collectionEndDate),
+      {
+        roundingMethod: 'ceil',
+        unit: 'day',
+      }
+    );
+
+    return remainingDays;
   };
 
   const renderSimpleTable = sus => {
@@ -38,10 +29,13 @@ const PageList = ({ surveyUnits, uesByPage }) => {
         <thead>
           <tr>
             <th>{D.surveyHeader}</th>
+            <th>{D.sampleHeader}</th>
             <th>{D.surveyUnitHeader}</th>
             <th>{D.fullNameHeader}</th>
             <th>{D.cityHeader}</th>
             <th>{D.toDoHeader}</th>
+            <th>{D.remainingDaysHeader}</th>
+            <th>{D.priorityHeader}</th>
             <th>{D.actionHeader}</th>
           </tr>
         </thead>
@@ -49,10 +43,19 @@ const PageList = ({ surveyUnits, uesByPage }) => {
           {sus.map(su => (
             <tr key={su.id} onClick={() => history.push(`/survey-unit/${su.id}`)}>
               <td>{su.questionnaire}</td>
+              <td>{su.sampleId}</td>
               <td>{su.id}</td>
               <td>{`${su.lastName} ${su.firstName}`}</td>
               <td>{su.address.city}</td>
-              <td>{etatUEToAFaire(su.state)}</td>
+              <td>{convertSUStateInToDo(su.state)}</td>
+              <td>{intervalInDays(su)}</td>
+              <td>
+                {su.priority && (
+                  <span role="img" aria-label="priority">
+                    🚩
+                  </span>
+                )}
+              </td>
               <td>
                 <Link to={`survey-unit/${su.id}`}>{D.seeSurveyUnit}</Link>
               </td>

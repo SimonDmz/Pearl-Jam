@@ -274,7 +274,8 @@ form label {
   height: 70vh;
 }
 
-.panel-body.ue {
+.panel-body.ue,
+.panel-body.ues {
   $background-button: #414c5c;
   $background-button-hover: #667791;
   .button-back-home {
