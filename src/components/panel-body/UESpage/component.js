@@ -77,7 +77,7 @@ const UESPage = () => {
         city: 'Maxéville',
       },
       phone: ['06 95 68 45 95', '03 87 73 22 00'],
-      sampleId: '1',
+      sampleId: Math.floor(Math.random() * 100) + 1,
       questionnaire: 'VQS 2021',
       collectionStartDate: '2021-06-01',
       collectionEndDate: '2021-07-31',
@@ -112,6 +112,14 @@ const UESPage = () => {
       <PageList surveyUnits={surveyUnits} />
       <button type="button" onClick={addSu}>
         Add new ue
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          console.log('transmit');
+        }}
+      >
+        Transmettre
       </button>
     </div>
   );

@@ -120,42 +120,31 @@ body {
 $border-size-bottom: 1px;
 
 .ue-table {
-  $border-style: 1px solid transparent;
-  border-collapse: separate;
+  $border-style: 1px solid black;
+  border-collapse: collapse;
   border-spacing: 0 0.5em;
   margin: auto;
   width: 100%;
 
-  thead {
+  thead:not(:first-child),
+  th:not(:first-child),
+  td:not(:first-child) {
     border: $border-style;
-    th {
-      padding: 0.7em;
-    }
+    padding: 0.7em;
+    white-space: pre-line;
+    background-color: white;
   }
-  tbody tr {
-    margin-top: 1em;
-    background-color: #a3d361;
-    &:hover {
-      background-color: #c2f57c;
-    }
-  }
-  tr td:first-child {
-    border-left: $border-style;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-  }
-  tr td:last-child {
-    border-right: $border-style;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-  td {
-    padding: 0.5em;
-    border-bottom: $border-style;
-    border-top: $border-style;
+  tbody tr:hover td:not(:first-child) {
+    background-color: #eeeeee;
   }
 }
+td.align-center {
+  text-align: center;
+}
 
+td.align-right {
+  text-align: right;
+}
 .div-nav-page {
   text-align: center;
 }
@@ -292,8 +281,8 @@ form label {
   .button-ue {
     justify-content: flex-end;
     display: flex;
-    margin-top: 2em;
-    margin-bottom: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 
     button {
       margin-left: 2em;

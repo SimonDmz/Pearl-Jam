@@ -1,11 +1,11 @@
 const tableHeader = {
   surveyHeader: { fr: 'Enquête', en: 'Survey' },
-  surveyUnitHeader: { fr: 'Unité Enquêtée', en: 'Survey Unit' },
+  surveyUnitHeader: { fr: 'Unité \nEnquêtée', en: 'Survey \nUnit' },
   sampleHeader: { fr: 'Échantillon', en: 'Sample' },
   fullNameHeader: { fr: 'Nom Prénom', en: 'Full name' },
   cityHeader: { fr: 'Commune', en: 'City' },
   toDoHeader: { fr: 'A Faire', en: 'To Do' },
-  remainingDaysHeader: { fr: 'Nombre de jours restant', en: 'Number of remaining days' },
+  remainingDaysHeader: { fr: 'Nombre \nde jours \nrestant', en: 'Number of \nremaining days' },
   priorityHeader: { fr: 'Priorité', en: 'Priority' },
   actionHeader: { fr: 'Actions', en: 'Actions' },
 };

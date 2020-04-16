@@ -20,7 +20,7 @@ const PageList = ({ surveyUnits, uesByPage }) => {
       }
     );
 
-    return remainingDays;
+    return remainingDays.split(' ')[0];
   };
 
   const renderSimpleTable = sus => {
@@ -28,6 +28,9 @@ const PageList = ({ surveyUnits, uesByPage }) => {
       <table className="ue-table">
         <thead>
           <tr>
+            <th>
+              <input type="checkbox" />
+            </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>
             <th>{D.surveyUnitHeader}</th>
@@ -41,23 +44,30 @@ const PageList = ({ surveyUnits, uesByPage }) => {
         </thead>
         <tbody>
           {sus.map(su => (
-            <tr key={su.id} onClick={() => history.push(`/survey-unit/${su.id}`)}>
+            <tr key={su.id}>
+              <td>
+                <input type="checkbox" />
+              </td>
               <td>{su.questionnaire}</td>
               <td>{su.sampleId}</td>
               <td>{su.id}</td>
               <td>{`${su.lastName} ${su.firstName}`}</td>
               <td>{su.address.city}</td>
               <td>{convertSUStateInToDo(su.state)}</td>
-              <td>{intervalInDays(su)}</td>
-              <td>
+              <td className="align-right">{intervalInDays(su)}</td>
+              <td className="align-center">
                 {su.priority && (
                   <span role="img" aria-label="priority">
                     🚩
                   </span>
                 )}
               </td>
-              <td>
-                <Link to={`survey-unit/${su.id}`}>{D.seeSurveyUnit}</Link>
+              <td className="align-center">
+                <Link to={`survey-unit/${su.id}`}>
+                  <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
+                    📅
+                  </span>
+                </Link>
               </td>
             </tr>
           ))}
@@ -67,17 +77,21 @@ const PageList = ({ surveyUnits, uesByPage }) => {
   };
 
   const renderTable = ues => {
+    const sortedUes = ues.sort(
+      (ueA, ueB) =>
+        ueA.questionnaire.localeCompare(ueB.questionnaire) || ueA.sampleId - ueB.sampleId
+    );
     let i;
     let j;
     let ueChunk;
     const tableSize = uesByPage || 10;
     const chunkSize = tableSize;
-    if (ues.length <= tableSize) {
-      return renderSimpleTable(ues);
+    if (sortedUes.length <= tableSize) {
+      return renderSimpleTable(sortedUes);
     }
     const ueSplit = [];
     for (i = 0, j = ues.length; i < j; i += chunkSize) {
-      ueChunk = ues.slice(i, i + chunkSize);
+      ueChunk = sortedUes.slice(i, i + chunkSize);
       ueSplit.push(ueChunk);
     }
     return (
