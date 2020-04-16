@@ -15,11 +15,6 @@ const UESPage = () => {
   useEffect(() => {
     if (!init) {
       setInit(true);
-    }
-  }, [init, surveyUnits]);
-
-  useEffect(() => {
-    if (!init) {
       surveyUnitDBService.getAll().then(units => {
         setSurveyUnits(units);
         setSearchEchoes([units.length, units.length]);
@@ -36,6 +31,8 @@ const UESPage = () => {
       suPromise.then(units => {
         setSurveyUnits(units);
         totalEchoes = units.length;
+        matchingEchoes = units.length;
+        setSearchEchoes([matchingEchoes, totalEchoes]);
       });
     } else {
       suPromise
@@ -59,7 +56,6 @@ const UESPage = () => {
           setSearchEchoes([matchingEchoes, totalEchoes]);
         });
     }
-    setSearchEchoes([matchingEchoes, totalEchoes]);
   }, [filter]);
 
   const addSu = () => {
