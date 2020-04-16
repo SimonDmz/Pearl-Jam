@@ -45,6 +45,9 @@ const Synchronize = ({ disabled = false }) => {
     // call common-tools/synchronize function
     setLoading(true);
     synchronizeQueen();
+    if (!authInitialized) {
+      dispatch({ type: 'initAuth' });
+    }
   };
 
   const syncOnClick = () => {
