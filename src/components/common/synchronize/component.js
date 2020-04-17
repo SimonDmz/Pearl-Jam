@@ -5,9 +5,11 @@ import { synchronizeQueen } from 'common-tools/synchronization';
 import D from 'i18n';
 import { store } from 'common-tools/store';
 import Loader from '../loader';
+import Result from '../syncResult';
 
 const Synchronize = ({ disabled = false }) => {
   const [loading, setLoading] = useState(false);
+  const [syncResult, setSyncResult] = useState(undefined);
 
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
@@ -19,7 +21,7 @@ const Synchronize = ({ disabled = false }) => {
     if (type === 'QUEEN' && command === 'UPDATE_SYNCHRONIZE') {
       if (state === 'FAILURE') {
         // TODO : message to user
-        console.log('Synchronization of queen failed');
+        setSyncResult(D.syncFailure);
       }
 
       setTimeout(() => setLoading(false), 3000);
@@ -59,9 +61,12 @@ const Synchronize = ({ disabled = false }) => {
     }
   };
 
+  const close = () => setSyncResult(undefined);
+
   return (
     <>
       {loading && <Loader message={D.synchronizationInProgress} />}
+      {!loading && syncResult && <Result messageResult={syncResult} close={close} />}
 
       <div className="sync" disabled={disabled}>
         <img alt="sync-logo" className={loading ? 'rotate' : ''} height="30px" src={imgSync} />
