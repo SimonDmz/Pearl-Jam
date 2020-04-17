@@ -76,7 +76,7 @@ const UESPage = () => {
       sampleId: Math.floor(Math.random() * 100) + 1,
       questionnaire: 'VQS 2021',
       collectionStartDate: '2021-06-01',
-      collectionEndDate: '2021-07-31',
+      collectionEndDate: '2021-06-30',
       priority: true,
       state: suStateEnum.NOT_STARTED.type,
       interviewerComment: '',

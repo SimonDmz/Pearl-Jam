@@ -9,16 +9,12 @@ const PageList = ({ surveyUnits, uesByPage }) => {
   const history = useHistory();
 
   const intervalInDays = su => {
-    const { collectionStartDate, collectionEndDate } = su;
+    const { collectionEndDate } = su;
 
-    const remainingDays = formatDistanceStrict(
-      new Date(collectionStartDate),
-      new Date(collectionEndDate),
-      {
-        roundingMethod: 'ceil',
-        unit: 'day',
-      }
-    );
+    const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
+      roundingMethod: 'ceil',
+      unit: 'day',
+    });
 
     return remainingDays.split(' ')[0];
   };
@@ -84,7 +80,9 @@ const PageList = ({ surveyUnits, uesByPage }) => {
   const renderTable = ues => {
     const sortedUes = ues.sort(
       (ueA, ueB) =>
-        ueA.questionnaire.localeCompare(ueB.questionnaire) || ueA.sampleId - ueB.sampleId
+        ueA.collectionEndDate.localeCompare(ueB.collectionEndDate) ||
+        ueA.questionnaire.localeCompare(ueB.questionnaire) ||
+        ueA.sampleId - ueB.sampleId
     );
     let i;
     let j;
