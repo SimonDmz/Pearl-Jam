@@ -22,6 +22,8 @@ const Synchronize = ({ disabled = false }) => {
       if (state === 'FAILURE') {
         // TODO : message to user
         setSyncResult(D.syncFailure);
+      } else if (state === 'SUCCESS') {
+        setSyncResult(D.syncSuccess);
       }
 
       setTimeout(() => setLoading(false), 3000);
