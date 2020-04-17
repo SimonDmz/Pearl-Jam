@@ -21,7 +21,8 @@ const Synchronize = ({ disabled = false }) => {
         // TODO : message to user
         console.log('Synchronization of queen failed');
       }
-      setLoading(false);
+
+      setTimeout(() => setLoading(false), 3000);
     }
   };
 
