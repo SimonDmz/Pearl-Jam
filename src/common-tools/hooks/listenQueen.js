@@ -9,46 +9,66 @@ const computeSurveyUnitState = suToCompute => {
     case questionnaireEnum.COMPLETED.type:
       return suStateEnum.WAITING_FOR_VALIDATION.type;
 
-    case questionnaireEnum.AT_LEAST_ONE_VARIABLE_ENTERED.type:
+    case questionnaireEnum.STARTED.type:
       return suStateEnum.QUESTIONNAIRE_STARTED.type;
-
     default:
       break;
   }
   return true;
 };
 
-const updateUE = (history, queenReturnedCode, suId) => {
-  surveyUnitDBService.get(suId).then(su => {
+const updateSurveyUnit = (surveyUnitID, queenState) => {
+  surveyUnitDBService.get(surveyUnitID).then(su => {
+    const newSU = su;
     let newQuestionnaireState = '';
-    switch (queenReturnedCode) {
-      case 'completed':
+    switch (queenState) {
+      case 'COMPLETED':
         newQuestionnaireState = questionnaireEnum.COMPLETED.type;
         break;
-      case 'atLeastOnVariableEntered':
-        newQuestionnaireState = questionnaireEnum.AT_LEAST_ONE_VARIABLE_ENTERED.type;
+      case 'STARTED':
+        newQuestionnaireState = questionnaireEnum.STARTED.type;
         break;
       default:
         break;
     }
-    su.questionnaireState = newQuestionnaireState;
-    su.state = computeSurveyUnitState(su);
-    surveyUnitDBService.update(su);
-
-    history.push(`/survey-unit/${suId}/details`);
+    newSU.questionnaireState = newQuestionnaireState;
+    newSU.state = computeSurveyUnitState(newSU);
+    const update = async () => {
+      await surveyUnitDBService.update(newSU);
+    };
+    update();
   });
+};
+
+const closeQueen = history => surveyUnitID => {
+  history.push(`/survey-unit/${surveyUnitID}/details`);
+};
+
+const handleQueenEvent = history => event => {
+  const { type, command, ...other } = event.detail;
+  if (type === 'QUEEN') {
+    switch (command) {
+      case 'CLOSE_QUEEN':
+        closeQueen(history)(other.surveyUnit);
+        break;
+      case 'UPDATE_SURVEY_UNIT':
+        updateSurveyUnit(other.surveyUnit, other.state);
+        window.dispatchEvent(new CustomEvent('pearl-update'));
+        break;
+      case 'UPDATE_SYNCHRONIZE':
+        // NOT here
+        break;
+      default:
+        break;
+    }
+  }
 };
 
 function useQueenListener(history) {
   useEffect(() => {
-    function handleQueenReturn(e) {
-      const queenReturnedCode = e.detail.returnedCode;
-      const suIdToUpdate = e.detail.suId;
-      updateUE(history, queenReturnedCode, suIdToUpdate);
-    }
-    window.addEventListener('queen', handleQueenReturn);
+    window.addEventListener('QUEEN', handleQueenEvent(history));
     return () => {
-      window.removeEventListener('queen', handleQueenReturn);
+      window.removeEventListener('QUEEN', handleQueenEvent(history));
     };
   });
 }

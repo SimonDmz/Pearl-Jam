@@ -32,6 +32,12 @@ const dictionary = {
   connexionOK: { fr: 'Connexion ok', en: 'Connection ok' },
   connexionKO: { fr: 'Pas de résau', en: 'No network' },
   interviewer: { fr: 'Enquêteur', en: 'Interviewer' },
+  syncResult: { fr: 'Résultat de la synchronisation', en: 'Result of synchronization' },
+  syncSuccess: { fr: 'La synchronisation a réussi.', en: 'Synchronization succeeded.' },
+  syncFailure: {
+    fr: 'La synchronisation a échoué, veuillez recommencer.',
+    en: 'Synchronization has failed, please try again.',
+  },
   ...buttonMessage,
   ...navigationMessage,
   ...waitingMessage,
