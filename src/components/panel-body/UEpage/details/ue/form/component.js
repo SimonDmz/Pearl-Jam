@@ -59,8 +59,8 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
           {`${D.surveyUnitLastName} :`}
           <input
             type="text"
-            id="name"
-            name="nom"
+            id="lastName"
+            name="lastName"
             value={ueState.lastName || ''}
             onChange={ueState.onChange}
           />

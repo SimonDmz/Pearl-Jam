@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import Modal from 'react-modal';
+import D from 'i18n';
 import Icon from '../icon/user.icon';
 import EditIcon from '../icon/pen.icon';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
-import D from 'i18n';
 
 Modal.setAppElement('#root');
 const UEItem = ({ saveUE }) => {
