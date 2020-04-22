@@ -9,6 +9,10 @@ export default class AbstractIdbService {
     return this.store.get({ id: Number(id) });
   }
 
+  getById(id) {
+    return this.store.get({ id: `${id}` });
+  }
+
   getAll() {
     return this.store.toArray();
   }

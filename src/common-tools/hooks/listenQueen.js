@@ -18,7 +18,7 @@ const computeSurveyUnitState = suToCompute => {
 };
 
 const updateSurveyUnit = (surveyUnitID, queenState) => {
-  surveyUnitDBService.get(surveyUnitID).then(su => {
+  surveyUnitDBService.getById(surveyUnitID).then(su => {
     const newSU = su;
     let newQuestionnaireState = '';
     switch (queenState) {
