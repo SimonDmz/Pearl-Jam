@@ -1,15 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
+import Modal from 'react-modal';
 import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
-import { synchronizeQueen } from 'common-tools/synchronization';
+import { synchronize } from 'common-tools/synchronize';
 import D from 'i18n';
 import { store } from 'common-tools/store';
 import Loader from '../loader';
-import Result from '../syncResult';
+import './result.scss';
+
+Modal.setAppElement('#root');
 
 const Synchronize = ({ disabled = false }) => {
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
+  const [queenSync, setQueenSync] = useState(undefined);
+  const [pearlSync, setPearlSync] = useState(undefined);
 
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
@@ -20,10 +25,9 @@ const Synchronize = ({ disabled = false }) => {
     const { type, command, state } = event.detail;
     if (type === 'QUEEN' && command === 'UPDATE_SYNCHRONIZE') {
       if (state === 'FAILURE') {
-        // TODO : message to user
-        setSyncResult(D.syncFailure);
+        setQueenSync('FAILURE');
       } else if (state === 'SUCCESS') {
-        setSyncResult(D.syncSuccess);
+        setQueenSync('SUCCESS');
       }
 
       setTimeout(() => setLoading(false), 3000);
@@ -46,17 +50,41 @@ const Synchronize = ({ disabled = false }) => {
     };
   });
 
+  useEffect(() => {
+    if (pearlSync && queenSync) {
+      console.log('pearlSync && queenSync :' + pearlSync + ' - ' + queenSync);
+      if (queenSync === 'SUCCESS' && pearlSync === 'SUCCESS') {
+        setSyncResult({ state: true, message: D.syncSuccess });
+      } else {
+        setSyncResult({ state: false, message: D.syncFailure });
+      }
+      setLoading(false);
+    }
+  }, [pearlSync, queenSync]);
+
   const syncFunction = () => {
-    // call common-tools/synchronize function
-    setLoading(true);
-    synchronizeQueen();
+    const launchSynchronize = async () => {
+      try {
+        setPearlSync(undefined);
+        setQueenSync(undefined);
+        setLoading(true);
+        await synchronize();
+        setPearlSync('SUCCESS');
+      } catch (e) {
+        console.log(e.message);
+        setPearlSync('FAILURE');
+      } finally {
+        console.log('Queen synchronization : ENDED !');
+      }
+    };
+    launchSynchronize();
     if (!authInitialized) {
       dispatch({ type: 'initAuth' });
     }
   };
 
   const syncOnClick = () => {
-    if (!loading) {
+    if (!loading && status) {
       syncFunction();
     } else {
       console.log('offline');
@@ -68,7 +96,19 @@ const Synchronize = ({ disabled = false }) => {
   return (
     <>
       {loading && <Loader message={D.synchronizationInProgress} />}
-      {!loading && syncResult && <Result messageResult={syncResult} close={close} />}
+      {!loading && syncResult && (
+        <Modal
+          className={`sync-result ${syncResult.state ? 'success' : 'failure'}`}
+          isOpen={!!syncResult}
+          onRequestClose={close}
+        >
+          <button type="button" className="close-result" onClick={close}>
+            ╳
+          </button>
+          <h2>{D.syncResult}</h2>
+          <p>{syncResult.message}</p>
+        </Modal>
+      )}
 
       <div className="sync" disabled={disabled}>
         <img alt="sync-logo" className={loading ? 'rotate' : ''} height="30px" src={imgSync} />
