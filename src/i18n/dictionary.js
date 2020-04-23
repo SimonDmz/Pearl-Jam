@@ -40,6 +40,10 @@ const dictionary = {
     fr: 'La synchronisation a échoué, veuillez recommencer.',
     en: 'Synchronization has failed, please try again.',
   },
+  updateAvailable: {
+    fr: "Une nouvelle version de l'application est disponible",
+    en: 'A new version of the application is available',
+  },
   ...buttonMessage,
   ...navigationMessage,
   ...waitingMessage,
