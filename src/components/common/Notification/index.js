@@ -6,6 +6,7 @@ import './notification.scss';
 const Notification = () => {
   const [init, setInit] = useState(false);
   const [open, setOpen] = useState(false);
+  const [installingServiceWorker, setInstallingServiceWorker] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);
   const [isServiceWorkerInstalled, setServiceWorkerInstalled] = useState(false);
@@ -13,6 +14,10 @@ const Notification = () => {
   useEffect(() => {
     if (!init) {
       serviceWorker.register({
+        onInstalling: installing => {
+          setInstallingServiceWorker(installing);
+          setOpen(true);
+        },
         onUpdate: registration => {
           setWaitingServiceWorker(registration.waiting);
           setUpdateAvailable(true);
@@ -24,6 +29,7 @@ const Notification = () => {
           setOpen(true);
         },
         onSuccess: registration => {
+          setInstallingServiceWorker(false);
           setServiceWorkerInstalled(!!registration);
           setOpen(true);
         },
@@ -48,29 +54,31 @@ const Notification = () => {
     }
   }, [waitingServiceWorker]);
 
+  const getMessage = () => {
+    if (isUpdateAvailable) return D.updateAvailable;
+    if (isServiceWorkerInstalled) return D.appReadyOffline;
+    if (installingServiceWorker) return D.appInstalling;
+    return '';
+  };
+
   return (
     <>
       <div
-        className={`notification ${
-          (isUpdateAvailable || isServiceWorkerInstalled) && open ? 'visible' : ''
+        className={`notification ${isUpdateAvailable ? 'update' : ''} ${
+          (isUpdateAvailable || isServiceWorkerInstalled || installingServiceWorker) && open
+            ? 'visible'
+            : ''
         }`}
       >
-        <>
-          <button type="button" className="close-button" onClick={() => setOpen(false)}>
-            {`\u2573 ${D.closeButton}`}
+        <button type="button" className="close-button" onClick={() => setOpen(false)}>
+          {`\u2573 ${D.closeButton}`}
+        </button>
+        <div className="title">{getMessage()}</div>
+        {isUpdateAvailable && (
+          <button type="button" className="update-button" onClick={updateAssets}>
+            {D.updateNow}
           </button>
-          {isUpdateAvailable && (
-            <>
-              <div className="title">{D.updateAvailable}</div>
-              <button type="button" className="update-button" onClick={updateAssets}>
-                {D.updateNow}
-              </button>
-            </>
-          )}
-          {!isUpdateAvailable && isServiceWorkerInstalled && (
-            <div className="title">{D.appReadyOffline}</div>
-          )}
-        </>
+        )}
       </div>
     </>
   );
