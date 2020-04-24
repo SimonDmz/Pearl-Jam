@@ -8,6 +8,7 @@ const Notification = () => {
   const [open, setOpen] = useState(false);
   const [waitingServiceWorker, setWaitingServiceWorker] = useState(null);
   const [isUpdateAvailable, setUpdateAvailable] = useState(false);
+  const [isServiceWorkerInstalled, setServiceWorkerInstalled] = useState(false);
 
   useEffect(() => {
     if (!init) {
@@ -20,6 +21,10 @@ const Notification = () => {
         onWaiting: waiting => {
           setWaitingServiceWorker(waiting);
           setUpdateAvailable(true);
+          setOpen(true);
+        },
+        onSuccess: registration => {
+          setServiceWorkerInstalled(!!registration);
           setOpen(true);
         },
       });
@@ -45,20 +50,27 @@ const Notification = () => {
 
   return (
     <>
-      <div className={`notification ${isUpdateAvailable && open ? 'visible' : ''}`}>
-        {isUpdateAvailable && (
-          <>
-            <button type="button" className="close-button" onClick={() => setOpen(false)}>
-              {`\u2573 ${D.closeButton}`}
-            </button>
-            <div className="title">
-              {D.updateAvailable}
+      <div
+        className={`notification ${
+          (isUpdateAvailable || isServiceWorkerInstalled) && open ? 'visible' : ''
+        }`}
+      >
+        <>
+          <button type="button" className="close-button" onClick={() => setOpen(false)}>
+            {`\u2573 ${D.closeButton}`}
+          </button>
+          {isUpdateAvailable && (
+            <>
+              <div className="title">{D.updateAvailable}</div>
               <button type="button" className="update-button" onClick={updateAssets}>
                 {D.updateNow}
               </button>
-            </div>
-          </>
-        )}
+            </>
+          )}
+          {!isUpdateAvailable && isServiceWorkerInstalled && (
+            <div className="title">{D.appReadyOffline}</div>
+          )}
+        </>
       </div>
     </>
   );
