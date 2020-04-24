@@ -40,12 +40,7 @@ const PageList = ({ surveyUnits, uesByPage }) => {
         </thead>
         <tbody>
           {sus.map(su => (
-            <tr
-              key={su.id}
-              onClick={() => {
-                history.push(`survey-unit/${su.id}`);
-              }}
-            >
+            <tr key={su.id}>
               <td role="gridcell" onClick={e => e.stopPropagation()}>
                 <input type="checkbox" />
               </td>

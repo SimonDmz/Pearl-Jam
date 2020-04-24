@@ -27,7 +27,7 @@ const Router = ({ match, saveUE }) => {
         <div className="infos">
           <div className="row">
             <span>{ue.questionnaire ? ue.questionnaire : D.loading}</span>
-            <span>{ue.id ? `${D.suSample}  ${ue.id}` : D.loading}</span>
+            <span>{ue.id ? `${D.suSample}  ${ue.sampleId}` : D.loading}</span>
             <span>{ue.id ? `VOOOOOO${ue.id}` : D.loading}</span>
           </div>
           <div className="row">
