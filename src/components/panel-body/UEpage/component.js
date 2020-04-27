@@ -12,7 +12,7 @@ const UEPage = ({ match }) => {
 
   useEffect(() => {
     let init = false;
-    surveyUnitDBService.get(match.params.id).then(ue => {
+    surveyUnitDBService.getById(match.params.id).then(ue => {
       console.log('read database');
       if (!init) {
         setSurveyUnit(ue);

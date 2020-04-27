@@ -58,7 +58,7 @@ const UESPage = () => {
     }
   }, [filter]);
 
-  const addSu = () => {
+  const addSu = async () => {
     const su = {
       civility: 'Monsieur',
       lastName: 'MANGIN',
@@ -74,7 +74,6 @@ const UESPage = () => {
       },
       phone: ['06 95 68 45 95', '03 87 73 22 00'],
       sampleId: Math.floor(Math.random() * 100) + 1,
-      questionnaire: 'VQS 2021',
       collectionStartDate: '2021-06-01',
       collectionEndDate: '2021-06-30',
       priority: true,
@@ -84,7 +83,17 @@ const UESPage = () => {
       questionnaireState: '',
     };
     // update the store
-    surveyUnitDBService.insert(su);
+    const newSU = [
+      { id: '11', questionnaire: 'simpsons2020x00', ...su },
+      { id: '12', questionnaire: 'simpsons2020x00', ...su },
+      { id: '21', questionnaire: 'vqs2021x00', ...su },
+      { id: '22', questionnaire: 'vqs2021x00', ...su },
+    ];
+    await Promise.all(
+      newSU.map(async unit => {
+        await surveyUnitDBService.addOrUpdate(unit);
+      })
+    );
     // update the state hook
     surveyUnitDBService.getAll().then(units => {
       setSurveyUnits(units);

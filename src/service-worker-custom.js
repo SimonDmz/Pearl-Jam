@@ -1,17 +1,16 @@
-importScripts('/service-worker.js');
+/* eslint-disable no-template-curly-in-string */
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-undef */
+/* eslint-disable no-underscore-dangle */
+self._urlQueen = '${QUEEN_URL}';
+importScripts('/service-worker.js', `${self._urlQueen}/queen-service-worker.js`);
 
 const getUrlRegexJson = function(url) {
-  return url
-    .replace('http', '^http')
-    .replace('.', '\\\\.')
-    .concat('/(.*)(.json)');
+  return url.replace('http', '^http').concat('/(.*)(.json)');
 };
 
 const getUrlRegexManifestFiles = function(url) {
-  return url
-    .replace('http', '^http')
-    .replace('.', '\\\\.')
-    .concat('/(.*)((.ico)|(.png))');
+  return url.replace('http', '^http').concat('/(.*)((.ico)|(.png))');
 };
 
 const configurationCacheName = 'configuration-cache';
@@ -64,35 +63,3 @@ workbox.routing.registerRoute(
     ],
   })
 );
-const addQueenAsset = urlQueen => {
-  const cacheName = configurationCacheName;
-  workbox.routing.registerRoute(
-    new RegExp(getUrlRegexJson(urlQueen)),
-    new workbox.strategies.CacheFirst({
-      cacheName: configurationCacheName,
-      plugins: [
-        new workbox.cacheableResponse.Plugin({
-          statuses: [0, 200],
-        }),
-      ],
-    })
-  );
-
-  caches.open(cacheName).then(function(cache) {
-    cache.add(`${urlQueen}/asset-manifest.json`);
-    return cache;
-  });
-};
-self.addEventListener('install', event => {
-  console.log('Pearl  sw : installing queen..');
-  event.waitUntil(
-    fetch(`${self.location.origin}/configuration.json`)
-      .then(res => res.json())
-      .then(data => {
-        self._urlQueen = data.urlQueen;
-        console.log(`Importing service-worker of Queen : ${data.urlQueen}/queen-service-worker.js`);
-        importScripts(`${data.urlQueen}/queen-service-worker.js`);
-        addQueenAsset(data.urlQueen);
-      })
-  );
-});

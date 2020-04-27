@@ -8,6 +8,7 @@ const buttonMessage = {
   addPhoneNumberButton: { fr: 'Ajouter un numéro', en: 'Add a phone number' },
   synchronizeButton: { fr: 'Synchroniser', en: 'Synchronize' },
   closeButton: { fr: 'Fermer', en: 'Close' },
+  updateNow: { fr: 'Mettre à jour', en: 'Update now' },
 };
 
 export default buttonMessage;
