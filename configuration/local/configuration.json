@@ -1,5 +1,5 @@
 {
-  "urlQueen": "http://localhost:5000",
+  "urlQueen": "https://queen.demo.dev.sspcloud.fr",
   "urlPearlApiComment": "url of Pearl API",
   "urlPearlApi": "",
   "authenticationModeComment": "The mode of authentication. Currently, App is supporting 'anonymous'",

@@ -126,6 +126,10 @@ $border-size-bottom: 1px;
   margin: auto;
   width: 100%;
 
+  tr.inactive td:not(:first-child) {
+    background-color: #969696;
+  }
+
   thead:not(:first-child),
   th:not(:first-child),
   td:not(:first-child) {
@@ -135,7 +139,7 @@ $border-size-bottom: 1px;
     background-color: white;
   }
   tbody tr:hover td:not(:first-child) {
-    background-color: #eeeeee;
+    background-color: #606060;
   }
 }
 td.align-center {

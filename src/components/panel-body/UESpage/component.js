@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import D from 'i18n';
+import fakeData from 'common-tools/fake-survey-units/fakeData';
 import PageList from './pageList';
 import Search from './search';
 import './ues.scss';
@@ -59,38 +59,9 @@ const UESPage = () => {
   }, [filter]);
 
   const addSu = async () => {
-    const su = {
-      civility: 'Monsieur',
-      lastName: 'MANGIN',
-      firstName: 'Jean',
-      address: {
-        deliveryPoint: '',
-        additionalAdress: '',
-        number: '1',
-        streetType: 'Rue',
-        streetName: 'Principale',
-        postcode: '54000',
-        city: 'Maxéville',
-      },
-      phone: ['06 95 68 45 95', '03 87 73 22 00'],
-      sampleId: Math.floor(Math.random() * 100) + 1,
-      collectionStartDate: '2021-06-01',
-      collectionEndDate: '2021-06-30',
-      priority: true,
-      state: suStateEnum.NOT_STARTED.type,
-      interviewerComment: '',
-      managementComment: 'Beware of the dog.',
-      questionnaireState: '',
-    };
     // update the store
-    const newSU = [
-      { id: '11', questionnaire: 'simpsons2020x00', ...su },
-      { id: '12', questionnaire: 'simpsons2020x00', ...su },
-      { id: '21', questionnaire: 'vqs2021x00', ...su },
-      { id: '22', questionnaire: 'vqs2021x00', ...su },
-    ];
     await Promise.all(
-      newSU.map(async unit => {
+      fakeData.map(async unit => {
         await surveyUnitDBService.addOrUpdate(unit);
       })
     );
