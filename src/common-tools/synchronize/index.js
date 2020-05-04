@@ -25,7 +25,6 @@ const sendData = async (urlQueenApi, token) => {
 };
 
 const putSurveyUnitsInDataBase = async su => {
-  console.log('avant putSuInDB', su);
   await surveyUnitDBService.addOrUpdate(su);
 };
 
