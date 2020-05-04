@@ -52,7 +52,7 @@ const Synchronize = ({ disabled = false }) => {
 
   useEffect(() => {
     if (pearlSync && queenSync) {
-      console.log('pearlSync && queenSync :' + pearlSync + ' - ' + queenSync);
+      console.log(`pearlSync && queenSync :  ${pearlSync} -   ${queenSync}`);
       if (queenSync === 'SUCCESS' && pearlSync === 'SUCCESS') {
         setSyncResult({ state: true, message: D.syncSuccess });
       } else {
@@ -68,13 +68,15 @@ const Synchronize = ({ disabled = false }) => {
         setPearlSync(undefined);
         setQueenSync(undefined);
         setLoading(true);
+
         await synchronize();
+
         setPearlSync('SUCCESS');
       } catch (e) {
         console.log(e.message);
         setPearlSync('FAILURE');
       } finally {
-        console.log('Queen synchronization : ENDED !');
+        console.log('Pearl synchronization : ENDED !');
       }
     };
     launchSynchronize();

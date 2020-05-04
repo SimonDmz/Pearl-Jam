@@ -1,4 +1,4 @@
-import data from '../fake-survey-units/data.json';
+import data from '../fake-survey-units/fakeData';
 
 export const getSurveyUnits = (urlPearApi, token) =>
   new Promise((resolve, reject) => {
@@ -11,11 +11,13 @@ export const getSurveyUnits = (urlPearApi, token) =>
         .then(res => resolve(res))
         .catch(e => reject(new Error(`Failed to fetch survey-units : ${e.message}`))); */
     // get data from fake-data.json
-    resolve(data);
+    resolve({ data: { data } });
   });
 
-export const putDataSurveyUnitById = (urlPearApi, token) => (id, su) =>
-  new Promise((resolve, reject) => {
+export const putDataSurveyUnitById = (urlPearApi, token) => (id, su) => {
+  console.log(`PUT survey-unit #${id} : ${su}`);
+
+  return new Promise((resolve, reject) => {
     /* Axios.put(`${urlPearApi}/api/survey-unit/${id}`, su, {
       headers: {
         ...getSecureHeader(token),
@@ -24,6 +26,6 @@ export const putDataSurveyUnitById = (urlPearApi, token) => (id, su) =>
     })
       .then(res => resolve(res))
       .catch(e => reject(new Error(`Failed to put survey-unit (id:${id}) : ${e.message}`))); */
-    console.log(`PUT survey-unit #${id} : ${su}`);
     resolve();
   });
+};
