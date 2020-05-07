@@ -14,7 +14,7 @@ const Router = ({ match, saveUE }) => {
   const history = useHistory();
 
   const openQueen = () => {
-    history.push(`/queen/questionnaire/${ue.questionnaire}/survey-unit/${match.params.id}`);
+    history.push(`/queen/questionnaire/${ue.campaign}/survey-unit/${match.params.id}`);
   };
 
   const save = (unite, url) => {
@@ -26,8 +26,8 @@ const Router = ({ match, saveUE }) => {
       <div className="ue-info">
         <div className="infos">
           <div className="row">
-            <span>{ue.questionnaire ? ue.questionnaire : D.loading}</span>
-            <span>{ue.id ? `${D.suSample}  ${ue.sampleId}` : D.loading}</span>
+            <span>{ue.campaign ? ue.campaign : D.loading}</span>
+            <span>{ue.id ? `${D.suSample}  ${ue.id}` : D.loading}</span>
             <span>{ue.id ? `VOOOOOO${ue.id}` : D.loading}</span>
           </div>
           <div className="row">

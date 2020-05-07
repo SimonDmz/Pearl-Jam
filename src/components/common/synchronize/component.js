@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
@@ -11,6 +12,7 @@ import './result.scss';
 Modal.setAppElement('#root');
 
 const Synchronize = ({ disabled = false }) => {
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
   const [queenSync, setQueenSync] = useState(undefined);
@@ -52,13 +54,14 @@ const Synchronize = ({ disabled = false }) => {
 
   useEffect(() => {
     if (pearlSync && queenSync) {
-      console.log('pearlSync && queenSync :' + pearlSync + ' - ' + queenSync);
+      console.log(`pearlSync && queenSync :  ${pearlSync} -   ${queenSync}`);
       if (queenSync === 'SUCCESS' && pearlSync === 'SUCCESS') {
         setSyncResult({ state: true, message: D.syncSuccess });
       } else {
         setSyncResult({ state: false, message: D.syncFailure });
       }
       setLoading(false);
+      history.push('/');
     }
   }, [pearlSync, queenSync]);
 
@@ -68,13 +71,15 @@ const Synchronize = ({ disabled = false }) => {
         setPearlSync(undefined);
         setQueenSync(undefined);
         setLoading(true);
+
         await synchronize();
+
         setPearlSync('SUCCESS');
       } catch (e) {
         console.log(e.message);
         setPearlSync('FAILURE');
       } finally {
-        console.log('Queen synchronization : ENDED !');
+        console.log('Pearl synchronization : ENDED !');
       }
     };
     launchSynchronize();

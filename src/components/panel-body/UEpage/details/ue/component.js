@@ -44,14 +44,10 @@ const UEItem = ({ saveUE }) => {
         <table>
           <tbody>
             <tr key={1}>
-              <th>{D.surveyUnitCivility}</th>
-              <td>{ue.civility}</td>
-            </tr>
-            <tr key={2}>
               <th>{D.surveyUnitLastName}</th>
               <td>{ue.lastName}</td>
             </tr>
-            <tr key={3}>
+            <tr key={2}>
               <th>{D.surveyUnitFirstName}</th>
               <td>{ue.firstName}</td>
             </tr>

@@ -19,13 +19,20 @@ const PageList = ({ surveyUnits, uesByPage }) => {
     return remainingDays.split(' ')[0];
   };
 
+  const checkSurveyUnit = su => {
+    const { collectionStartDate } = su;
+    const suTime = new Date(collectionStartDate).getTime();
+    const instantTime = new Date().getTime();
+    return suTime > instantTime;
+  };
+
   const renderSimpleTable = sus => {
     return (
       <table className="ue-table">
         <thead>
           <tr>
             <th>
-              <input type="checkbox" />
+              <input type="checkbox" onClick={() => console.log('toggle all SU')} />
             </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>
@@ -39,34 +46,41 @@ const PageList = ({ surveyUnits, uesByPage }) => {
           </tr>
         </thead>
         <tbody>
-          {sus.map(su => (
-            <tr key={su.id}>
-              <td role="gridcell" onClick={e => e.stopPropagation()}>
-                <input type="checkbox" />
-              </td>
-              <td>{su.questionnaire}</td>
-              <td>{su.sampleId}</td>
-              <td>{su.id}</td>
-              <td>{`${su.lastName} ${su.firstName}`}</td>
-              <td>{su.address.city}</td>
-              <td>{convertSUStateInToDo(su.state)}</td>
-              <td className="align-right">{intervalInDays(su)}</td>
-              <td className="align-center">
-                {su.priority && (
-                  <span role="img" aria-label="priority">
-                    🚩
-                  </span>
-                )}
-              </td>
-              <td className="align-center">
-                <Link to={`survey-unit/${su.id}`}>
-                  <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
-                    📅
-                  </span>
-                </Link>
-              </td>
-            </tr>
-          ))}
+          {sus.map(su => {
+            const isDisabled = checkSurveyUnit(su);
+            const rowClickFunct = () => {
+              if (!isDisabled) history.push(`survey-unit/${su.id}`);
+            };
+            const inactive = isDisabled ? 'inactive' : '';
+            return (
+              <tr key={su.id} onClick={rowClickFunct} className={inactive}>
+                <td role="gridcell" onClick={e => e.stopPropagation()}>
+                  {!isDisabled && <input type="checkbox" />}
+                </td>
+                <td>{su.campaign}</td>
+                <td>{su.sampleId}</td>
+                <td>{su.id}</td>
+                <td>{`${su.lastName} ${su.firstName}`}</td>
+                <td>{su.address.city}</td>
+                <td>{convertSUStateInToDo(su.state)}</td>
+                <td className="align-right">{intervalInDays(su)}</td>
+                <td className="align-center">
+                  {su.priority && (
+                    <span role="img" aria-label="priority">
+                      🚩
+                    </span>
+                  )}
+                </td>
+                <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
+                  <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
+                    <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
+                      📅
+                    </span>
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     );
@@ -76,7 +90,7 @@ const PageList = ({ surveyUnits, uesByPage }) => {
     const sortedUes = ues.sort(
       (ueA, ueB) =>
         ueA.collectionEndDate.localeCompare(ueB.collectionEndDate) ||
-        ueA.questionnaire.localeCompare(ueB.questionnaire) ||
+        ueA.campaign.localeCompare(ueB.campaign) ||
         ueA.sampleId - ueB.sampleId
     );
     let i;

@@ -1,5 +1,5 @@
 {
-  "campaign": "++id,label,collectionStartDate,collectionEndDate",
-  "surveyUnit": "id,civility,lastName,firstName,address,phone,state,interviewerComment,demComment,questionnaireState,collectionStartDate,collectionEndDate",
+  "campaign": "id,label,collectionStartDate,collectionEndDate",
+  "surveyUnit": "id,lastName,firstName,address,phone,state,interviewerComment,demComment,campaign,questionnaireState,collectionStartDate,collectionEndDate",
   "notification": "++id,date,time,title,message"
 }
