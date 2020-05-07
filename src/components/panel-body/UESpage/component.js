@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import D from 'i18n';
-import fakeData from 'common-tools/fake-survey-units/fakeData';
 import PageList from './pageList';
 import Search from './search';
 import './ues.scss';
@@ -58,19 +57,6 @@ const UESPage = () => {
     }
   }, [filter]);
 
-  const addSu = async () => {
-    // update the store
-    await Promise.all(
-      fakeData.map(async unit => {
-        await surveyUnitDBService.addOrUpdate(unit);
-      })
-    );
-    // update the state hook
-    surveyUnitDBService.getAll().then(units => {
-      setSurveyUnits(units);
-    });
-  };
-
   return (
     <div className="panel-body ues">
       <div className="column">
@@ -86,9 +72,6 @@ const UESPage = () => {
         <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
       </div>
       <PageList surveyUnits={surveyUnits} />
-      <button type="button" onClick={addSu}>
-        Add new ue
-      </button>
       <button
         type="button"
         onClick={() => {

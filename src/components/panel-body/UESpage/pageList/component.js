@@ -57,7 +57,7 @@ const PageList = ({ surveyUnits, uesByPage }) => {
                 <td role="gridcell" onClick={e => e.stopPropagation()}>
                   {!isDisabled && <input type="checkbox" />}
                 </td>
-                <td>{su.questionnaire}</td>
+                <td>{su.campaign}</td>
                 <td>{su.sampleId}</td>
                 <td>{su.id}</td>
                 <td>{`${su.lastName} ${su.firstName}`}</td>
@@ -72,7 +72,7 @@ const PageList = ({ surveyUnits, uesByPage }) => {
                   )}
                 </td>
                 <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
-                  <Link to={`/queen/questionnaire/${su.questionnaire}/survey-unit/${su.id}`}>
+                  <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
                     <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
                       📅
                     </span>
@@ -90,7 +90,7 @@ const PageList = ({ surveyUnits, uesByPage }) => {
     const sortedUes = ues.sort(
       (ueA, ueB) =>
         ueA.collectionEndDate.localeCompare(ueB.collectionEndDate) ||
-        ueA.questionnaire.localeCompare(ueB.questionnaire) ||
+        ueA.campaign.localeCompare(ueB.campaign) ||
         ueA.sampleId - ueB.sampleId
     );
     let i;

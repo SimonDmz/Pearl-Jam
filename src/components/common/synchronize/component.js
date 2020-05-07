@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import imgSync from 'img/sync.png';
 import { addOnlineStatusObserver } from 'common-tools/';
@@ -11,6 +12,7 @@ import './result.scss';
 Modal.setAppElement('#root');
 
 const Synchronize = ({ disabled = false }) => {
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
   const [queenSync, setQueenSync] = useState(undefined);
@@ -59,6 +61,7 @@ const Synchronize = ({ disabled = false }) => {
         setSyncResult({ state: false, message: D.syncFailure });
       }
       setLoading(false);
+      history.push('/');
     }
   }, [pearlSync, queenSync]);
 

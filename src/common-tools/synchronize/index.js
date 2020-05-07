@@ -14,12 +14,12 @@ const getConfiguration = async () => {
   return configuration;
 };
 
-const sendData = async (urlQueenApi, token) => {
+const sendData = async (urlPearlApi, token) => {
   const surveyUnits = await surveyUnitDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
       const { id } = surveyUnit;
-      await api.putDataSurveyUnitById(urlQueenApi, token)(id, surveyUnit);
+      await api.putDataSurveyUnitById(urlPearlApi, token)(id, surveyUnit);
     })
   );
 };
@@ -50,11 +50,14 @@ const synchronizePearl = async () => {
 
   // (4) : Get the data
   const surveyUnitsResponse = await api.getSurveyUnits(urlPearlApi, token);
-  const surveyUnits = await surveyUnitsResponse.data.data;
+  const surveyUnits = await surveyUnitsResponse.data;
 
   await Promise.all(
     surveyUnits.map(async su => {
-      await putSurveyUnitsInDataBase(su);
+      const surveyUnitResponse = await api.getSurveyUnitById(urlPearlApi, token)(su.id);
+      const surveyUnit = await surveyUnitResponse.data;
+      const mergedSurveyUnit = { ...surveyUnit, ...su };
+      await putSurveyUnitsInDataBase(mergedSurveyUnit);
     })
   );
 };
