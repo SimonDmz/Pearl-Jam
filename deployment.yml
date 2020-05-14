@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pearl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pearl
+  template:
+    metadata:
+      labels:
+        app: pearl
+    spec:
+      containers:
+        - name: pearl
+          image: bwerquin/pearl-jam:latest
