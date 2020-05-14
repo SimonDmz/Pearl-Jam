@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
-self._urlQueen = '${QUEEN_URL}';
+self._urlQueen = new URL(location).searchParams.get('urlQueen');
 importScripts('/service-worker.js', `${self._urlQueen}/queen-service-worker.js`);
 
 const getUrlRegexJson = function(url) {

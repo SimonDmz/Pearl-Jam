@@ -30,7 +30,7 @@ export function register(config) {
       return;
     }
 
-    const swUrl = `${process.env.PUBLIC_URL}/service-worker-custom.js`;
+    const swUrl = `${process.env.PUBLIC_URL}/service-worker-custom.js?urlQueen=${config.urlQueen}`;
 
     if (isLocalhost) {
       // This is running on localhost. Let's check if a service worker still exists or not.
