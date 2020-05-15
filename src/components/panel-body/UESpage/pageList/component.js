@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import convertSUStateInToDo from 'common-tools/functions/convertSUStateInToDo';
+import { convertSUStateInToDo } from 'common-tools/functions';
 import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 
@@ -58,10 +58,10 @@ const PageList = ({ surveyUnits, uesByPage }) => {
                   {!isDisabled && <input type="checkbox" />}
                 </td>
                 <td>{su.campaign}</td>
-                <td>{su.sampleId}</td>
+                <td>{su.sampleIdentifiers.ssech}</td>
                 <td>{su.id}</td>
                 <td>{`${su.lastName} ${su.firstName}`}</td>
-                <td>{su.address.city}</td>
+                <td>{su.geographicalLocation.label}</td>
                 <td>{convertSUStateInToDo(su.state)}</td>
                 <td className="align-right">{intervalInDays(su)}</td>
                 <td className="align-center">

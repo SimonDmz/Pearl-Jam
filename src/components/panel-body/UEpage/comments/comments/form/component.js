@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { getCommentByType } from 'common-tools/functions';
 import './form.scss';
 import D from 'i18n';
 
 const Form = ({ closeModal, surveyUnit, saveUE }) => {
-  const [commentInterviewer, setCommentInterviewer] = useState(
-    surveyUnit.commentInterviewer ? surveyUnit.commentInterviewer : ''
+  const [interviewerComment, setInterviewerComment] = useState(
+    getCommentByType('interviewerComment', surveyUnit)
   );
 
   const onChange = event => {
-    setCommentInterviewer(event.target.value);
+    setInterviewerComment(event.target.value);
   };
 
   const save = () => {
-    surveyUnit.commentInterviewer = commentInterviewer;
+    const managementCommentValue = getCommentByType('managementComment', surveyUnit);
+    const managementComment = { type: 'managementComment', value: managementCommentValue };
+    const newInterviewerComment = { type: 'interviewerComment', value: interviewerComment };
+
+    const newComments = [];
+    newComments.push(managementComment);
+    newComments.push(newInterviewerComment);
+    surveyUnit.comments = newComments;
     saveUE(surveyUnit);
   };
 
@@ -28,7 +36,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
           name="comment"
           rows="10"
           cols="100"
-          defaultValue={commentInterviewer}
+          defaultValue={interviewerComment}
           onChange={onChange}
         />
       </label>

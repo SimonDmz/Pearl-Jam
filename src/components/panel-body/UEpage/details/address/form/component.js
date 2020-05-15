@@ -3,21 +3,15 @@ import D from 'i18n';
 
 const Form = ({ closeModal, surveyUnit, saveUE }) => {
   const useField = defaultValue => {
-    const [deliveryPoint, setDeliveryPoint] = useState(
-      defaultValue.deliveryPoint ? defaultValue.deliveryPoint : ''
-    );
+    const [deliveryPoint, setDeliveryPoint] = useState(defaultValue.L1 ? defaultValue.L1 : '');
     const [additionalAddress, setAdditionalAddress] = useState(
-      defaultValue.additionalAddress ? defaultValue.additionalAddress : ''
+      defaultValue.L2 ? defaultValue.L2 : ''
     );
-    const [number, setNumber] = useState(defaultValue.number ? defaultValue.number : '');
-    const [streetType, setStreetType] = useState(
-      defaultValue.streetType ? defaultValue.streetType : ''
-    );
-    const [streetName, setStreetName] = useState(
-      defaultValue.streetName ? defaultValue.streetName : ''
-    );
-    const [postcode, setpostcode] = useState(defaultValue.postcode ? defaultValue.postcode : '');
-    const [city, setCity] = useState(defaultValue.city ? defaultValue.city : '');
+    const [number, setNumber] = useState(defaultValue.L3 ? defaultValue.L3 : '');
+    const [streetType, setStreetType] = useState(defaultValue.L4 ? defaultValue.L4 : '');
+    const [streetName, setStreetName] = useState(defaultValue.L5 ? defaultValue.L5 : '');
+    const [postcode, setpostcode] = useState(defaultValue.L6 ? defaultValue.L6 : '');
+    const [city, setCity] = useState(defaultValue.L7 ? defaultValue.L7 : '');
 
     const onChange = event => {
       const key = event.target.name;
@@ -25,7 +19,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
         case 'deliveryPoint':
           setDeliveryPoint(event.target.value);
           break;
-        case 'additionalAdress':
+        case 'additionalAddress':
           setAdditionalAddress(event.target.value);
           break;
         case 'number':
@@ -49,13 +43,13 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
     };
     return {
       address: {
-        deliveryPoint,
-        additionalAddress,
-        number,
-        streetType,
-        streetName,
-        postcode,
-        city,
+        L1: deliveryPoint,
+        L2: additionalAddress,
+        L3: number,
+        L4: streetType,
+        L5: streetName,
+        L6: postcode,
+        L7: city,
       },
 
       onChange,
@@ -80,7 +74,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="deliveryPoint"
             name="deliveryPoint"
-            value={addressField.address.deliveryPoint}
+            value={addressField.address.L1}
             onChange={addressField.onChange}
           />
         </label>
@@ -90,7 +84,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="additionalAddress"
             name="additionalAddress"
-            value={addressField.address.additionalAddress}
+            value={addressField.address.L2}
             onChange={addressField.onChange}
           />
         </label>
@@ -100,7 +94,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="number"
             name="number"
-            value={addressField.address.number}
+            value={addressField.address.L3}
             onChange={addressField.onChange}
           />
         </label>
@@ -110,7 +104,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="streetType"
             name="streetType"
-            value={addressField.address.streetType}
+            value={addressField.address.L4}
             onChange={addressField.onChange}
           />
         </label>
@@ -120,7 +114,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="streetName"
             name="streetName"
-            value={addressField.address.streetName}
+            value={addressField.address.L5}
             onChange={addressField.onChange}
           />
         </label>
@@ -130,7 +124,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="postcode"
             name="postcode"
-            value={addressField.address.postcode}
+            value={addressField.address.L6}
             onChange={addressField.onChange}
           />
         </label>
@@ -140,7 +134,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="city"
             name="city"
-            value={addressField.address.city}
+            value={addressField.address.L7}
             onChange={addressField.onChange}
           />
         </label>

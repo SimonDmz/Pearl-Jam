@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Route, Redirect, useHistory } from 'react-router-dom';
-import convertSUStateInToDo from 'common-tools/functions/convertSUStateInToDo';
+import { convertSUStateInToDo, getLastState } from 'common-tools/functions';
 import PropTypes from 'prop-types';
 import D from 'i18n';
 import Navigation from './navigation';
@@ -20,6 +20,7 @@ const Router = ({ match, saveUE }) => {
   const save = (unite, url) => {
     saveUE(unite, url);
   };
+  const lastState = getLastState(ue);
 
   return (
     <div className="panel-body ue">
@@ -27,17 +28,25 @@ const Router = ({ match, saveUE }) => {
         <div className="infos">
           <div className="row">
             <span>{ue.campaign ? ue.campaign : D.loading}</span>
-            <span>{ue.id ? `${D.suSample}  ${ue.id}` : D.loading}</span>
-            <span>{ue.id ? `VOOOOOO${ue.id}` : D.loading}</span>
+            <span>
+              {ue.sampleIdentifiers && ue.sampleIdentifiers.ssech
+                ? `${D.suSample}  ${ue.sampleIdentifiers.ssech}`
+                : D.loading}
+            </span>
+            <span>
+              {ue.sampleIdentifiers && ue.sampleIdentifiers.numfa
+                ? `VOOOOOO${ue.sampleIdentifiers.numfa}`
+                : D.loading}
+            </span>
           </div>
           <div className="row">
             <span>{ue.lastName ? `${ue.lastName}` : D.loading}</span>
             <span>{ue.firstName ? `${ue.firstName}` : D.loading}</span>
-            <span>{ue.address ? ue.address.city : D.loading}</span>
+            <span>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</span>
           </div>
           <div className="row">
             <span className="ue-state">
-              {ue.state ? convertSUStateInToDo(ue.state) : D.loading}
+              {ue.states ? convertSUStateInToDo(lastState) : D.loading}
             </span>
             <span className="comment ">Planifié le --/--/----</span>
           </div>

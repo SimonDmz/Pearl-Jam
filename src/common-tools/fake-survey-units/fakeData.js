@@ -217,8 +217,8 @@ const fakeSurveyUnits = [
       L7: 'France',
     },
     geographicalLocation: {
-      id: '',
-      label: '',
+      id: 44043,
+      label: 'CLISSON',
     },
     priority: false,
     campaign: '',

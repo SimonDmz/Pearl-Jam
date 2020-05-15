@@ -129,8 +129,12 @@ $border-size-bottom: 1px;
   tr.inactive td:not(:first-child) {
     background-color: #969696;
   }
-  tr:not(.inactive) {
+  tbody tr:not(.inactive) td:not(:first-child) {
     cursor: pointer;
+  }
+
+  tbody tr.inactive td:not(:first-child) {
+    cursor: not-allowed;
   }
 
   thead:not(:first-child),

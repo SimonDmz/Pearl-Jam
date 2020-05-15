@@ -46,31 +46,31 @@ const UEItem = ({ saveUE }) => {
             <tbody>
               <tr key={1}>
                 <th>{D.addressDeliveryPoint}</th>
-                <td>{ue.address.deliveryPoint}</td>
+                <td>{ue.address.L1}</td>
               </tr>
               <tr key={2}>
                 <th>{D.addressAdditionalAddress}</th>
-                <td>{ue.address.additionalAdress}</td>
+                <td>{ue.address.L2}</td>
               </tr>
               <tr key={3}>
                 <th>{D.addressNumber}</th>
-                <td>{ue.address.number}</td>
+                <td>{ue.address.L3}</td>
               </tr>
               <tr key={4}>
                 <th>{D.addressStreetType}</th>
-                <td>{ue.address.streetType}</td>
+                <td>{ue.address.L4}</td>
               </tr>
               <tr key={5}>
                 <th>{D.addressStreetName}</th>
-                <td>{ue.address.streetName}</td>
+                <td>{ue.address.L5}</td>
               </tr>
               <tr key={6}>
                 <th>{D.addressPostcode}</th>
-                <td>{ue.address.postcode}</td>
+                <td>{ue.address.L6}</td>
               </tr>
               <tr key={7}>
                 <th>{D.addressCity}</th>
-                <td>{ue.address.city}</td>
+                <td>{ue.address.L7}</td>
               </tr>
             </tbody>
           </table>
@@ -82,14 +82,13 @@ const UEItem = ({ saveUE }) => {
         />
       </div>
     );
-  } else {
-    return (
-      <div className="ue-item adresse">
-        <Icon width={40} />
-        <div className="data">{`Pas d'adresse`}</div>
-      </div>
-    );
   }
+  return (
+    <div className="ue-item adresse">
+      <Icon width={40} />
+      <div className="data">Pas d&aposadresse</div>
+    </div>
+  );
 };
 
 export default UEItem;

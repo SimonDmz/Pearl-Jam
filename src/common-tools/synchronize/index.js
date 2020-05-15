@@ -19,6 +19,7 @@ const sendData = async (urlPearlApi, token) => {
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
       const { id } = surveyUnit;
+      console.log('put SU id=', id);
       await api.putDataSurveyUnitById(urlPearlApi, token)(id, surveyUnit);
     })
   );
@@ -30,6 +31,21 @@ const putSurveyUnitsInDataBase = async su => {
 
 const clean = async () => {
   await surveyUnitDBService.deleteAll();
+};
+
+const validateSU = su => {
+  const { states, comments } = su;
+  if (Array.isArray(states) && states.length === 0) {
+    const instantTime = new Date().getTime();
+    su.states.push({ date: instantTime, type: 'NOT_STARTED' });
+  }
+  if (Array.isArray(comments) && comments.length === 0) {
+    const interviewerComment = { type: 'interviewerComment', value: '' };
+    const managementComment = { type: 'managementComment', value: '' };
+    su.comments.push(interviewerComment);
+    su.comments.push(managementComment);
+  }
+  return su;
 };
 
 const synchronizePearl = async () => {
@@ -47,17 +63,20 @@ const synchronizePearl = async () => {
 
   // (3) : clean
   await clean();
-
+  console.log('clean done');
   // (4) : Get the data
   const surveyUnitsResponse = await api.getSurveyUnits(urlPearlApi, token);
-  const surveyUnits = await surveyUnitsResponse.data;
+  console.log(surveyUnitsResponse, '!');
+  const surveyUnits = await surveyUnitsResponse;
+  console.log(surveyUnits, '!!');
 
   await Promise.all(
     surveyUnits.map(async su => {
       const surveyUnitResponse = await api.getSurveyUnitById(urlPearlApi, token)(su.id);
       const surveyUnit = await surveyUnitResponse.data;
       const mergedSurveyUnit = { ...surveyUnit, ...su };
-      await putSurveyUnitsInDataBase(mergedSurveyUnit);
+      const validSurveynit = validateSU(mergedSurveyUnit);
+      await putSurveyUnitsInDataBase(validSurveynit);
     })
   );
 };

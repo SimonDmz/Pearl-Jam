@@ -32,7 +32,8 @@ const updateSurveyUnit = (surveyUnitID, queenState) => {
         break;
     }
     newSU.questionnaireState = newQuestionnaireState;
-    newSU.state = computeSurveyUnitState(newSU);
+    const newState = computeSurveyUnitState(newSU);
+    su.states.push(newState);
     const update = async () => {
       await surveyUnitDBService.update(newSU);
     };

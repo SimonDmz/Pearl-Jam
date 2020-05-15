@@ -1,14 +1,11 @@
 import suStateEnum from 'common-tools/enum/SUStateEnum';
 import toDoEnum from 'common-tools/enum/SUToDoEnum';
 
-const convertSUStateInToDo = suState => {
-  if (
-    [
-      suStateEnum.NOT_STARTED.type,
-      suStateEnum.IN_PREPARATION.type,
-      suStateEnum.AT_LEAST_ONE_CONTACT.type,
-    ].includes(suState)
-  ) {
+export const convertSUStateInToDo = suState => {
+  if (suState === suStateEnum.NOT_STARTED.type) {
+    return toDoEnum.NOT_STARTED;
+  }
+  if ([suStateEnum.IN_PREPARATION.type, suStateEnum.AT_LEAST_ONE_CONTACT.type].includes(suState)) {
     return toDoEnum.CONTACT;
   }
   if (suState === suStateEnum.APPOINTMENT_MADE.type) {
@@ -25,5 +22,3 @@ const convertSUStateInToDo = suState => {
   }
   return false;
 };
-
-export default convertSUStateInToDo;

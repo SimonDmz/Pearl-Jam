@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import Modal from 'react-modal';
+import D from 'i18n';
 import Icon from '../icon/phone.icon';
 import EditIcon from '../icon/pen.icon';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
-import D from 'i18n';
 
 Modal.setAppElement('#root');
 const UEItem = ({ saveUE }) => {
@@ -34,7 +34,7 @@ const UEItem = ({ saveUE }) => {
     closeModal();
   };
 
-  if (ue.phone) {
+  if (ue.phoneNumbers) {
     return (
       <div className="ue-item">
         <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles}>
@@ -44,7 +44,7 @@ const UEItem = ({ saveUE }) => {
         <div className="data">
           <table>
             <tbody>
-              {ue.phone.map((phoneNumber, index) => (
+              {ue.phoneNumbers.map((phoneNumber, index) => (
                 <tr key={index}>
                   <th>{D.surveyUnitPhone}</th>
                   <td>{phoneNumber}</td>
@@ -60,20 +60,19 @@ const UEItem = ({ saveUE }) => {
         />
       </div>
     );
-  } else {
-    return (
-      <div className="ue-item">
-        <Icon width={35} />
-        <div className="data">
-          <b>{D.surveyUnitNoPhone}</b>
-        </div>
-        <EditIcon
-          style={{ border: 'solid 1px black', borderRadius: '5px', margin: 'auto', padding: '2px' }}
-          width={30}
-        />
-      </div>
-    );
   }
+  return (
+    <div className="ue-item">
+      <Icon width={35} />
+      <div className="data">
+        <b>{D.surveyUnitNoPhone}</b>
+      </div>
+      <EditIcon
+        style={{ border: 'solid 1px black', borderRadius: '5px', margin: 'auto', padding: '2px' }}
+        width={30}
+      />
+    </div>
+  );
 };
 
 export default UEItem;
