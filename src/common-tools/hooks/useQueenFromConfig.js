@@ -1,30 +1,31 @@
 import { useEffect } from 'react';
 
 const useQueenFromConfig = url => {
+  const scripts = [];
   useEffect(() => {
-    const scripts = [];
-    fetch(url)
-      .then(response => response.json())
-      .then(conf => {
-        localStorage.setItem('QUEEN_URL', conf.urlQueen);
-        fetch(`${conf.urlQueen}/asset-manifest.json`)
-          .then(res => res.json())
-          .then(data => {
-            const jsFiles = data.entrypoints;
-            jsFiles.map(scriptUrl => {
-              const script = document.createElement('script');
-              script.src = `${conf.urlQueen}${scriptUrl}`;
-              script.async = true;
-              document.body.appendChild(script);
-              scripts.push(script);
-            });
-          });
+    const importQueenScript = async () => {
+      const response = await fetch(url);
+      const { urlQueen } = await response.json();
+
+      window.localStorage.setItem('QUEEN_URL', urlQueen);
+
+      const manifest = await fetch(`${urlQueen}/asset-manifest.json`);
+      const { entrypoints } = await manifest.json();
+
+      entrypoints.forEach(scriptUrl => {
+        if (scriptUrl.endsWith('.js')) {
+          const script = document.createElement('script');
+          script.src = `${urlQueen}/${scriptUrl}`;
+          script.async = true;
+          document.body.appendChild(script);
+          scripts.push(script);
+        }
       });
+    };
+    importQueenScript();
 
     return () => {
-      for (const scriptElement in scripts) {
-        document.body.removeChild(scriptElement);
-      }
+      scripts.forEach(scriptElement => document.body.removeChild(scriptElement));
     };
   }, [url]);
 };
