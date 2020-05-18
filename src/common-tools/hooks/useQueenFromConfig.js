@@ -5,17 +5,17 @@ const useQueenFromConfig = url => {
   useEffect(() => {
     const importQueenScript = async () => {
       const response = await fetch(url);
-      const { urlQueen } = await response.json();
+      const { QUEEN_URL } = await response.json();
 
-      window.localStorage.setItem('QUEEN_URL', urlQueen);
+      window.localStorage.setItem('QUEEN_URL', QUEEN_URL);
 
-      const manifest = await fetch(`${urlQueen}/asset-manifest.json`);
+      const manifest = await fetch(`${QUEEN_URL}/asset-manifest.json`);
       const { entrypoints } = await manifest.json();
 
       entrypoints.forEach(scriptUrl => {
         if (scriptUrl.endsWith('.js')) {
           const script = document.createElement('script');
-          script.src = `${urlQueen}/${scriptUrl}`;
+          script.src = `${QUEEN_URL}/${scriptUrl}`;
           script.async = true;
           document.body.appendChild(script);
           scripts.push(script);

@@ -15,9 +15,9 @@ const Notification = () => {
     if (!init) {
       const install = async () => {
         const configuration = await fetch(`${window.location.origin}/configuration.json`);
-        const { urlQueen } = await configuration.json();
+        const { QUEEN_URL } = await configuration.json();
         serviceWorker.register({
-          urlQueen,
+          QUEEN_URL,
           onInstalling: installing => {
             setInstallingServiceWorker(installing);
             setOpen(true);
