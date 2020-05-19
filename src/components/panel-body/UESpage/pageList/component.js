@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link /* useHistory */ } from 'react-router-dom';
 import convertSUStateInToDo from 'common-tools/functions/convertSUStateInToDo';
 import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 
 const PageList = ({ surveyUnits, uesByPage }) => {
   const [page, setPage] = useState(0);
-  const history = useHistory();
+  // const history = useHistory();
 
   const intervalInDays = su => {
     const { collectionEndDate } = su;

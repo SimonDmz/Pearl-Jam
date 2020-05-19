@@ -1,8 +1,0 @@
-{
-  "realm": "insert-REALM-here",
-  "auth-server-url": "insert-AUTH-SERVER-URL-here",
-  "ssl-required": "external",
-  "resource": "insert-RESOURCE-here",
-  "public-client": true,
-  "confidential-port": 0
-}

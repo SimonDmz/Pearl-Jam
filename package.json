@@ -17,8 +17,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && copy-and-watch src/service-worker-custom.js build && copy-and-watch configuration/local/*.json build",
-    "build-docker": "react-scripts build && copy-and-watch src/service-worker-custom.js build && copy-and-watch configuration/docker/*.json build",
+    "build": "react-scripts build && copy-and-watch src/service-worker-custom.js build && copy-and-watch configuration/configuration.json build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
