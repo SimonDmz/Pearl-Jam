@@ -17,9 +17,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && env NODE_ENV=local yarn build-sw && copy-and-watch configuration/local/*.json build",
-    "build-sw": "node ./configuration/build/build-sw.js",
-    "build-docker": "react-scripts build && env NODE_ENV=docker yarn build-sw && copy-and-watch configuration/docker/*.json build",
+    "build": "react-scripts build && copy-and-watch src/service-worker-custom.js build && copy-and-watch configuration/local/*.json build",
+    "build-docker": "react-scripts build && copy-and-watch src/service-worker-custom.js build && copy-and-watch configuration/docker/*.json build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -42,7 +41,6 @@
     "@types/react": "^16.9.23",
     "@types/react-router-dom": "^5.1.3",
     "copy-and-watch": "^0.1.4",
-    "envsub": "^4.0.7",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^6.6.0",
