@@ -1,7 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
 self._QUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
 importScripts('/service-worker.js', `${self._QUEEN_URL}/queen-service-worker.js`);
 
