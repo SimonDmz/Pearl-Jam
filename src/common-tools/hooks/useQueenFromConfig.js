@@ -1,29 +1,31 @@
 import { useEffect } from 'react';
 
 const useQueenFromConfig = url => {
+  const scripts = [];
   useEffect(() => {
-    const scripts = [];
-    fetch(url)
-      .then(response => response.json())
-      .then(conf => {
-        fetch(`${conf.urlQueen}/asset-manifest.json`)
-          .then(res => res.json())
-          .then(data => {
-            const jsFiles = data.entrypoints;
-            jsFiles.map(scriptUrl => {
-              const script = document.createElement('script');
-              script.src = scriptUrl;
-              script.async = true;
-              document.body.appendChild(script);
-              scripts.push(script);
-            });
-          });
+    const importQueenScript = async () => {
+      const response = await fetch(url);
+      const { QUEEN_URL } = await response.json();
+
+      window.localStorage.setItem('QUEEN_URL', QUEEN_URL);
+
+      const manifest = await fetch(`${QUEEN_URL}/asset-manifest.json`);
+      const { entrypoints } = await manifest.json();
+
+      entrypoints.forEach(scriptUrl => {
+        if (scriptUrl.endsWith('.js')) {
+          const script = document.createElement('script');
+          script.src = `${QUEEN_URL}/${scriptUrl}`;
+          script.async = true;
+          document.body.appendChild(script);
+          scripts.push(script);
+        }
       });
+    };
+    importQueenScript();
 
     return () => {
-      for (const scriptElement in scripts) {
-        document.body.removeChild(scriptElement);
-      }
+      scripts.forEach(scriptElement => document.body.removeChild(scriptElement));
     };
   }, [url]);
 };

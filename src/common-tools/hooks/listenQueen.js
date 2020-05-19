@@ -17,34 +17,30 @@ const computeSurveyUnitState = suToCompute => {
   return true;
 };
 
-const updateSurveyUnit = (surveyUnitID, queenState) => {
-  surveyUnitDBService.getById(surveyUnitID).then(su => {
-    const newSU = su;
-    let newQuestionnaireState = '';
-    switch (queenState) {
-      case 'COMPLETED':
-        newQuestionnaireState = questionnaireEnum.COMPLETED.type;
-        break;
-      case 'STARTED':
-        newQuestionnaireState = questionnaireEnum.STARTED.type;
-        break;
-      default:
-        break;
-    }
-    newSU.questionnaireState = newQuestionnaireState;
-    newSU.state = computeSurveyUnitState(newSU);
-    const update = async () => {
-      await surveyUnitDBService.update(newSU);
-    };
-    update();
-  });
+const updateSurveyUnit = async (surveyUnitID, queenState) => {
+  const surveyUnit = await surveyUnitDBService.getById(surveyUnitID);
+  const newSU = surveyUnit;
+  let newQuestionnaireState = '';
+  switch (queenState) {
+    case 'COMPLETED':
+      newQuestionnaireState = questionnaireEnum.COMPLETED.type;
+      break;
+    case 'STARTED':
+      newQuestionnaireState = questionnaireEnum.STARTED.type;
+      break;
+    default:
+      break;
+  }
+  newSU.questionnaireState = newQuestionnaireState;
+  newSU.state = computeSurveyUnitState(newSU);
+  await surveyUnitDBService.update(newSU);
 };
 
 const closeQueen = history => surveyUnitID => {
   history.push(`/survey-unit/${surveyUnitID}/details`);
 };
 
-const handleQueenEvent = history => event => {
+const handleQueenEvent = history => async event => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {
     switch (command) {
@@ -52,7 +48,7 @@ const handleQueenEvent = history => event => {
         closeQueen(history)(other.surveyUnit);
         break;
       case 'UPDATE_SURVEY_UNIT':
-        updateSurveyUnit(other.surveyUnit, other.state);
+        await updateSurveyUnit(other.surveyUnit, other.state);
         window.dispatchEvent(new CustomEvent('pearl-update'));
         break;
       case 'UPDATE_SYNCHRONIZE':
