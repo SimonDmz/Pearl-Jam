@@ -12,7 +12,7 @@ cache: yarn
 
 script:
   - yarn install
-  - yarn build-docker
+  - yarn build
   - docker build -t inseefr/pearl-jam .
 
 before_script:

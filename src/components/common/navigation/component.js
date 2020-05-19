@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { addOnlineStatusObserver } from 'common-tools';
 import imgInsee from 'img/insee.png';
 import Synchronize from 'components/common/synchronize';
 import D from 'i18n';
@@ -7,22 +6,11 @@ import NavigationItem from './item';
 import OnlineStatus from '../online-status';
 
 const Navigation = ({ location }) => {
-  const [init, setInit] = useState(false);
-  const [status, setStatus] = useState(navigator.onLine);
   const [disabled, setDisable] = useState(location.pathname.startsWith('/queen'));
 
   useEffect(() => {
     setDisable(location.pathname.startsWith('/queen'));
   }, [location]);
-
-  useEffect(() => {
-    if (!init) {
-      addOnlineStatusObserver(s => {
-        setStatus(s);
-      });
-      setInit(true);
-    }
-  }, [init]);
 
   const getName = () => {
     const interviewerFromLocalStorage = localStorage.getItem('pearl-interviewer');

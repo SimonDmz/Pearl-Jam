@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
 const useQueenFromConfig = url => {
-  const scripts = [];
   useEffect(() => {
+    const scripts = [];
     const importQueenScript = async () => {
       const response = await fetch(url);
       const { QUEEN_URL } = await response.json();

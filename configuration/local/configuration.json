@@ -1,9 +1,0 @@
-{
-  "QUEEN_URL": "http://localhost:5000",
-  "urlPearlApiComment": "url of Pearl API",
-  "urlPearlApi": "",
-  "authenticationModeComment": "The mode of authentication. Currently, App is supporting 'anonymous'",
-  "authenticationMode": "anonymous",
-  "urlChatComment": "url of Pearl Chat",
-  "urlChat": ""
-}
