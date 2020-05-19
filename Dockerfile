@@ -12,8 +12,6 @@ WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
 COPY .env .
 
-RUN apt-get install bash
-
 # Make shell script executable
 RUN chmod +x env.sh
 
