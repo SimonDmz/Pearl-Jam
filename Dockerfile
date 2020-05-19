@@ -1,6 +1,7 @@
 FROM nginx
-COPY build /usr/share/nginx/html
+ADD build /usr/share/nginx/html
 RUN rm etc/nginx/conf.d/default.conf
+# Overload nginx.conf to enable cors
 COPY nginx.conf etc/nginx/conf.d/
 
 # Default port exposure
@@ -10,6 +11,8 @@ EXPOSE 80
 WORKDIR /usr/share/nginx/html
 COPY ./scripts/env.sh .
 COPY .env .
+
+RUN apt-get install bash
 
 # Make shell script executable
 RUN chmod +x env.sh
