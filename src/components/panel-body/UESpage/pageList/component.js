@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { convertSUStateInToDo } from 'common-tools/functions';
+import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
 import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 

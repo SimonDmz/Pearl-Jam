@@ -45,7 +45,7 @@ const closeQueen = history => surveyUnitID => {
   history.push(`/survey-unit/${surveyUnitID}/details`);
 };
 
-const handleQueenEvent = history => event => {
+const handleQueenEvent = history => async event => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {
     switch (command) {
@@ -53,7 +53,7 @@ const handleQueenEvent = history => event => {
         closeQueen(history)(other.surveyUnit);
         break;
       case 'UPDATE_SURVEY_UNIT':
-        updateSurveyUnit(other.surveyUnit, other.state);
+        await updateSurveyUnit(other.surveyUnit, other.state);
         window.dispatchEvent(new CustomEvent('pearl-update'));
         break;
       case 'UPDATE_SYNCHRONIZE':

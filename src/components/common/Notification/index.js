@@ -13,28 +13,34 @@ const Notification = () => {
 
   useEffect(() => {
     if (!init) {
-      serviceWorker.register({
-        onInstalling: installing => {
-          setInstallingServiceWorker(installing);
-          setOpen(true);
-        },
-        onUpdate: registration => {
-          setWaitingServiceWorker(registration.waiting);
-          setUpdateAvailable(true);
-          setOpen(true);
-        },
-        onWaiting: waiting => {
-          setWaitingServiceWorker(waiting);
-          setUpdateAvailable(true);
-          setOpen(true);
-        },
-        onSuccess: registration => {
-          setInstallingServiceWorker(false);
-          setServiceWorkerInstalled(!!registration);
-          setOpen(true);
-        },
-      });
-      setInit(true);
+      const install = async () => {
+        const configuration = await fetch(`${window.location.origin}/configuration.json`);
+        const { QUEEN_URL } = await configuration.json();
+        serviceWorker.register({
+          QUEEN_URL,
+          onInstalling: installing => {
+            setInstallingServiceWorker(installing);
+            setOpen(true);
+          },
+          onUpdate: registration => {
+            setWaitingServiceWorker(registration.waiting);
+            setUpdateAvailable(true);
+            setOpen(true);
+          },
+          onWaiting: waiting => {
+            setWaitingServiceWorker(waiting);
+            setUpdateAvailable(true);
+            setOpen(true);
+          },
+          onSuccess: registration => {
+            setInstallingServiceWorker(false);
+            setServiceWorkerInstalled(!!registration);
+            setOpen(true);
+          },
+        });
+        setInit(true);
+      };
+      install();
     }
   }, [init]);
 
