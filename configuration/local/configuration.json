@@ -1,9 +1,0 @@
-{
-  "urlQueen": "https://queen.demo.dev.sspcloud.fr",
-  "urlPearlApiComment": "url of Pearl API",
-  "urlPearlApi": "",
-  "authenticationModeComment": "The mode of authentication. Currently, App is supporting 'anonymous'",
-  "authenticationMode": "anonymous",
-  "urlChatComment": "url of Pearl Chat",
-  "urlChat": ""
-}

@@ -89,10 +89,11 @@ const PageList = ({ surveyUnits, uesByPage }) => {
   const renderTable = ues => {
     const sortedUes = ues.sort(
       (ueA, ueB) =>
-        ueA.collectionEndDate.localeCompare(ueB.collectionEndDate) ||
+        ueA.collectionEndDate.toString().localeCompare(ueB.collectionEndDate.toString()) ||
         ueA.campaign.localeCompare(ueB.campaign) ||
-        ueA.sampleId - ueB.sampleId
+        ueA.sampleIdentifiers.ssech - ueB.sampleIdentifiers.ssech
     );
+
     let i;
     let j;
     let ueChunk;
