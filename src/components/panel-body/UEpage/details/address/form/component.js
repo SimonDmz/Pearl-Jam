@@ -3,15 +3,15 @@ import D from 'i18n';
 
 const Form = ({ closeModal, surveyUnit, saveUE }) => {
   const useField = defaultValue => {
-    const [deliveryPoint, setDeliveryPoint] = useState(defaultValue.L1 ? defaultValue.L1 : '');
+    const [deliveryPoint, setDeliveryPoint] = useState(defaultValue.l1 ? defaultValue.l1 : '');
     const [additionalAddress, setAdditionalAddress] = useState(
-      defaultValue.L2 ? defaultValue.L2 : ''
+      defaultValue.l2 ? defaultValue.l2 : ''
     );
-    const [number, setNumber] = useState(defaultValue.L3 ? defaultValue.L3 : '');
-    const [streetType, setStreetType] = useState(defaultValue.L4 ? defaultValue.L4 : '');
-    const [streetName, setStreetName] = useState(defaultValue.L5 ? defaultValue.L5 : '');
-    const [postcode, setpostcode] = useState(defaultValue.L6 ? defaultValue.L6 : '');
-    const [city, setCity] = useState(defaultValue.L7 ? defaultValue.L7 : '');
+    const [number, setNumber] = useState(defaultValue.l3 ? defaultValue.l3 : '');
+    const [streetType, setStreetType] = useState(defaultValue.l4 ? defaultValue.l4 : '');
+    const [streetName, setStreetName] = useState(defaultValue.l5 ? defaultValue.l5 : '');
+    const [postcode, setpostcode] = useState(defaultValue.l6 ? defaultValue.l6 : '');
+    const [city, setCity] = useState(defaultValue.l7 ? defaultValue.l7 : '');
 
     const onChange = event => {
       const key = event.target.name;
@@ -43,13 +43,13 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
     };
     return {
       address: {
-        L1: deliveryPoint,
-        L2: additionalAddress,
-        L3: number,
-        L4: streetType,
-        L5: streetName,
-        L6: postcode,
-        L7: city,
+        l1: deliveryPoint,
+        l2: additionalAddress,
+        l3: number,
+        l4: streetType,
+        l5: streetName,
+        l6: postcode,
+        l7: city,
       },
 
       onChange,
@@ -74,7 +74,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="deliveryPoint"
             name="deliveryPoint"
-            value={addressField.address.L1}
+            value={addressField.address.l1}
             onChange={addressField.onChange}
           />
         </label>
@@ -84,7 +84,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="additionalAddress"
             name="additionalAddress"
-            value={addressField.address.L2}
+            value={addressField.address.l2}
             onChange={addressField.onChange}
           />
         </label>
@@ -94,7 +94,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="number"
             name="number"
-            value={addressField.address.L3}
+            value={addressField.address.l3}
             onChange={addressField.onChange}
           />
         </label>
@@ -104,7 +104,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="streetType"
             name="streetType"
-            value={addressField.address.L4}
+            value={addressField.address.l4}
             onChange={addressField.onChange}
           />
         </label>
@@ -114,7 +114,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="streetName"
             name="streetName"
-            value={addressField.address.L5}
+            value={addressField.address.l5}
             onChange={addressField.onChange}
           />
         </label>
@@ -124,7 +124,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="postcode"
             name="postcode"
-            value={addressField.address.L6}
+            value={addressField.address.l6}
             onChange={addressField.onChange}
           />
         </label>
@@ -134,7 +134,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
             type="text"
             id="city"
             name="city"
-            value={addressField.address.L7}
+            value={addressField.address.l7}
             onChange={addressField.onChange}
           />
         </label>

@@ -11,6 +11,7 @@ import addressMessage from './addressMessage';
 import queenMockMessage from './queenMockMessage';
 import surveyUnitMessage from './surveyUnitMessage';
 import searchMessage from './searchMessage';
+import transmissionMessage from './transmissionMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -65,6 +66,7 @@ const dictionary = {
   ...queenMockMessage,
   ...surveyUnitMessage,
   ...searchMessage,
+  ...transmissionMessage,
 };
 
 export default dictionary;
