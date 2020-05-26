@@ -25,9 +25,7 @@ const Comment = ({ saveUE, title, editable }) => {
 
       <div className="border">
         <div className="text">
-          {editable
-            ? getCommentByType('interviewerComment', ue)
-            : getCommentByType('managementComment', ue)}
+          {editable ? getCommentByType('INTERVIEWER', ue) : getCommentByType('MANAGEMENT', ue)}
         </div>
 
         {editable === true && (

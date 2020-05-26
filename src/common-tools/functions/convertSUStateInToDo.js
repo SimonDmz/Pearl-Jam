@@ -14,7 +14,7 @@ export const convertSUStateInToDo = suState => {
   if (suState === suStateEnum.QUESTIONNAIRE_STARTED.type) {
     return toDoEnum.FINALIZE;
   }
-  if (suState === suStateEnum.WAITING_FOR_VALIDATION.type) {
+  if (suState === suStateEnum.WAITING_FOR_TRANSMISSION.type) {
     return toDoEnum.TRANSMIT;
   }
   if (suState === suStateEnum.WAITING_FOR_SYNCHRONIZATION.type) {

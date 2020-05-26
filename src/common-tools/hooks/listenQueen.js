@@ -7,7 +7,7 @@ const computeSurveyUnitState = suToCompute => {
   const { questionnaireState } = suToCompute;
   switch (questionnaireState) {
     case questionnaireEnum.COMPLETED.type:
-      return suStateEnum.WAITING_FOR_VALIDATION.type;
+      return suStateEnum.WAITING_FOR_TRANSMISSION.type;
 
     case questionnaireEnum.STARTED.type:
       return suStateEnum.QUESTIONNAIRE_STARTED.type;

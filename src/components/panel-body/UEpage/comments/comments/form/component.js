@@ -6,7 +6,7 @@ import D from 'i18n';
 
 const Form = ({ closeModal, surveyUnit, saveUE }) => {
   const [interviewerComment, setInterviewerComment] = useState(
-    getCommentByType('interviewerComment', surveyUnit)
+    getCommentByType('INTERVIEWER', surveyUnit)
   );
 
   const onChange = event => {
@@ -14,9 +14,9 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
   };
 
   const save = () => {
-    const managementCommentValue = getCommentByType('managementComment', surveyUnit);
-    const managementComment = { type: 'managementComment', value: managementCommentValue };
-    const newInterviewerComment = { type: 'interviewerComment', value: interviewerComment };
+    const managementCommentValue = getCommentByType('MANAGEMENT', surveyUnit);
+    const managementComment = { type: 'MANAGEMENT', value: managementCommentValue };
+    const newInterviewerComment = { type: 'INTERVIEWER', value: interviewerComment };
 
     const newComments = [];
     newComments.push(managementComment);

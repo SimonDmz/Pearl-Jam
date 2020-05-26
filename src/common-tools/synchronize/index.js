@@ -18,6 +18,7 @@ const sendData = async (urlPearlApi, token) => {
   const surveyUnits = await surveyUnitDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
+      console.log(surveyUnit);
       const { id } = surveyUnit;
       await api.putDataSurveyUnitById(urlPearlApi, token)(id, surveyUnit);
     })
@@ -35,12 +36,11 @@ const clean = async () => {
 const validateSU = su => {
   const { states, comments } = su;
   if (Array.isArray(states) && states.length === 0) {
-    const instantTime = new Date().getTime();
-    su.states.push({ date: instantTime, type: 'NOT_STARTED' });
+    su.states.push(su.lastState);
   }
   if (Array.isArray(comments) && comments.length === 0) {
-    const interviewerComment = { type: 'interviewerComment', value: '' };
-    const managementComment = { type: 'managementComment', value: '' };
+    const interviewerComment = { type: 'INTERVIEWER', value: '' };
+    const managementComment = { type: 'MANAGEMENT', value: '' };
     su.comments.push(interviewerComment);
     su.comments.push(managementComment);
   }

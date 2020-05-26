@@ -1,23 +1,23 @@
 import D from 'i18n';
 
 const surveyUnitState = {
-  NOT_STARTED: { type: 'NOT_STARTED', value: `${D.suStateAssignedNotStarted}` },
-  IN_PREPARATION: { type: 'IN_PREPARATION', value: `${D.suStateInPreparation}` },
-  AT_LEAST_ONE_CONTACT: { type: 'AT_LEAST_ONE_CONTACT', value: `${D.suStateAtLeastOneContact}` },
-  APPOINTMENT_MADE: { type: 'APPOINTMENT_MADE', value: `${D.suStateAppointmentMade}` },
+  NOT_STARTED: { type: 'ANS', value: `${D.suStateAssignedNotStarted}` },
+  IN_PREPARATION: { type: 'PRC', value: `${D.suStateInPreparation}` },
+  AT_LEAST_ONE_CONTACT: { type: 'AOC', value: `${D.suStateAtLeastOneContact}` },
+  APPOINTMENT_MADE: { type: 'APS', value: `${D.suStateAppointmentMade}` },
   QUESTIONNAIRE_STARTED: {
-    type: 'QUESTIONNAIRE_STARTED',
+    type: 'INS',
     value: `${D.suStateQuestionnaireStarted}`,
   },
-  WAITING_FOR_VALIDATION: {
-    type: 'WAITING_FOR_VALIDATION',
-    value: `${D.suStateWaitingForValidation}`,
+  WAITING_FOR_TRANSMISSION: {
+    type: 'WFT',
+    value: `${D.suStateWaitingForTransmission}`,
   },
   WAITING_FOR_SYNCHRONIZATION: {
-    type: 'WAITING_FOR_SYNCHRONIZATION',
+    type: 'WFS',
     value: `${D.suStateWaitingForSynchronization}`,
   },
-  FINALIZED: { type: 'FINALIZED', value: `${D.suStateFinalized}` },
+  FINALIZED: { type: 'FIN', value: `${D.suStateFinalized}` },
 };
 
 export default surveyUnitState;
