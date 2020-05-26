@@ -4,8 +4,9 @@ import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToD
 import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 
-const PageList = ({ surveyUnits, uesByPage }) => {
+const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSelection }) => {
   const [page, setPage] = useState(0);
+  const [selectAll, setSelectAll] = useState(false);
   const history = useHistory();
 
   const intervalInDays = su => {
@@ -26,13 +27,33 @@ const PageList = ({ surveyUnits, uesByPage }) => {
     return suTime > instantTime;
   };
 
+  const toggleAll = event => {
+    const { target } = event;
+    if (target.type !== 'checkbox') {
+      event.stopPropagation();
+    }
+    toggleAllSUSelection(!selectAll);
+    setSelectAll(!selectAll);
+  };
+
+  const toggleOne = (id, newValue) => {
+    toggleOneSUSelection(id, newValue);
+  };
+
+  const filterPropagation = e => {
+    const { target } = e;
+    if (target.type !== 'checkbox') {
+      e.stopPropagation();
+    }
+  };
+
   const renderSimpleTable = sus => {
     return (
       <table className="ue-table">
         <thead>
           <tr>
             <th>
-              <input type="checkbox" onClick={() => console.log('toggle all SU')} />
+              <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
             </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>
@@ -53,15 +74,22 @@ const PageList = ({ surveyUnits, uesByPage }) => {
             };
             const inactive = isDisabled ? 'inactive' : '';
             return (
-              <tr key={su.id} onClick={rowClickFunct} className={inactive}>
-                <td role="gridcell" onClick={e => e.stopPropagation()}>
-                  {!isDisabled && <input type="checkbox" />}
+              <tr key={su.id} onClick={e => rowClickFunct(e)} className={inactive}>
+                <td role="gridcell" onClick={e => filterPropagation(e)}>
+                  {!isDisabled && (
+                    <input
+                      type="checkbox"
+                      checked={su.selected}
+                      onChange={e => toggleOne(su.id, e.target.checked)}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  )}
                 </td>
                 <td>{su.campaign}</td>
                 <td>{su.sampleIdentifiers.ssech}</td>
                 <td>{su.id}</td>
                 <td>{`${su.lastName} ${su.firstName}`}</td>
-                <td>{su.geographicalLocation.label}</td>
+                <td>{su.address.l6}</td>
                 <td>{convertSUStateInToDo(su.state)}</td>
                 <td className="align-right">{intervalInDays(su)}</td>
                 <td className="align-center">

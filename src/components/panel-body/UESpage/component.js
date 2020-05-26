@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import D from 'i18n';
+import Modal from 'react-modal';
+import suStateEnum from 'common-tools/enum/SUStateEnum';
+import Form from './transmitForm';
 import PageList from './pageList';
 import Search from './search';
 import './ues.scss';
@@ -10,13 +13,18 @@ const UESPage = () => {
   const [filter, setFilter] = useState('');
   const [searchEchoes, setSearchEchoes] = useState([0, 0]);
   const [init, setInit] = useState(false);
+  const [showTransmitSummary, setShowTransmitSummary] = useState(false);
+  const [transmitSummary, setTransmitSummary] = useState({ ok: 0, ko: 0 });
 
   useEffect(() => {
     if (!init) {
       setInit(true);
       surveyUnitDBService.getAll().then(units => {
-        setSurveyUnits(units);
-        setSearchEchoes([units.length, units.length]);
+        const initializedSU = units.map(su => {
+          return { ...su, selected: false };
+        });
+        setSurveyUnits(initializedSU);
+        setSearchEchoes([initializedSU.length, initializedSU.length]);
       });
     }
   }, [init, surveyUnits]);
@@ -57,6 +65,74 @@ const UESPage = () => {
     }
   }, [filter]);
 
+  const isSelectable = su => {
+    // TODO implements rules
+    return true;
+  };
+
+  const toggleAllSUSelection = newValue => {
+    setSurveyUnits(
+      surveyUnits.map(su => {
+        const selectable = isSelectable(su);
+        return { ...su, selected: selectable ? newValue : false };
+      })
+    );
+  };
+
+  const toggleOneSUSelection = (id, newValue) => {
+    setSurveyUnits(
+      surveyUnits.map(su => {
+        if (su.id === id) {
+          return { ...su, selected: newValue };
+        }
+        return su;
+      })
+    );
+  };
+
+  const checkSUBeforeTransmission = su => {
+    console.log('checkSU id : ', su.id);
+    return true;
+  };
+
+  const processSU = surveyUnitsToProcess => {
+    const newDate = new Date().getTime();
+    const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
+    let nbOk = 0;
+    let nbKo = 0;
+    surveyUnitsToProcess.forEach(su => {
+      if (su.valid) {
+        const newSu = su;
+        newSu.states.push({ date: newDate, type: newType });
+        newSu.state = newType;
+        newSu.selected = false;
+        surveyUnitDBService.addOrUpdate(newSu);
+        nbOk += 1;
+      } else {
+        nbKo += 1;
+      }
+    });
+    setShowTransmitSummary(true);
+    setTransmitSummary({ ok: nbOk, ko: nbKo });
+    surveyUnitDBService.getAll().then(units => {
+      setSurveyUnits(units);
+    });
+  };
+
+  const transmit = () => {
+    const filteredSU = surveyUnits
+      .filter(su => su.selected)
+      .map(su => {
+        return { ...su, valid: checkSUBeforeTransmission(su) };
+      });
+    processSU(filteredSU);
+    setShowTransmitSummary(true);
+  };
+
+  const closeModal = () => {
+    setShowTransmitSummary(false);
+  };
+
   return (
     <div className="panel-body ues">
       <div className="column">
@@ -71,15 +147,17 @@ const UESPage = () => {
         </div>
         <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
       </div>
-      <PageList surveyUnits={surveyUnits} />
-      <button
-        type="button"
-        onClick={() => {
-          console.log('transmit');
-        }}
-      >
+      <PageList
+        surveyUnits={surveyUnits}
+        toggleAllSUSelection={toggleAllSUSelection}
+        toggleOneSUSelection={toggleOneSUSelection}
+      />
+      <button type="button" onClick={transmit}>
         Transmettre
       </button>
+      <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
+        <Form closeModal={closeModal} summary={transmitSummary} />
+      </Modal>
     </div>
   );
 };

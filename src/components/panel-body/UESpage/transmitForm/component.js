@@ -20,7 +20,5 @@ const Form = ({ closeModal, summary }) => {
 export default Form;
 Form.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  ok: PropTypes.string.isRequired,
-  ko: PropTypes.string.isRequired,
   summary: PropTypes.object.isRequired,
 };
