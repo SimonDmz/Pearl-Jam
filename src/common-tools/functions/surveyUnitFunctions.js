@@ -6,8 +6,11 @@ export const getCommentByType = (type, ue) => {
 };
 
 export const getLastState = ue => {
+  console.log('get last state');
+  console.log(ue);
   if (Array.isArray(ue.states) && ue.states.length > 0) {
-    return ue.states.reduce((a, b) => Math.max(a.date, b.date));
+    console.log('array non vide');
+    return ue.states.reduce((a, b) => (a.date > b.date ? a : b));
   }
   return false;
 };

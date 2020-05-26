@@ -22,6 +22,8 @@ const Router = ({ match, saveUE }) => {
   };
   const lastState = getLastState(ue);
 
+  console.log('lastState calculé : ', lastState);
+
   return (
     <div className="panel-body ue">
       <div className="ue-info">
@@ -46,7 +48,7 @@ const Router = ({ match, saveUE }) => {
           </div>
           <div className="row">
             <span className="ue-state">
-              {ue.states ? convertSUStateInToDo(lastState) : D.loading}
+              {ue.states ? convertSUStateInToDo(lastState.type) : D.loading}
             </span>
             <span className="comment ">Planifié le --/--/----</span>
           </div>

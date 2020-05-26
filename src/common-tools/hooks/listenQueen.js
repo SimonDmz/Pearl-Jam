@@ -5,16 +5,19 @@ import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 const computeSurveyUnitState = suToCompute => {
   const { questionnaireState } = suToCompute;
+  let newSuState = '';
   switch (questionnaireState) {
     case questionnaireEnum.COMPLETED.type:
-      return suStateEnum.WAITING_FOR_TRANSMISSION.type;
-
+      newSuState = suStateEnum.WAITING_FOR_TRANSMISSION.type;
+      break;
     case questionnaireEnum.STARTED.type:
-      return suStateEnum.QUESTIONNAIRE_STARTED.type;
+      newSuState = suStateEnum.QUESTIONNAIRE_STARTED.type;
+      break;
     default:
       break;
   }
-  return true;
+
+  return { date: new Date().getTime(), type: newSuState };
 };
 
 const updateSurveyUnit = (surveyUnitID, queenState) => {
