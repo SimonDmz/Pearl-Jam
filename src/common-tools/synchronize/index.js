@@ -18,7 +18,6 @@ const sendData = async (urlPearlApi, token) => {
   const surveyUnits = await surveyUnitDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
-      console.log(surveyUnit);
       const { id } = surveyUnit;
       await api.putDataSurveyUnitById(urlPearlApi, token)(id, surveyUnit);
     })

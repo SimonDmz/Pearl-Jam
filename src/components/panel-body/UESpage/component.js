@@ -104,7 +104,7 @@ const UESPage = () => {
       if (su.valid) {
         const newSu = su;
         newSu.states.push({ date: newDate, type: newType });
-        newSu.state = newType;
+        newSu.lastState = newType;
         newSu.selected = false;
         surveyUnitDBService.addOrUpdate(newSu);
         nbOk += 1;

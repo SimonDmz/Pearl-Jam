@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import { convertSUStateInToDo, getLastState } from 'common-tools/functions';
 import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 
@@ -90,7 +90,7 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
                 <td>{su.id}</td>
                 <td>{`${su.lastName} ${su.firstName}`}</td>
                 <td>{su.address.l6}</td>
-                <td>{convertSUStateInToDo(su.state)}</td>
+                <td>{convertSUStateInToDo(getLastState(su).type)}</td>
                 <td className="align-right">{intervalInDays(su)}</td>
                 <td className="align-center">
                   {su.priority && (

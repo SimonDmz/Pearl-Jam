@@ -22,8 +22,6 @@ const Router = ({ match, saveUE }) => {
   };
   const lastState = getLastState(ue);
 
-  console.log('lastState calculé : ', lastState);
-
   return (
     <div className="panel-body ue">
       <div className="ue-info">
