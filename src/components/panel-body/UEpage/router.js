@@ -12,6 +12,7 @@ import D from 'i18n';
 import Navigation from './navigation';
 import Details from './details';
 import Comments from './comments';
+import Contacts from './contacts';
 import SurveyUnitContext from './UEContext';
 import './router.scss';
 
@@ -89,6 +90,11 @@ const Router = ({ match, saveUE }) => {
           exact
           path={`${match.url}/comments`}
           component={routeProps => <Comments {...routeProps} saveUE={save} />}
+        />
+        <Route
+          exact
+          path={`${match.url}/contacts`}
+          component={routeProps => <Contacts {...routeProps} saveUE={save} />}
         />
         <Route exact path={`${match.url}/`}>
           <Redirect to={`${match.url}/details`} />

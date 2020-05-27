@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import D from 'i18n';
-import Comment from './comments';
+import Comment from './comment';
 import './comments.scss';
 
 const Comments = ({ saveUE }) => {
