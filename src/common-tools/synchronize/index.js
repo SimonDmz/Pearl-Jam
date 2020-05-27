@@ -1,4 +1,5 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
 const synchronizeQueen = () => {
@@ -18,8 +19,9 @@ const sendData = async (urlPearlApi, token) => {
   const surveyUnits = await surveyUnitDBService.getAll();
   await Promise.all(
     surveyUnits.map(async surveyUnit => {
+      const lastState = getLastState(surveyUnit);
       const { id } = surveyUnit;
-      await api.putDataSurveyUnitById(urlPearlApi, token)(id, surveyUnit);
+      await api.putDataSurveyUnitById(urlPearlApi, token)(id, { ...surveyUnit, lastState });
     })
   );
 };
