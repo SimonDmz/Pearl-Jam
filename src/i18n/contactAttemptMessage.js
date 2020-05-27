@@ -4,7 +4,7 @@ const contactAttemptMessage = {
   noContact: { fr: 'Pas de contact', en: 'No contact' },
   busyLine: { fr: 'Ligne occupée', en: 'Busy line' },
   answeringMachine: { fr: 'Répondeur', en: 'Answering machine' },
-  contactAttempts: { fr: 'Essais de contat', en: 'Contact attempts' },
+  contactAttempts: { fr: 'Essais de contact', en: 'Contact attempts' },
 };
 
 export default contactAttemptMessage;
