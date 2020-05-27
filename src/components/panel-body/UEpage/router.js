@@ -1,6 +1,12 @@
 import React, { useContext } from 'react';
 import { Route, Redirect, useHistory } from 'react-router-dom';
-import { convertSUStateInToDo, getLastState } from 'common-tools/functions';
+import {
+  convertSUStateInToDo,
+  getLastState,
+  isValidForTransmission,
+  addNewState,
+} from 'common-tools/functions';
+import suStateEnum from 'common-tools/enum/SUStateEnum';
 import PropTypes from 'prop-types';
 import D from 'i18n';
 import Navigation from './navigation';
@@ -21,6 +27,16 @@ const Router = ({ match, saveUE }) => {
     saveUE(unite, url);
   };
   const lastState = getLastState(ue);
+
+  const transmit = async () => {
+    console.log('transmit surveyUnit');
+    console.log(ue);
+    if (isValidForTransmission(ue)) {
+      const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
+      await addNewState(ue, newType);
+      history.push(match.url);
+    }
+  };
 
   return (
     <div className="panel-body ue">
@@ -56,7 +72,9 @@ const Router = ({ match, saveUE }) => {
           <button type="button" onClick={openQueen}>
             {D.questionnaireButton}
           </button>
-          <button type="button">{D.sendButton}</button>
+          <button type="button" onClick={transmit}>
+            {D.sendButton}
+          </button>
         </div>
       </div>
 

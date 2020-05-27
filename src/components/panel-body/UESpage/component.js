@@ -3,6 +3,7 @@ import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import D from 'i18n';
 import Modal from 'react-modal';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
+import { isValidForTransmission, addNewState } from 'common-tools/functions';
 import Form from './transmitForm';
 import PageList from './pageList';
 import Search from './search';
@@ -66,7 +67,7 @@ const UESPage = () => {
   }, [filter]);
 
   const isSelectable = su => {
-    // TODO implements rules
+    // TODO implements rules (collection[Start|End]Date)
     return true;
   };
 
@@ -90,23 +91,13 @@ const UESPage = () => {
     );
   };
 
-  const checkSUBeforeTransmission = su => {
-    console.log('checkSU id : ', su.id);
-    return true;
-  };
-
   const processSU = surveyUnitsToProcess => {
-    const newDate = new Date().getTime();
     const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
     let nbOk = 0;
     let nbKo = 0;
     surveyUnitsToProcess.forEach(su => {
       if (su.valid) {
-        const newSu = su;
-        newSu.states.push({ date: newDate, type: newType });
-        newSu.lastState = newType;
-        newSu.selected = false;
-        surveyUnitDBService.addOrUpdate(newSu);
+        addNewState(su, newType);
         nbOk += 1;
       } else {
         nbKo += 1;
@@ -123,7 +114,7 @@ const UESPage = () => {
     const filteredSU = surveyUnits
       .filter(su => su.selected)
       .map(su => {
-        return { ...su, valid: checkSUBeforeTransmission(su) };
+        return { ...su, valid: isValidForTransmission(su) };
       });
     processSU(filteredSU);
     setShowTransmitSummary(true);
