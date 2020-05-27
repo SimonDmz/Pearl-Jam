@@ -9,8 +9,9 @@ const ContactOutcome = ({ saveUE }) => {
   return (
     <div className="ContactOutcome">
       <h2>{D.contactOutcome}</h2>
-      <span>{`Contact outcome of survey-unit with id : ${ue.id}`}</span>
-      <span>{ue.ContactOutcome}</span>
+      <div>{`Contact outcome of survey-unit #${ue.id}`}</div>
+      <div>{ue.ContactOutcome}</div>
+      <button type="button">{` ✎ ${D.editButton}`}</button>
     </div>
   );
 };

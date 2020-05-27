@@ -7,12 +7,20 @@ div.Contacts {
   flex-direction: row;
   justify-content: center;
 
-  div {
+  div.ContactOutcome,
+  div.ContactAttempts {
+    flex-direction: column;
+    display: flex;
     width: 50%;
     height: 80%;
     border: 1px solid #969696;
     border-radius: 30px;
     margin: 0.5em;
     padding: 1em;
+  }
+
+  h2 {
+    width: 100%;
+    justify-self: auto;
   }
 }
