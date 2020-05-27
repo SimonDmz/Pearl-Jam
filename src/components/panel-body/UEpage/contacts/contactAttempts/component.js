@@ -1,19 +1,36 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import D from 'i18n';
+import format from 'date-fns/format';
 import SurveyUnitContext from '../../UEContext';
 
 const ContactAttempts = ({ saveUE }) => {
   const ue = useContext(SurveyUnitContext);
 
   const lines = () => {
-    const { contactAttempts } = ue;
+    const contactAttempts = [
+      {
+        date: 1589986800000,
+        status: 'BUL',
+      },
+      {
+        date: 1589994000000,
+        status: 'BUL',
+      },
+      {
+        date: 1590055200000,
+        status: 'COM',
+      },
+    ];
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
       return contactAttempts.map(contAtt => {
+        const date = format(new Date(contAtt.date), 'dd/MM/yyyy');
+        const hour = format(new Date(contAtt.date), 'H');
+
         return (
-          <div>
+          <div className="line">
             <button type="button">{` 🗑 `}</button>
-            <div>{contAtt.type}</div>
+            <div>{`${date} - ${hour}H - Téléphone - ${contAtt.status}`}</div>
             <button type="button">{` ✎ ${D.editButton}`}</button>
           </div>
         );

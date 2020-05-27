@@ -17,10 +17,11 @@ div.Contacts {
     border-radius: 30px;
     margin: 0.5em;
     padding: 1em;
-  }
 
-  h2 {
-    width: 100%;
-    justify-self: auto;
+    div.line {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 }

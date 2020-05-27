@@ -5,12 +5,15 @@ import SurveyUnitContext from '../../UEContext';
 
 const ContactOutcome = ({ saveUE }) => {
   const ue = useContext(SurveyUnitContext);
-
+  const outcome = {
+    date: 1590055200000,
+    totalNumberOfContactAttempts: 3,
+    type: 'INA',
+  };
   return (
     <div className="ContactOutcome">
       <h2>{D.contactOutcome}</h2>
-      <div>{`Contact outcome of survey-unit #${ue.id}`}</div>
-      <div>{ue.ContactOutcome}</div>
+      <div>{`${outcome.type} (${outcome.totalNumberOfContactAttempts} attempts)`}</div>
       <button type="button">{` ✎ ${D.editButton}`}</button>
     </div>
   );
