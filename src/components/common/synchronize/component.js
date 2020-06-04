@@ -63,7 +63,7 @@ const Synchronize = ({ disabled = false }) => {
       setLoading(false);
       history.push('/');
     }
-  }, [pearlSync, queenSync]);
+  }, [pearlSync, queenSync, history]);
 
   const syncFunction = () => {
     const launchSynchronize = async () => {

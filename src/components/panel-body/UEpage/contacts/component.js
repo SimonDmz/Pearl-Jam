@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import D from 'i18n';
 import PropTypes from 'prop-types';
 import ContactAttempts from './contactAttempts';
 import ContactOutcome from './contactOutcome';

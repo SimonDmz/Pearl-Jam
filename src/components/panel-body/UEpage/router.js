@@ -30,8 +30,6 @@ const Router = ({ match, saveUE }) => {
   const lastState = getLastState(ue);
 
   const transmit = async () => {
-    console.log('transmit surveyUnit');
-    console.log(ue);
     if (isValidForTransmission(ue)) {
       const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
       await addNewState(ue, newType);

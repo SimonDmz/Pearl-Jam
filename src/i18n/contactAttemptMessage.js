@@ -5,6 +5,10 @@ const contactAttemptMessage = {
   busyLine: { fr: 'Ligne occupée', en: 'Busy line' },
   answeringMachine: { fr: 'Répondeur', en: 'Answering machine' },
   contactAttempts: { fr: 'Essais de contact', en: 'Contact attempts' },
+  contactAttempt: {
+    fr: "Indiquez le résultat de l'appel téléphonique",
+    en: 'Select the phone call result',
+  },
 };
 
 export default contactAttemptMessage;
