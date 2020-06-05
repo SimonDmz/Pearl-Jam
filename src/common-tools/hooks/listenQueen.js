@@ -5,35 +5,43 @@ import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 const computeSurveyUnitState = suToCompute => {
   const { questionnaireState } = suToCompute;
+  let newSuState = '';
   switch (questionnaireState) {
     case questionnaireEnum.COMPLETED.type:
-      return suStateEnum.WAITING_FOR_VALIDATION.type;
-
+      newSuState = suStateEnum.WAITING_FOR_TRANSMISSION.type;
+      break;
     case questionnaireEnum.STARTED.type:
-      return suStateEnum.QUESTIONNAIRE_STARTED.type;
+      newSuState = suStateEnum.QUESTIONNAIRE_STARTED.type;
+      break;
     default:
       break;
   }
-  return true;
+
+  return { date: new Date().getTime(), type: newSuState };
 };
 
-const updateSurveyUnit = async (surveyUnitID, queenState) => {
-  const surveyUnit = await surveyUnitDBService.getById(surveyUnitID);
-  const newSU = surveyUnit;
-  let newQuestionnaireState = '';
-  switch (queenState) {
-    case 'COMPLETED':
-      newQuestionnaireState = questionnaireEnum.COMPLETED.type;
-      break;
-    case 'STARTED':
-      newQuestionnaireState = questionnaireEnum.STARTED.type;
-      break;
-    default:
-      break;
-  }
-  newSU.questionnaireState = newQuestionnaireState;
-  newSU.state = computeSurveyUnitState(newSU);
-  await surveyUnitDBService.update(newSU);
+const updateSurveyUnit = (surveyUnitID, queenState) => {
+  surveyUnitDBService.getById(surveyUnitID).then(su => {
+    const newSU = su;
+    let newQuestionnaireState = '';
+    switch (queenState) {
+      case 'COMPLETED':
+        newQuestionnaireState = questionnaireEnum.COMPLETED.type;
+        break;
+      case 'STARTED':
+        newQuestionnaireState = questionnaireEnum.STARTED.type;
+        break;
+      default:
+        break;
+    }
+    newSU.questionnaireState = newQuestionnaireState;
+    const newState = computeSurveyUnitState(newSU);
+    su.states.push(newState);
+    const update = async () => {
+      await surveyUnitDBService.update(newSU);
+    };
+    update();
+  });
 };
 
 const closeQueen = history => surveyUnitID => {

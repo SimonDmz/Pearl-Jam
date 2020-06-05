@@ -4,7 +4,10 @@ const suStateMessage = {
   suStateAtLeastOneContact: { fr: 'Au moins un contact', en: 'At least one contact' },
   suStateAppointmentMade: { fr: 'Rendez-vous pris', en: 'Appointment made' },
   suStateQuestionnaireStarted: { fr: 'Questionnaire démarré', en: 'Questionnaire started' },
-  suStateWaitingForValidation: { fr: 'En attente de validation', en: 'Waiting for Validation' },
+  suStateWaitingForTransmission: {
+    fr: 'En attente de transmission',
+    en: 'Waiting for transmission',
+  },
   suStateWaitingForSynchronization: {
     fr: 'En attente de synchronisation',
     en: 'Waiting for Synchronization',

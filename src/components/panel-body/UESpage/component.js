@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import D from 'i18n';
+import Modal from 'react-modal';
+import suStateEnum from 'common-tools/enum/SUStateEnum';
+import { isValidForTransmission, addNewState } from 'common-tools/functions';
+import Form from './transmitForm';
 import PageList from './pageList';
 import Search from './search';
 import './ues.scss';
@@ -11,13 +14,18 @@ const UESPage = () => {
   const [filter, setFilter] = useState('');
   const [searchEchoes, setSearchEchoes] = useState([0, 0]);
   const [init, setInit] = useState(false);
+  const [showTransmitSummary, setShowTransmitSummary] = useState(false);
+  const [transmitSummary, setTransmitSummary] = useState({ ok: 0, ko: 0 });
 
   useEffect(() => {
     if (!init) {
       setInit(true);
       surveyUnitDBService.getAll().then(units => {
-        setSurveyUnits(units);
-        setSearchEchoes([units.length, units.length]);
+        const initializedSU = units.map(su => {
+          return { ...su, selected: false };
+        });
+        setSurveyUnits(initializedSU);
+        setSearchEchoes([initializedSU.length, initializedSU.length]);
       });
     }
   }, [init, surveyUnits]);
@@ -58,46 +66,62 @@ const UESPage = () => {
     }
   }, [filter]);
 
-  const addSu = async () => {
-    const su = {
-      civility: 'Monsieur',
-      lastName: 'MANGIN',
-      firstName: 'Jean',
-      address: {
-        deliveryPoint: '',
-        additionalAdress: '',
-        number: '1',
-        streetType: 'Rue',
-        streetName: 'Principale',
-        postcode: '54000',
-        city: 'Maxéville',
-      },
-      phone: ['06 95 68 45 95', '03 87 73 22 00'],
-      sampleId: Math.floor(Math.random() * 100) + 1,
-      collectionStartDate: '2021-06-01',
-      collectionEndDate: '2021-06-30',
-      priority: true,
-      state: suStateEnum.NOT_STARTED.type,
-      interviewerComment: '',
-      managementComment: 'Beware of the dog.',
-      questionnaireState: '',
-    };
-    // update the store
-    const newSU = [
-      { id: '11', questionnaire: 'simpsons2020x00', ...su },
-      { id: '12', questionnaire: 'simpsons2020x00', ...su },
-      { id: '21', questionnaire: 'vqs2021x00', ...su },
-      { id: '22', questionnaire: 'vqs2021x00', ...su },
-    ];
-    await Promise.all(
-      newSU.map(async unit => {
-        await surveyUnitDBService.addOrUpdate(unit);
+  const isSelectable = su => {
+    // TODO implements rules (collection[Start|End]Date)
+    return true;
+  };
+
+  const toggleAllSUSelection = newValue => {
+    setSurveyUnits(
+      surveyUnits.map(su => {
+        const selectable = isSelectable(su);
+        return { ...su, selected: selectable ? newValue : false };
       })
     );
-    // update the state hook
+  };
+
+  const toggleOneSUSelection = (id, newValue) => {
+    setSurveyUnits(
+      surveyUnits.map(su => {
+        if (su.id === id) {
+          return { ...su, selected: newValue };
+        }
+        return su;
+      })
+    );
+  };
+
+  const processSU = surveyUnitsToProcess => {
+    const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
+    let nbOk = 0;
+    let nbKo = 0;
+    surveyUnitsToProcess.forEach(su => {
+      if (su.valid) {
+        addNewState(su, newType);
+        nbOk += 1;
+      } else {
+        nbKo += 1;
+      }
+    });
+    setShowTransmitSummary(true);
+    setTransmitSummary({ ok: nbOk, ko: nbKo });
     surveyUnitDBService.getAll().then(units => {
       setSurveyUnits(units);
     });
+  };
+
+  const transmit = () => {
+    const filteredSU = surveyUnits
+      .filter(su => su.selected)
+      .map(su => {
+        return { ...su, valid: isValidForTransmission(su) };
+      });
+    processSU(filteredSU);
+    setShowTransmitSummary(true);
+  };
+
+  const closeModal = () => {
+    setShowTransmitSummary(false);
   };
 
   return (
@@ -114,18 +138,17 @@ const UESPage = () => {
         </div>
         <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
       </div>
-      <PageList surveyUnits={surveyUnits} />
-      <button type="button" onClick={addSu}>
-        Add new ue
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          console.log('transmit');
-        }}
-      >
+      <PageList
+        surveyUnits={surveyUnits}
+        toggleAllSUSelection={toggleAllSUSelection}
+        toggleOneSUSelection={toggleOneSUSelection}
+      />
+      <button type="button" onClick={transmit}>
         Transmettre
       </button>
+      <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
+        <Form closeModal={closeModal} summary={transmitSummary} />
+      </Modal>
     </div>
   );
 };

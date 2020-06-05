@@ -1,11 +1,18 @@
 import React, { useContext } from 'react';
 import { Route, Redirect, useHistory } from 'react-router-dom';
-import convertSUStateInToDo from 'common-tools/functions/convertSUStateInToDo';
+import {
+  convertSUStateInToDo,
+  getLastState,
+  isValidForTransmission,
+  addNewState,
+} from 'common-tools/functions';
+import suStateEnum from 'common-tools/enum/SUStateEnum';
 import PropTypes from 'prop-types';
 import D from 'i18n';
 import Navigation from './navigation';
 import Details from './details';
 import Comments from './comments';
+import Contacts from './contacts';
 import SurveyUnitContext from './UEContext';
 import './router.scss';
 
@@ -14,11 +21,20 @@ const Router = ({ match, saveUE }) => {
   const history = useHistory();
 
   const openQueen = () => {
-    history.push(`/queen/questionnaire/${ue.questionnaire}/survey-unit/${match.params.id}`);
+    history.push(`/queen/questionnaire/${ue.campaign}/survey-unit/${match.params.id}`);
   };
 
   const save = (unite, url) => {
     saveUE(unite, url);
+  };
+  const lastState = getLastState(ue);
+
+  const transmit = async () => {
+    if (isValidForTransmission(ue)) {
+      const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
+      await addNewState(ue, newType);
+      history.push(match.url);
+    }
   };
 
   return (
@@ -26,18 +42,26 @@ const Router = ({ match, saveUE }) => {
       <div className="ue-info">
         <div className="infos">
           <div className="row">
-            <span>{ue.questionnaire ? ue.questionnaire : D.loading}</span>
-            <span>{ue.id ? `${D.suSample}  ${ue.sampleId}` : D.loading}</span>
-            <span>{ue.id ? `VOOOOOO${ue.id}` : D.loading}</span>
+            <span>{ue.campaign ? ue.campaign : D.loading}</span>
+            <span>
+              {ue.sampleIdentifiers && ue.sampleIdentifiers.ssech
+                ? `${D.suSample}  ${ue.sampleIdentifiers.ssech}`
+                : D.loading}
+            </span>
+            <span>
+              {ue.sampleIdentifiers && ue.sampleIdentifiers.numfa
+                ? `VOOOOOO${ue.sampleIdentifiers.numfa}`
+                : D.loading}
+            </span>
           </div>
           <div className="row">
             <span>{ue.lastName ? `${ue.lastName}` : D.loading}</span>
             <span>{ue.firstName ? `${ue.firstName}` : D.loading}</span>
-            <span>{ue.address ? ue.address.city : D.loading}</span>
+            <span>{ue.geographicalLocation ? ue.geographicalLocation.label : D.loading}</span>
           </div>
           <div className="row">
             <span className="ue-state">
-              {ue.state ? convertSUStateInToDo(ue.state) : D.loading}
+              {ue.states ? convertSUStateInToDo(lastState.type) : D.loading}
             </span>
             <span className="comment ">Planifié le --/--/----</span>
           </div>
@@ -47,7 +71,9 @@ const Router = ({ match, saveUE }) => {
           <button type="button" onClick={openQueen}>
             {D.questionnaireButton}
           </button>
-          <button type="button">{D.sendButton}</button>
+          <button type="button" onClick={transmit}>
+            {D.sendButton}
+          </button>
         </div>
       </div>
 
@@ -62,6 +88,11 @@ const Router = ({ match, saveUE }) => {
           exact
           path={`${match.url}/comments`}
           component={routeProps => <Comments {...routeProps} saveUE={save} />}
+        />
+        <Route
+          exact
+          path={`${match.url}/contacts`}
+          component={routeProps => <Contacts {...routeProps} saveUE={save} />}
         />
         <Route exact path={`${match.url}/`}>
           <Redirect to={`${match.url}/details`} />

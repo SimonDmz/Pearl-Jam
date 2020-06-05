@@ -23,10 +23,10 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
     };
   };
 
-  const phoneField = useField(surveyUnit.phone);
+  const phoneField = useField(surveyUnit.phoneNumbers);
 
   const save = () => {
-    surveyUnit.phone = phoneField.phone;
+    surveyUnit.phoneNumbers = phoneField.phone;
     saveUE(surveyUnit);
   };
 
@@ -50,9 +50,15 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
           ))}
       </form>
 
-      <button onClick={phoneField.addPhone}>{D.addPhoneNumberButton}</button>
-      <button onClick={save}>{D.validateButton}</button>
-      <button onClick={closeModal}>{D.cancelButton}</button>
+      <button type="button" onClick={phoneField.addPhone}>
+        {D.addPhoneNumberButton}
+      </button>
+      <button type="button" onClick={save}>
+        {D.validateButton}
+      </button>
+      <button type="button" onClick={closeModal}>
+        {D.cancelButton}
+      </button>
     </>
   );
 };

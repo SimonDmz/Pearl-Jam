@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Link /* useHistory */ } from 'react-router-dom';
-import convertSUStateInToDo from 'common-tools/functions/convertSUStateInToDo';
+import { Link, useHistory } from 'react-router-dom';
+import { convertSUStateInToDo, getLastState } from 'common-tools/functions';
 import { formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 
-const PageList = ({ surveyUnits, uesByPage }) => {
+const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSelection }) => {
   const [page, setPage] = useState(0);
-  // const history = useHistory();
+  const [selectAll, setSelectAll] = useState(false);
+  const history = useHistory();
 
   const intervalInDays = su => {
     const { collectionEndDate } = su;
@@ -19,13 +20,40 @@ const PageList = ({ surveyUnits, uesByPage }) => {
     return remainingDays.split(' ')[0];
   };
 
+  const checkSurveyUnit = su => {
+    const { collectionStartDate } = su;
+    const suTime = new Date(collectionStartDate).getTime();
+    const instantTime = new Date().getTime();
+    return suTime > instantTime;
+  };
+
+  const toggleAll = event => {
+    const { target } = event;
+    if (target.type !== 'checkbox') {
+      event.stopPropagation();
+    }
+    toggleAllSUSelection(!selectAll);
+    setSelectAll(!selectAll);
+  };
+
+  const toggleOne = (id, newValue) => {
+    toggleOneSUSelection(id, newValue);
+  };
+
+  const filterPropagation = e => {
+    const { target } = e;
+    if (target.type !== 'checkbox') {
+      e.stopPropagation();
+    }
+  };
+
   const renderSimpleTable = sus => {
     return (
       <table className="ue-table">
         <thead>
           <tr>
             <th>
-              <input type="checkbox" />
+              <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
             </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>
@@ -39,34 +67,48 @@ const PageList = ({ surveyUnits, uesByPage }) => {
           </tr>
         </thead>
         <tbody>
-          {sus.map(su => (
-            <tr key={su.id}>
-              <td role="gridcell" onClick={e => e.stopPropagation()}>
-                <input type="checkbox" />
-              </td>
-              <td>{su.questionnaire}</td>
-              <td>{su.sampleId}</td>
-              <td>{su.id}</td>
-              <td>{`${su.lastName} ${su.firstName}`}</td>
-              <td>{su.address.city}</td>
-              <td>{convertSUStateInToDo(su.state)}</td>
-              <td className="align-right">{intervalInDays(su)}</td>
-              <td className="align-center">
-                {su.priority && (
-                  <span role="img" aria-label="priority">
-                    🚩
-                  </span>
-                )}
-              </td>
-              <td className="align-center">
-                <Link to={`survey-unit/${su.id}`}>
-                  <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
-                    📅
-                  </span>
-                </Link>
-              </td>
-            </tr>
-          ))}
+          {sus.map(su => {
+            const isDisabled = checkSurveyUnit(su);
+            const rowClickFunct = () => {
+              if (!isDisabled) history.push(`survey-unit/${su.id}`);
+            };
+            const inactive = isDisabled ? 'inactive' : '';
+            return (
+              <tr key={su.id} onClick={e => rowClickFunct(e)} className={inactive}>
+                <td role="gridcell" onClick={e => filterPropagation(e)}>
+                  {!isDisabled && (
+                    <input
+                      type="checkbox"
+                      checked={su.selected}
+                      onChange={e => toggleOne(su.id, e.target.checked)}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  )}
+                </td>
+                <td>{su.campaign}</td>
+                <td>{su.sampleIdentifiers.ssech}</td>
+                <td>{su.id}</td>
+                <td>{`${su.lastName} ${su.firstName}`}</td>
+                <td>{su.address.l6}</td>
+                <td>{convertSUStateInToDo(getLastState(su).type)}</td>
+                <td className="align-right">{intervalInDays(su)}</td>
+                <td className="align-center">
+                  {su.priority && (
+                    <span role="img" aria-label="priority">
+                      🚩
+                    </span>
+                  )}
+                </td>
+                <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
+                  <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
+                    <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
+                      📅
+                    </span>
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     );
@@ -75,10 +117,11 @@ const PageList = ({ surveyUnits, uesByPage }) => {
   const renderTable = ues => {
     const sortedUes = ues.sort(
       (ueA, ueB) =>
-        ueA.collectionEndDate.localeCompare(ueB.collectionEndDate) ||
-        ueA.questionnaire.localeCompare(ueB.questionnaire) ||
-        ueA.sampleId - ueB.sampleId
+        ueA.collectionEndDate.toString().localeCompare(ueB.collectionEndDate.toString()) ||
+        ueA.campaign.localeCompare(ueB.campaign) ||
+        ueA.sampleIdentifiers.ssech - ueB.sampleIdentifiers.ssech
     );
+
     let i;
     let j;
     let ueChunk;
