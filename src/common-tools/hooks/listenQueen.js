@@ -5,16 +5,19 @@ import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 const computeSurveyUnitState = suToCompute => {
   const { questionnaireState } = suToCompute;
+  let newSuState = '';
   switch (questionnaireState) {
     case questionnaireEnum.COMPLETED.type:
-      return suStateEnum.WAITING_FOR_VALIDATION.type;
-
+      newSuState = suStateEnum.WAITING_FOR_TRANSMISSION.type;
+      break;
     case questionnaireEnum.STARTED.type:
-      return suStateEnum.QUESTIONNAIRE_STARTED.type;
+      newSuState = suStateEnum.QUESTIONNAIRE_STARTED.type;
+      break;
     default:
       break;
   }
-  return true;
+
+  return { date: new Date().getTime(), type: newSuState };
 };
 
 const updateSurveyUnit = (surveyUnitID, queenState) => {
@@ -32,7 +35,8 @@ const updateSurveyUnit = (surveyUnitID, queenState) => {
         break;
     }
     newSU.questionnaireState = newQuestionnaireState;
-    newSU.state = computeSurveyUnitState(newSU);
+    const newState = computeSurveyUnitState(newSU);
+    su.states.push(newState);
     const update = async () => {
       await surveyUnitDBService.update(newSU);
     };
@@ -44,7 +48,7 @@ const closeQueen = history => surveyUnitID => {
   history.push(`/survey-unit/${surveyUnitID}/details`);
 };
 
-const handleQueenEvent = history => event => {
+const handleQueenEvent = history => async event => {
   const { type, command, ...other } = event.detail;
   if (type === 'QUEEN') {
     switch (command) {
@@ -52,7 +56,7 @@ const handleQueenEvent = history => event => {
         closeQueen(history)(other.surveyUnit);
         break;
       case 'UPDATE_SURVEY_UNIT':
-        updateSurveyUnit(other.surveyUnit, other.state);
+        await updateSurveyUnit(other.surveyUnit, other.state);
         window.dispatchEvent(new CustomEvent('pearl-update'));
         break;
       case 'UPDATE_SYNCHRONIZE':

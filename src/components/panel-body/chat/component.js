@@ -10,7 +10,7 @@ const ChatPage = () => {
       const init = async () => {
         const response = await fetch(`${window.location.origin}/configuration.json`);
         const configuration = await response.json();
-        setUrlChat(configuration.urlChat);
+        setUrlChat(configuration.CHAT_URL);
       };
       init();
     }

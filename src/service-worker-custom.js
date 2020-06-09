@@ -1,9 +1,5 @@
-/* eslint-disable no-template-curly-in-string */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-self._urlQueen = '${QUEEN_URL}';
-importScripts('/service-worker.js', `${self._urlQueen}/queen-service-worker.js`);
+self._QUEEN_URL = new URL(location).searchParams.get('QUEEN_URL');
+importScripts('/service-worker.js', `${self._QUEEN_URL}/queen-service-worker.js`);
 
 const getUrlRegexJson = function(url) {
   return url.replace('http', '^http').concat('/(.*)(.json)');

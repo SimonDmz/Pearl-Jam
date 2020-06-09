@@ -6,6 +6,7 @@ const buttonMessage = {
   editButton: { fr: 'Modifier', en: 'Edit' },
   validateButton: { fr: 'Valider', en: 'Validate' },
   addPhoneNumberButton: { fr: 'Ajouter un numéro', en: 'Add a phone number' },
+  addButton: { fr: 'Ajouter', en: 'Add' },
   synchronizeButton: { fr: 'Synchroniser', en: 'Synchronize' },
   closeButton: { fr: 'Fermer', en: 'Close' },
   updateNow: { fr: 'Mettre à jour maintenant', en: 'Update now' },

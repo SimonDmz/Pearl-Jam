@@ -3,7 +3,7 @@ export const initAuth = () => {
   fetch(configURL)
     .then(response => response.json())
     .then(data => {
-      switch (data.authenticationMode) {
+      switch (data.PEARL_AUTHENTICATION_MODE) {
         case 'anonymous':
           window.localStorage.setItem(
             'pearl-interviewer',

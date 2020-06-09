@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import D from 'i18n';
+import { getCommentByType } from 'common-tools/functions/surveyUnitFunctions';
 import SurveyUnitContext from '../../UEContext';
 import Form from './form';
 import './comment.scss';
@@ -17,12 +18,15 @@ const Comment = ({ saveUE, title, editable }) => {
     saveUE(surveyUnit);
     closeModal();
   };
+
   return (
     <div className="Comment">
       <p className="title">{title}</p>
 
       <div className="border">
-        <div className="text">{editable ? ue.interviewerComment : ue.managementComment}</div>
+        <div className="text">
+          {editable ? getCommentByType('INTERVIEWER', ue) : getCommentByType('MANAGEMENT', ue)}
+        </div>
 
         {editable === true && (
           <button type="button" onClick={openModal}>
