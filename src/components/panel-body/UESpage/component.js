@@ -124,11 +124,8 @@ const UESPage = () => {
     setShowTransmitSummary(false);
   };
 
-  console.log(surveyUnits.filter(su => su.selected));
-
   const anySuSelected = surveyUnits.filter(su => su.selected).length > 0 ? '' : '"disabled"';
 
-  console.log(anySuSelected);
   return (
     <div className="panel-body ues">
       <div className="column">
