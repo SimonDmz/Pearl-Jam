@@ -5,7 +5,7 @@ import ChatPage from 'components/panel-body/chat';
 import NotificationsPage from 'components/panel-body/notifications';
 import TrainingPage from 'components/panel-body/training';
 import QueenContainer from 'components/panel-body/queen-container';
-import useQueenFromConfig from 'common-tools/hooks/useQueenFromConfig';
+import { useQueenFromConfig } from 'common-tools/hooks/useQueenFromConfig';
 import { StateProvider } from 'common-tools/store';
 import Notification from 'components/common/Notification';
 
