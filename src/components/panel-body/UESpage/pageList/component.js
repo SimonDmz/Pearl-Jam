@@ -47,14 +47,19 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
     }
   };
 
+  const removePostCode = str => {
+    return str
+      .split(' ')
+      .slice(1)
+      .toString();
+  };
+
   const renderSimpleTable = sus => {
     return (
       <table className="ue-table">
         <thead>
           <tr>
-            <th>
-              <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
-            </th>
+            <th> </th>
             <th>{D.surveyHeader}</th>
             <th>{D.sampleHeader}</th>
             <th>{D.surveyUnitHeader}</th>
@@ -89,7 +94,7 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
                 <td>{su.sampleIdentifiers.ssech}</td>
                 <td>{su.id}</td>
                 <td>{`${su.lastName} ${su.firstName}`}</td>
-                <td>{su.address.l6}</td>
+                <td>{removePostCode(su.address.l6)}</td>
                 <td>{convertSUStateInToDo(getLastState(su).type)}</td>
                 <td className="align-right">{intervalInDays(su)}</td>
                 <td className="align-center">
@@ -128,7 +133,15 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
     const tableSize = uesByPage || 10;
     const chunkSize = tableSize;
     if (sortedUes.length <= tableSize) {
-      return renderSimpleTable(sortedUes);
+      return (
+        <>
+          {renderSimpleTable(sortedUes)}
+          <div>
+            <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
+            <span>Tout cocher / décocher</span>
+          </div>
+        </>
+      );
     }
     const ueSplit = [];
     for (i = 0, j = ues.length; i < j; i += chunkSize) {
@@ -160,6 +173,7 @@ const PageList = ({ surveyUnits, uesByPage, toggleAllSUSelection, toggleOneSUSel
             »
           </button>
         </div>
+        <input type="checkbox" checked={selectAll} onChange={e => toggleAll(e)} />
       </>
     );
   };

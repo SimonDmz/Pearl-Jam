@@ -19,6 +19,10 @@ const Navigation = ({ location }) => {
 
   return (
     <>
+      <div className="top-info">
+        <div className="user-name">{`${D.welcome} ${getName()}`}</div>
+        <OnlineStatus />
+      </div>
       <nav className="nav-bar" disabled={disabled}>
         <div className="items">
           <img alt="logo Insee" src={imgInsee} className="insee-logo" />
@@ -34,10 +38,6 @@ const Navigation = ({ location }) => {
         </div>
         <div className="top-right">
           <Synchronize disabled={disabled} />
-          <div>
-            <div className="user-name">{`${D.welcome} ${getName()}`}</div>
-            <OnlineStatus />
-          </div>
         </div>
       </nav>
     </>

@@ -28,7 +28,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
   return (
     <div className="form">
       <label htmlFor="comment">
-        <p className="title">{D.surveyUnitComment}</p>
+        <p className="title">{D.organizationComment}</p>
         <textarea
           autoFocus
           type="textarea"

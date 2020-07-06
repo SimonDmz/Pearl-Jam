@@ -25,7 +25,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
 
   return (
     <>
-      <h3>{`Modification de l'unité enquêtée`}</h3>
+      <h3>{`${D.surveyUnitEmailChange}`}</h3>
       <form onSubmit={saveTempUE}>
         <label htmlFor="email">
           {`${D.surveyUnitEmail} :`}

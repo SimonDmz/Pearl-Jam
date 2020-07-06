@@ -124,6 +124,11 @@ const UESPage = () => {
     setShowTransmitSummary(false);
   };
 
+  console.log(surveyUnits.filter(su => su.selected));
+
+  const anySuSelected = surveyUnits.filter(su => su.selected).length > 0 ? '' : '"disabled"';
+
+  console.log(anySuSelected);
   return (
     <div className="panel-body ues">
       <div className="column">
@@ -143,7 +148,7 @@ const UESPage = () => {
         toggleAllSUSelection={toggleAllSUSelection}
         toggleOneSUSelection={toggleOneSUSelection}
       />
-      <button type="button" onClick={transmit}>
+      <button type="button" className="transmit" disabled={anySuSelected} onClick={transmit}>
         Transmettre
       </button>
       <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">

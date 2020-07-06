@@ -36,7 +36,7 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
 
   return (
     <>
-      <h3>{`Modification de l'unité enquêtée`}</h3>
+      <h3>{`${D.surveyUnitNameChange}`}</h3>
       <form onSubmit={saveTempUE}>
         <label htmlFor="lastName">
           {`${D.surveyUnitLastName} :`}
