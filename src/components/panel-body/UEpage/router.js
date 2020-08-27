@@ -40,6 +40,9 @@ const Router = ({ match, saveUE }) => {
   return (
     <div className="panel-body ue">
       <div className="ue-info">
+        <button type="button" className="button-back-home" onClick={() => history.push('/')}>
+          {'<<'}
+        </button>
         <div className="infos">
           <div className="row">
             <span>{ue.campaign ? ue.campaign : D.loading}</span>
@@ -63,7 +66,6 @@ const Router = ({ match, saveUE }) => {
             <span className="ue-state">
               {ue.states ? convertSUStateInToDo(lastState.type) : D.loading}
             </span>
-            <span className="comment ">Planifié le --/--/----</span>
           </div>
         </div>
 

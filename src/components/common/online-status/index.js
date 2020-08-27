@@ -4,7 +4,7 @@ import D from 'i18n';
 import Online from './online.icon';
 import Offline from './offine.icon';
 
-export default ({ width = 20, height = 20 }) => {
+export default ({ width = 18, height = 18 }) => {
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
   useEffect(() => {
