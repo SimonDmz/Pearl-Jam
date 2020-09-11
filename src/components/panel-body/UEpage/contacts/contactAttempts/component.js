@@ -1,56 +1,61 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import D from 'i18n';
+import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
+import { deleteContactAttempt } from 'common-tools/functions';
 import format from 'date-fns/format';
 import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
 import Form from './form';
 import SurveyUnitContext from '../../UEContext';
 
 const ContactAttempts = ({ saveUE }) => {
-  const ue = useContext(SurveyUnitContext);
+  const su = useContext(SurveyUnitContext);
   const [contactAttempt, setContactAttempt] = useState({ status: 'titi', date: 12345 });
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [contactAttempts, setcontactAttempts] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+
+  useEffect(() => {
+    const getContactAttempts = async ids => {
+      if (ids === undefined || ids.length === 0) return [];
+      const cat = await contactAttemptDBService.findByIds(ids);
+      return cat;
+    };
+
+    if (su !== undefined) {
+      const contactAttemptsId = su.contactAttempts;
+      getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
+      setRefresh(false);
+    } else {
+      console.log('undefined');
+    }
+  }, [su, refresh]);
 
   const lines = () => {
-    // TODO use real indexedDB data -> const {contactAttempts }= ue;
-    const contactAttempts = [
-      {
-        date: 1590055200000,
-        status: 'COM',
-        id: 128,
-      },
-      {
-        date: 1589994000000,
-        status: 'BUL',
-        id: 127,
-      },
-      {
-        date: 1589986800000,
-        status: 'BUL',
-        id: 126,
-      },
-      {
-        date: 1589986800000,
-        status: 'BUL',
-        id: 125,
-      },
-    ];
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
       return contactAttempts.map(contAtt => {
         const date = format(new Date(contAtt.date), 'dd/MM/yyyy');
-        const hour = format(new Date(contAtt.date), 'H');
+        const hour = format(new Date(contAtt.date), 'HH');
+        const minutes = format(new Date(contAtt.date), 'mm');
 
         return (
           <tr className="line" key={contAtt.id}>
             <td>
-              <button type="button" className="smallButton">
+              <button
+                type="button"
+                className="smallButton"
+                onClick={() => {
+                  deleteContactAttempt(su, contAtt.id);
+                  setRefresh(true);
+                }}
+              >
                 <i className="fa fa-times" aria-hidden="true" />
               </button>
             </td>
             <td>
               <div>
-                {`${date} - ${hour}H - Téléphone - ${findContactAttemptValueByType(
+                {`${date} - ${hour}h${minutes} - ${D.telephone} - ${findContactAttemptValueByType(
                   contAtt.status
                 )}`}
               </div>
@@ -58,7 +63,12 @@ const ContactAttempts = ({ saveUE }) => {
           </tr>
         );
       });
-    return <div>No data to process</div>;
+    return (
+      <tr>
+        <td />
+        <td>{D.noContactAttempt}</td>
+      </tr>
+    );
   };
 
   const openModal = () => {
@@ -84,18 +94,17 @@ const ContactAttempts = ({ saveUE }) => {
           {D.addButton}
         </button>
       </div>
-
       <table className="contactTable">
         <colgroup>
           <col className="col1" />
           <col className="col2" />
         </colgroup>
-        {lines()}
+        <tbody>{lines()}</tbody>
       </table>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
         <Form
           closeModal={closeModal}
-          surveyUnit={ue}
+          surveyUnit={su}
           setContactAttempt={setContactAttempt}
           contactAttempt={contactAttempt}
           saveUE={save}

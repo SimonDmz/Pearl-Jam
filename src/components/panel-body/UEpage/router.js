@@ -68,7 +68,7 @@ const Router = ({ match, saveUE }) => {
           <div className="row">
             <span className="ue-state">
               <i className="fa fa-info-circle" aria-hidden="true" />
-              {ue.states ? ` ${convertSUStateInToDo(lastState.type).value}` : D.loading}
+              {ue.states ? <span> {convertSUStateInToDo(lastState.type).value}</span> : D.loading}
               &nbsp;
             </span>
           </div>
