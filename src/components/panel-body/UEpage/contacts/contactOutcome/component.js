@@ -1,35 +1,78 @@
-import React /* , { useContext } */ from 'react';
-/* import PropTypes from 'prop-types'; */
+import React, { useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import Modal from 'react-modal';
 import D from 'i18n';
-/* import SurveyUnitContext from '../../UEContext'; */
 import { findContactOutcomeValueByType } from 'common-tools/enum/ContactOutcomEnum';
+import Form from './form';
+import SurveyUnitContext from '../../UEContext';
 
-const ContactOutcome = (/* { saveUE } */) => {
-  /* const ue = useContext(SurveyUnitContext); */
-  const outcome = {
-    date: 1590055200000,
-    totalNumberOfContactAttempts: 3,
-    type: 'INA',
+const ContactOutcome = ({ saveUE }) => {
+  const su = useContext(SurveyUnitContext);
+  const defaultContactOutcome =
+    su.contactOutcome !== undefined && su.contactOutcome !== null
+      ? su.contactOutcome
+      : {
+          date: new Date().getTime(),
+          type: undefined,
+          totalNumberOfContactAttempts: '0',
+        };
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [contactOutcome, setContactOutcome] = useState(defaultContactOutcome);
+
+  useEffect(() => {
+    setContactOutcome(
+      su.contactOutcome !== undefined && su.contactOutcome !== null
+        ? su.contactOutcome
+        : {
+            date: new Date().getTime(),
+            type: undefined,
+            totalNumberOfContactAttempts: '0',
+          }
+    );
+  }, [su]);
+
+  const openModal = () => {
+    setModalIsOpen(true);
   };
 
-  const outcomeValue = findContactOutcomeValueByType(outcome.type);
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const save = surveyUnit => {
+    saveUE(surveyUnit);
+    closeModal();
+  };
+
+  const outcomeValue = findContactOutcomeValueByType(contactOutcome.type);
   return (
-    <div className="ContactOutcome">
-      <div className="row">
-        <h2>{D.contactOutcome}</h2>
-        <button type="button" className="bottom-right">
-          <i className="fa fa-pencil" aria-hidden="true" />
-          &nbsp;
-          {D.editButton}
-        </button>
+    <>
+      <div className="ContactOutcome">
+        <div className="row">
+          <h2>{D.contactOutcome}</h2>
+          <button type="button" className="bottom-right" onClick={() => openModal()}>
+            <i className="fa fa-pencil" aria-hidden="true" />
+            &nbsp;
+            {D.editButton}
+          </button>
+        </div>
+        <div className="line">{outcomeValue}</div>
+        <div className="line">{`(${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts})`}</div>
       </div>
-      <div className="line">{outcomeValue}</div>
-      <div className="line">{`(${outcome.totalNumberOfContactAttempts} essais)`}</div>
-    </div>
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
+        <Form
+          closeModal={closeModal}
+          surveyUnit={su}
+          setContactOutcome={setContactOutcome}
+          contactOutcome={contactOutcome}
+          saveUE={save}
+        />
+      </Modal>
+    </>
   );
 };
 
 export default ContactOutcome;
-/* ContactOutcome.propTypes = {
+ContactOutcome.propTypes = {
   saveUE: PropTypes.func.isRequired,
-}; */
+};
