@@ -122,10 +122,11 @@ const UESPage = () => {
     );
   };
 
-  const processSU = surveyUnitsToProcess => {
+  const processSU = async surveyUnitsToProcess => {
     const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
     let nbOk = 0;
     let nbKo = 0;
+
     surveyUnitsToProcess.forEach(su => {
       if (su.valid) {
         addNewState(su, newType);
@@ -134,21 +135,20 @@ const UESPage = () => {
         nbKo += 1;
       }
     });
-    setShowTransmitSummary(true);
+
+    setSurveyUnits(await surveyUnitDBService.getAll());
     setTransmitSummary({ ok: nbOk, ko: nbKo });
-    surveyUnitDBService.getAll().then(units => {
-      setSurveyUnits(units);
-    });
   };
 
-  const transmit = () => {
+  const transmit = async () => {
     const filteredSU = surveyUnits
       .filter(su => su.selected)
       .map(su => {
         return { ...su, valid: isValidForTransmission(su) };
       });
-    processSU(filteredSU);
+    await processSU(filteredSU);
     setShowTransmitSummary(true);
+    setInit(false);
   };
 
   const closeModal = () => {

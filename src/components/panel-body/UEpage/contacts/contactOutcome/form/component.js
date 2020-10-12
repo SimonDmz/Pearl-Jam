@@ -47,8 +47,7 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
     if (type === contactOutcomeEnum.INTERVIEW_ACCEPTED.type) {
       addNewState(surveyUnit, surveyUnitStateEnum.APPOINTMENT_MADE.type);
     } else {
-      // su.State -> au moins un contact
-      addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
+      addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type);
     }
     saveUE(newSu);
   };
