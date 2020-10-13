@@ -34,6 +34,8 @@ export const STATES_ACCEPTING_ANY_NEW_STATE = [
   surveyUnitStateEnum.IN_PREPARATION.type,
   surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
   surveyUnitStateEnum.APPOINTMENT_MADE.type,
+  surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type,
+  surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
 ];
 
 export const STATES_UPDATING_TO_WFT = [
