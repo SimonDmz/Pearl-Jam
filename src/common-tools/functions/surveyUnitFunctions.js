@@ -1,11 +1,6 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-import {
-  CONTACT_RELATED_STATES,
-  CONTACT_SUCCESS_LIST,
-  STATES_ACCEPTING_ANY_NEW_STATE,
-  STATES_UPDATING_TO_WFT,
-} from 'common-tools/constants';
+import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 
 export const getCommentByType = (type, ue) => {
@@ -60,16 +55,20 @@ const isContactAttemptOk = surveyUnit => {
 
 const addContactState = (surveyUnit, newState) => {
   // this method add AOC or APS state in states if needed => for life cycle consistency
-  // rule #1 if you add AOC and AOC is successfull : should add APS then
+  // rule #1 if you add a successfull AOC : should add APS if there is no APS in states
   // ruel #2 if you add APS : sould add AOC before if there is no AOC in states
+  console.log('------------');
+  console.log(surveyUnit.states);
 
   // switch between AOC | APS (from newState.type)
   switch (newState.type) {
     case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
       // add AOC state
+      console.log('add AOC');
       surveyUnit.states.push(newState);
-      if (isContactAttemptOk(surveyUnit)) {
+      if (isContactAttemptOk(surveyUnit) && surveyUnit.contactOutcome !== null) {
         // add APS then
+        console.log('contactOK so add APS after');
         surveyUnit.states.push({
           date: new Date().getTime(),
           type: surveyUnitStateEnum.APPOINTMENT_MADE.type,
@@ -80,18 +79,20 @@ const addContactState = (surveyUnit, newState) => {
     case surveyUnitStateEnum.APPOINTMENT_MADE.type:
       if (getContactAttemptNumber(surveyUnit) === 0) {
         // add AOC state with 1 ms earlier date
+        console.log('should add AOC before');
         surveyUnit.states.push({
           date: newState.date - 1,
           type: surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type,
         });
         // add APS state
+        console.log('add APS');
         surveyUnit.states.push(newState);
       }
       break;
     default:
       break;
   }
-
+  console.log(surveyUnit.states);
   return surveyUnit;
 };
 
@@ -99,11 +100,13 @@ export const addNewState = async (surveyUnit, stateType) => {
   const lastStateType = getLastState(surveyUnit).type;
   const newState = { date: new Date().getTime(), type: stateType };
   let newSu = surveyUnit;
-
+  console.log('ADD NEW STATE');
+  console.log('lastStateType = ', lastStateType, ' | stateType = ', stateType);
   // case management : lastState * addedState
   switch (lastStateType) {
     // INS then adding AOC or APS should also finally add INS
     case surveyUnitStateEnum.QUESTIONNAIRE_STARTED.type:
+      console.log('case INS');
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = addContactState(newSu, newState);
 
@@ -114,15 +117,48 @@ export const addNewState = async (surveyUnit, stateType) => {
       }
       break;
 
-    case STATES_ACCEPTING_ANY_NEW_STATE:
+    case surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type:
+      console.log('case AOC');
+      if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
+        break;
+      }
+      if (surveyUnitStateEnum.APPOINTMENT_MADE.type === stateType) {
+        newSu = addContactState(newSu, newState);
+      } else {
+        newSu.states.push(newState);
+      }
+      break;
+
+    case surveyUnitStateEnum.APPOINTMENT_MADE.type:
+      console.log('case APS');
+      if (surveyUnitStateEnum.APPOINTMENT_MADE.type === stateType) {
+        break;
+      }
+      if (surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type === stateType) {
+        newSu = addContactState(newSu, newState);
+      } else {
+        newSu.states.push(newState);
+      }
+      break;
+
+    case surveyUnitStateEnum.IN_PREPARATION.type:
+    case surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type:
+    case surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type:
+      console.log('case any new state');
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = addContactState(newSu, newState);
       } else {
         newSu.states.push(newState);
       }
       break;
+
     // WFT/WFS/TBR/FIN/QNA then adding
-    case STATES_UPDATING_TO_WFT:
+    case surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type:
+    case surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type:
+    case surveyUnitStateEnum.TO_BE_REVIEWED.type:
+    case surveyUnitStateEnum.FINALIZED.type:
+    case surveyUnitStateEnum.QUESTIONNAIRE_NOT_AVAILABLE.type:
+      console.log('case updating to WFT if contact related state added');
       // TODO : peut-être d'autres états  gérer ici
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = addContactState(newSu, newState);
@@ -135,14 +171,10 @@ export const addNewState = async (surveyUnit, stateType) => {
       }
       break;
     default:
+      console.log('default case nothing done');
       break;
   }
 
-  // old version :to be deleted
-  newSu.states.push(newState);
-  newSu.lastState = newState;
-
-  // keep function ending : clean
   newSu.selected = false;
   await surveyUnitDBService.addOrUpdate(newSu);
 };
