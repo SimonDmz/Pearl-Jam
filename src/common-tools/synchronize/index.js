@@ -101,7 +101,6 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
   console.log('GET DATA');
   const surveyUnitsResponse = await api.getSurveyUnits(pearlApiUrl, pearlAuthenticationMode);
   const surveyUnits = await surveyUnitsResponse.data;
-  console.log('nb of SU :', surveyUnits.length);
   await Promise.all(
     surveyUnits.map(async su => {
       const surveyUnitResponse = await api.getSurveyUnitById(
@@ -110,8 +109,8 @@ const getData = async (pearlApiUrl, pearlAuthenticationMode) => {
       )(su.id);
       const surveyUnit = await surveyUnitResponse.data;
       const mergedSurveyUnit = { ...surveyUnit, ...su };
-      const validSurveynit = await validateSU(mergedSurveyUnit);
-      await putSurveyUnitsInDataBase(validSurveynit);
+      const validSurveyUnit = await validateSU(mergedSurveyUnit);
+      await putSurveyUnitsInDataBase(validSurveyUnit);
     })
   );
 };
