@@ -29,10 +29,12 @@ const PageList = ({
   };
 
   const checkSurveyUnit = su => {
-    const { collectionStartDate } = su;
-    const suTime = new Date(collectionStartDate).getTime();
+    // false is SU should not be clickable
+    const { identificationPhaseStartDate, endDate } = su;
+    const endTime = new Date(endDate).getTime();
+    const suTime = new Date(identificationPhaseStartDate).getTime();
     const instantTime = new Date().getTime();
-    return suTime > instantTime;
+    return endTime > suTime > instantTime;
   };
 
   const toggleAll = event => {

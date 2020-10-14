@@ -5,9 +5,8 @@ const surveyUnitState = {
     type: 'VIN',
     value: `${D.suStateVisibleNotClickable}`,
   },
-  // return to VIC when stateEnum update is deployed
   VISIBLE_AND_CLICKABLE: {
-    type: 'ANS',
+    type: 'VIC',
     value: `${D.suStateVisibleAndClickable}`,
   },
   IN_PREPARATION: { type: 'PRC', value: `${D.suStateInPreparation}` },

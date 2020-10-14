@@ -9,6 +9,7 @@ import {
   sortOnColumnCompareFunction,
   convertSUStateInToDo,
   getLastState,
+  updateStateWithDates,
 } from 'common-tools/functions';
 import Form from './transmitForm';
 import PageList from './pageList';
@@ -36,6 +37,17 @@ const UESPage = () => {
       });
     }
   }, [init, surveyUnits]);
+
+  useEffect(() => {
+    surveyUnitDBService.getAll().then(units => {
+      const updateNb = units
+        .map(su => {
+          return updateStateWithDates(su);
+        })
+        .reduce((a, b) => a + b, 0);
+      if (updateNb > 0) setInit(false);
+    });
+  }, [surveyUnits]);
 
   useEffect(() => {
     const sortSU = su => {

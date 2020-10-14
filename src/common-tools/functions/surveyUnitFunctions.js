@@ -168,3 +168,22 @@ export const addNewState = async (surveyUnit, stateType) => {
 export const checkIfContactAttemptCanBeDeleted = surveyUnit => {
   return getContactAttemptNumber(surveyUnit) > 1;
 };
+
+export const updateStateWithDates = surveyUnit => {
+  const lastState = getLastState(surveyUnit).type;
+  const currentDate = new Date().getTime();
+  const { identificationPhaseStartDate } = surveyUnit;
+  let result = 0;
+  if (
+    lastState === surveyUnitStateEnum.VISIBLE_NOT_CLICKABLE.type &&
+    currentDate > identificationPhaseStartDate
+  ) {
+    result = 1;
+    addNewState(surveyUnit, {
+      date: currentDate,
+      type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
+    });
+  }
+
+  return result;
+};
