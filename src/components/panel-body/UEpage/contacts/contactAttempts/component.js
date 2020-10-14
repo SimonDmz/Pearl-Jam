@@ -84,7 +84,6 @@ const ContactAttempts = ({ saveUE }) => {
 
   const save = surveyUnit => {
     saveUE(surveyUnit);
-    closeModal();
   };
 
   return (
