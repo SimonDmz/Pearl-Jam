@@ -179,10 +179,7 @@ export const updateStateWithDates = surveyUnit => {
     currentDate > identificationPhaseStartDate
   ) {
     result = 1;
-    addNewState(surveyUnit, {
-      date: currentDate,
-      type: surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type,
-    });
+    addNewState(surveyUnit, surveyUnitStateEnum.VISIBLE_AND_CLICKABLE.type);
   }
 
   return result;
