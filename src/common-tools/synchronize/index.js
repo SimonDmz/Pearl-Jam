@@ -1,6 +1,5 @@
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-import synchroSummaryDBService from 'indexedbb/services/synchroSummary-idb-service';
 import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
 
@@ -68,7 +67,6 @@ const clean = async () => {
   console.log('CLEAN DATA');
   await surveyUnitDBService.deleteAll();
   await contactAttemptDBService.deleteAll();
-  await synchroSummaryDBService.deleteAll();
 };
 
 const validateSU = async su => {
