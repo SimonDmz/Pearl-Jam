@@ -196,7 +196,7 @@ const PageList = ({
                   <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
                     {!isDisabled && (
                       <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
-                        <span role="img" aria-label="calendar" title={D.seeSurveyUnit}>
+                        <span role="img" aria-label="calendar" title={D.openQuestionnaire}>
                           <i className="fa fa-file-text-o" aria-hidden="true" />
                         </span>
                       </Link>
