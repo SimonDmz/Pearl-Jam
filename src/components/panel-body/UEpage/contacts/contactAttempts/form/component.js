@@ -96,14 +96,10 @@ const Form = ({ closeModal, surveyUnit, setContactAttempt, contactAttempt, saveU
       </label>
       <div className="buttonsGroup">
         <button type="button" onClick={closeModal}>
-          <i className="fa fa-times" aria-hidden="true" />
-          &nbsp;
-          {D.cancelButton}
+          {`✗ ${D.cancelButton}`}
         </button>
         <button type="button" onClick={save} disabled={!formIsValid}>
-          <i className="fa fa-check" aria-hidden="true" />
-          &nbsp;
-          {D.saveButton}
+          {`✔ ${D.saveButton}`}
         </button>
       </div>
     </div>
