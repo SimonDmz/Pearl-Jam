@@ -100,8 +100,11 @@ const UESPage = () => {
   }, [filter, columnFilter]);
 
   const isSelectable = su => {
-    // TODO implements rules (collection[Start|End]Date)
-    return true;
+    const { identificationPhaseStartDate, endDate } = su;
+    const endTime = new Date(endDate).getTime();
+    const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
+    const instantTime = new Date().getTime();
+    return endTime > instantTime > identificationPhaseStartTime;
   };
 
   const sortOnColumn = column => {
