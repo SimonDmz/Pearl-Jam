@@ -7,12 +7,15 @@ import { deleteContactAttempt } from 'common-tools/functions';
 import format from 'date-fns/format';
 import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
 import Form from './form';
+import DeletionForm from './deletionForm';
 import SurveyUnitContext from '../../UEContext';
 
 const ContactAttempts = ({ saveUE }) => {
   const su = useContext(SurveyUnitContext);
   const [contactAttempt, setContactAttempt] = useState({ status: 'titi', date: 12345 });
+  const [contactToBeDeletedId, setContactToBeDeletedId] = useState(undefined);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [deletionModalIsOpen, setDeletionModalIsOpen] = useState(false);
   const [contactAttempts, setcontactAttempts] = useState([]);
   const [refresh, setRefresh] = useState(true);
 
@@ -31,6 +34,10 @@ const ContactAttempts = ({ saveUE }) => {
     }
   }, [su, refresh]);
 
+  const openDeletionModal = () => {
+    setDeletionModalIsOpen(true);
+  };
+
   const lines = () => {
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
       return contactAttempts.map((contAtt, index) => {
@@ -38,7 +45,6 @@ const ContactAttempts = ({ saveUE }) => {
         const hour = format(new Date(contAtt.date), 'HH');
         const minutes = format(new Date(contAtt.date), 'mm');
         const isLastContact = index === 0;
-
         return (
           <tr className="line" key={contAtt.id}>
             <td>
@@ -47,8 +53,8 @@ const ContactAttempts = ({ saveUE }) => {
                 className="smallButton"
                 hidden={isLastContact}
                 onClick={() => {
-                  deleteContactAttempt(su, contAtt.id);
-                  setRefresh(true);
+                  setContactToBeDeletedId(contAtt.id);
+                  openDeletionModal();
                 }}
               >
                 <i className="fa fa-times" aria-hidden="true" />
@@ -79,6 +85,9 @@ const ContactAttempts = ({ saveUE }) => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
+  const closeDeletionModal = () => {
+    setDeletionModalIsOpen(false);
+  };
 
   const save = surveyUnit => {
     saveUE(surveyUnit);
@@ -108,6 +117,16 @@ const ContactAttempts = ({ saveUE }) => {
           setContactAttempt={setContactAttempt}
           contactAttempt={contactAttempt}
           saveUE={save}
+        />
+      </Modal>
+      <Modal isOpen={deletionModalIsOpen} onRequestClose={closeDeletionModal} className="modal">
+        <DeletionForm
+          onValidate={() => {
+            deleteContactAttempt(su, contactToBeDeletedId);
+            setRefresh(true);
+            closeDeletionModal();
+          }}
+          onCancel={closeDeletionModal}
         />
       </Modal>
     </div>
