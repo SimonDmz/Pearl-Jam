@@ -19,8 +19,9 @@ export const getLastState = ue => {
 };
 
 export const isValidForTransmission = ue => {
-  const { contactOutcome } = ue;
-  return contactOutcome !== null;
+  /* const { contactOutcome } = ue;
+  return contactOutcome !== null; */
+  return true;
 };
 
 const getContactAttempts = async surveyUnit => {
