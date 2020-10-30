@@ -197,3 +197,7 @@ export const updateStateWithDates = surveyUnit => {
 
   return result;
 };
+
+export const isQuestionnaireAvailable = su => {
+  return getLastState(su).type !== 'QNA';
+};
