@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { convertSUStateInToDo, getLastState, intervalInDays } from 'common-tools/functions';
+import {
+  convertSUStateInToDo,
+  getLastState,
+  intervalInDays,
+  isQuestionnaireAvailable,
+} from 'common-tools/functions';
 import D from 'i18n';
 
 const PageList = ({
@@ -166,6 +171,7 @@ const PageList = ({
                 if (!isDisabled) history.push(`survey-unit/${su.id}`);
               };
               const inactive = isDisabled ? 'inactive' : '';
+              const questionnaireAvailable = isQuestionnaireAvailable(su);
               return (
                 <tr key={su.id} onClick={e => rowClickFunct(e)} className={inactive}>
                   <td role="gridcell" onClick={e => filterPropagation(e)}>
@@ -193,7 +199,7 @@ const PageList = ({
                     )}
                   </td>
                   <td role="gridcell" className="align-center" onClick={e => e.stopPropagation()}>
-                    {!isDisabled && (
+                    {!isDisabled && questionnaireAvailable && (
                       <Link to={`/queen/questionnaire/${su.campaign}/survey-unit/${su.id}`}>
                         <span role="img" aria-label="calendar" title={D.openQuestionnaire}>
                           <i className="fa fa-file-text-o" aria-hidden="true" />
