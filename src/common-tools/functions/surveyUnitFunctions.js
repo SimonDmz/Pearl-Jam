@@ -62,7 +62,7 @@ const lastContactAttemptIsSuccessfull = async surveyUnit => {
   if (Array.isArray(contactAttempts) && contactAttempts.length > 1) {
     lastContactAttempt = contactAttempts.reduce((a, b) => (a.date > b.date ? a : b));
   } else {
-    lastContactAttempt = contactAttempts;
+    [lastContactAttempt] = contactAttempts;
   }
   return CONTACT_SUCCESS_LIST.includes(lastContactAttempt.status);
 };
@@ -93,7 +93,6 @@ const addContactState = async (surveyUnit, newState) => {
       surveyUnit.states.push(newState);
       break;
     default:
-      console.log('erreur avec le type : ', newState.type);
       break;
   }
   return surveyUnit;
@@ -170,10 +169,8 @@ export const addNewState = async (surveyUnit, stateType) => {
       }
       break;
     default:
-      console.log('default case nothing done');
       break;
   }
-  console.log('new state is ', getLastState(await newSu).type);
   newSu.selected = false;
   await surveyUnitDBService.addOrUpdate(newSu);
 };
