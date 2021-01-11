@@ -3,18 +3,20 @@
   "version": "0.1.2",
   "private": true,
   "dependencies": {
+    "@inseefr/lunatic": "^2.0.0-rc16",
     "axios": "^0.19.2",
     "date-fns": "^2.11.1",
     "dexie": "^2.0.4",
-    "keycloak-js": "^10.0.2",
     "font-awesome": "^4.7.0",
+    "keycloak-js": "^10.0.2",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-modal": "^3.11.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "yarn": "^1.22.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -38,8 +40,6 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^16.9.23",
-    "@types/react-router-dom": "^5.1.3",
     "copy-and-watch": "^0.1.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",

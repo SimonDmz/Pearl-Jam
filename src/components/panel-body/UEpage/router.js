@@ -1,21 +1,22 @@
-import React, { useContext } from 'react';
-import { Route, Redirect, useHistory } from 'react-router-dom';
+import suStateEnum from 'common-tools/enum/SUStateEnum';
 import {
+  addNewState,
   convertSUStateInToDo,
   getLastState,
-  isValidForTransmission,
-  addNewState,
   isQuestionnaireAvailable,
+  isValidForTransmission,
 } from 'common-tools/functions';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
-import PropTypes from 'prop-types';
 import D from 'i18n';
-import Navigation from './navigation';
-import Details from './details';
+import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import Comments from './comments';
 import Contacts from './contacts';
-import SurveyUnitContext from './UEContext';
+import Details from './details';
+import Identification from './identification';
+import Navigation from './navigation';
 import './router.scss';
+import SurveyUnitContext from './UEContext';
 
 const Router = ({ match, saveUE }) => {
   const ue = useContext(SurveyUnitContext);
@@ -113,6 +114,11 @@ const Router = ({ match, saveUE }) => {
           exact
           path={`${match.url}/contacts`}
           component={routeProps => <Contacts {...routeProps} saveUE={save} />}
+        />
+        <Route
+          exact
+          path={`${match.url}/identification`}
+          component={routeProps => <Identification {...routeProps} saveUE={save} />}
         />
         <Route exact path={`${match.url}/`}>
           <Redirect to={`${match.url}/details`} />

@@ -1,6 +1,6 @@
+import D from 'i18n';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import D from 'i18n';
 
 const Navigation = ({ match }) => {
   return (
@@ -9,15 +9,10 @@ const Navigation = ({ match }) => {
         <NavLink activeClassName="active" className="item" exact to={`${match.url}/details`}>
           {D.goToContactDetailsPage}
         </NavLink>
-        <span
-          // activeClassName="active"
-          disabled="disabled"
-          className="item"
-          // exact
-          to={`${match.url}/spotting`}
-        >
+
+        <NavLink activeClassName="active" className="item" exact to={`${match.url}/identification`}>
           {D.goToSpottingPage}
-        </span>
+        </NavLink>
         <span
           // activeClassName="active"
           disabled="disabled"
