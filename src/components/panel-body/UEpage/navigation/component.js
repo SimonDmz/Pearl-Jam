@@ -9,7 +9,6 @@ const Navigation = ({ match }) => {
         <NavLink activeClassName="active" className="item" exact to={`${match.url}/details`}>
           {D.goToContactDetailsPage}
         </NavLink>
-
         <NavLink activeClassName="active" className="item" exact to={`${match.url}/identification`}>
           {D.goToSpottingPage}
         </NavLink>

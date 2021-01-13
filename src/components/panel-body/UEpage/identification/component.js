@@ -3,18 +3,7 @@ import React from 'react';
 import questionnaire from './questionnaire.json';
 
 const Identification = () => {
-  const Collect = () => (
-    <Orchestrator
-      source={questionnaire}
-      data={{}}
-      features={['VTL']}
-      style={{
-        'border-color': '#e80a4d',
-        'border-radius': 10,
-        'border-width': 3,
-      }}
-    />
-  );
+  const Collect = () => <Orchestrator source={questionnaire} data={{}} features={['VTL']} />;
 
   return <div className="Contacts">{Collect()}</div>;
 };

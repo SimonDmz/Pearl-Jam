@@ -17,6 +17,7 @@ const Orchestrator = ({ savingType, preferences, source, features, data, managem
         {components.map(q => {
           const { id, componentType } = q;
           const Component = lunatic[componentType];
+
           return (
             <div className="lunatic lunatic-component" key={`component-${id}`}>
               <Component
