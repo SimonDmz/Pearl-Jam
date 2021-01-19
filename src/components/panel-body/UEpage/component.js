@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import { useHistory } from 'react-router-dom';
-import D from 'i18n';
-import { getLastState, addNewState } from 'common-tools/functions';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
-import { SurveyUnitProvider } from './UEContext';
+import { addNewState, getLastState } from 'common-tools/functions';
+import D from 'i18n';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Router from './router';
+import { SurveyUnitProvider } from './UEContext';
 
 const UEPage = ({ match }) => {
   const [surveyUnit, setSurveyUnit] = useState(undefined);
@@ -25,10 +25,17 @@ const UEPage = ({ match }) => {
     };
   }, [match]);
 
+  const redirectTo = url => {
+    if (url !== undefined) {
+      history.push(url);
+    }
+  };
+
   const saveUE = (ue, url) => {
+    console.log('root save with ', ue);
     setSurveyUnit(ue);
     surveyUnitDBService.update(ue);
-    history.push(url); //force to update
+    redirectTo(url);
   };
 
   useEffect(() => {
@@ -51,7 +58,7 @@ const UEPage = ({ match }) => {
 
       {!surveyUnit && (
         <>
-          <button type="button" className="button-back-home" onClick={() => history.push('/')}>
+          <button type="button" className="button-back-home" onClick={() => redirectTo('/')}>
             <i className="fa fa-arrow-left" aria-hidden="true" />
           </button>
           <h2>{`${D.surveyUnitNotFound} ${match.params.id}.`}</h2>

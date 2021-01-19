@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import D from 'i18n';
-import Modal from 'react-modal';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
 import {
-  isValidForTransmission,
   addNewState,
-  sortOnColumnCompareFunction,
   convertSUStateInToDo,
   getLastState,
+  isValidForTransmission,
+  sortOnColumnCompareFunction,
   updateStateWithDates,
 } from 'common-tools/functions';
-import Form from './transmitForm';
+import D from 'i18n';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import React, { useEffect, useState } from 'react';
+import Modal from 'react-modal';
 import PageList from './pageList';
 import Search from './search';
+import Form from './transmitForm';
 import './ues.scss';
 
 const UESPage = () => {

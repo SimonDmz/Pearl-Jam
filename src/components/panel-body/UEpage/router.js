@@ -26,8 +26,8 @@ const Router = ({ match, saveUE }) => {
     history.push(`/queen/questionnaire/${ue.campaign}/survey-unit/${match.params.id}`);
   };
 
-  const save = (unite, url) => {
-    saveUE(unite, url);
+  const save = async (unite, url) => {
+    await saveUE(unite, url);
   };
   const lastState = getLastState(ue);
 

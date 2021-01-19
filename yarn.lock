@@ -936,12 +936,12 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@inseefr/lunatic@^2.0.0-rc16":
-  version "2.0.0-rc16"
-  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.0.0-rc16.tgz#e9b5a2d7a00a8d6b33db2c3a798e300603d6a5ad"
-  integrity sha512-L7ifW1ViDIJ7l3qruQQpVaCQyUYH8LC1GxG14O+jVYNULhh04eS5gfIeW5YpzLw9zYVgduxg+P7wHC+sHvEl5w==
+"@inseefr/lunatic@^2.0.0-rc23":
+  version "2.0.0-rc23"
+  resolved "https://registry.yarnpkg.com/@inseefr/lunatic/-/lunatic-2.0.0-rc23.tgz#3601ea6c49b7165c1aa668d48d30782a6d927c6e"
+  integrity sha512-hVueVPEzFkUTs3W/4VaTrVNxZdXweNMTmbO4flRsuBSG1ZiwZX4FlxfRpV7uGuGAuoZjtzkc/3Xw+JU/VHi5mQ==
   dependencies:
-    "@inseefr/vtl-2.1-engine" "^0.1.4"
+    "@inseefr/vtl-2.1-engine" "^0.1.8"
     keycode "^2.2.0"
     lodash.camelcase "^4.3.0"
     lodash.isequal "^4.5.0"
@@ -956,10 +956,10 @@
   dependencies:
     antlr4 "4.8.0"
 
-"@inseefr/vtl-2.1-engine@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@inseefr/vtl-2.1-engine/-/vtl-2.1-engine-0.1.4.tgz#7ca4ee3d2b9f2bb5d865195d9c3124fa7ef42a70"
-  integrity sha512-xXtPT4YY4gm8Gvcv5kw1f84IsJCKAZc02/Qs/mI9p9s4rBe1NRMND8pTdK4/av/yww2Mw/J98P3coC2Qm4xfSQ==
+"@inseefr/vtl-2.1-engine@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@inseefr/vtl-2.1-engine/-/vtl-2.1-engine-0.1.8.tgz#9f1914f0449edc7cc93ebb658016fb688a0da144"
+  integrity sha512-SiBZmIyhDUpsiIUFp4pznIjtDBoCYxRN33oElXZ7eYoZvtnwrA8KByl0V2jCWf+dR9KCcnMfWkMkvG9SpSzD9w==
   dependencies:
     "@inseefr/vtl-2.1-antlr-tools" "1.0.0-rc2"
     antlr4 "4.8.0"

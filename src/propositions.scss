@@ -1,10 +1,5 @@
 button {
   cursor: pointer;
-  background: transparent;
-
-  &:hover {
-    background: transparent;
-  }
 }
 
 .pearl-container {
@@ -46,6 +41,7 @@ button.rechercher {
 .button-ue > button,
 .button-back-home,
 div.Comment button,
+div.Identification button,
 div.buttons button,
 div.form div button,
 button.bottom-right,

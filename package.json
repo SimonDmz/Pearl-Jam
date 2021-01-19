@@ -3,7 +3,7 @@
   "version": "0.1.2",
   "private": true,
   "dependencies": {
-    "@inseefr/lunatic": "^2.0.0-rc16",
+    "@inseefr/lunatic": "^2.0.0-rc23",
     "axios": "^0.19.2",
     "date-fns": "^2.11.1",
     "dexie": "^2.0.4",
