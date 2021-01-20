@@ -1,3 +1,21 @@
 div.Identification {
   height: 18em;
+
+  div.checkbox-modality {
+    margin-top: 0;
+
+    &.content-checked {
+      label {
+        border: 0.1em solid #2072b8;
+      }
+    }
+  }
+
+  input.checkbox-lunatic:focus {
+    box-shadow: 0 0 0.3em 0.3em #2072b8;
+  }
+
+  fieldset.checkbox-group {
+    border-color: #969696;
+  }
 }

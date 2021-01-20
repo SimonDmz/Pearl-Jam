@@ -19,9 +19,7 @@ const Identification = ({ saveUE }) => {
   };
 
   useEffect(() => {
-    console.log(init, questionnaire, surveyUnit);
     if (!init && questionnaire && surveyUnit) {
-      console.log('gotcha!!');
       const newQuestionnaire = {
         ...questionnaire,
         components: paginateComponents(questionnaire.components),

@@ -32,7 +32,6 @@ const UEPage = ({ match }) => {
   };
 
   const saveUE = (ue, url) => {
-    console.log('root save with ', ue);
     setSurveyUnit(ue);
     surveyUnitDBService.update(ue);
     redirectTo(url);

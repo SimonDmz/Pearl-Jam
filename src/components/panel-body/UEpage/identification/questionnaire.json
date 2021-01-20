@@ -55,7 +55,7 @@
       "mandatory": false,
       "maxLength": 500,
       "label": " if(cast(REPERLOG,integer)=6) then  \"Précisément, pourquoi l'accès à l'immeuble ou au logement n'a-t-il pas été possible ?\" else \"Précisément, pourquoi le repérage n’a-t-il pas pu être effectué avant la fin de la collecte ?\"",
-      "conditionFilter": "if ( (cast(REPERLOG,integer)=5 or cast(REPERLOG,integer)=6 or cast(REPERLOG,integer)=7 or cast(REPERLOG,integer)=8))) then \"normal\" else \"hidden\"",
+      "conditionFilter": "if ( (cast(REPERLOG,integer)=5) or (cast(REPERLOG,integer)=6) or (cast(REPERLOG,integer)=7) or (cast(REPERLOG,integer)=8)) then \"normal\" else \"hidden\"",
       "bindingDependencies": ["FANONTRAIX", "REPERLOG"],
       "response": { "name": "FANONTRAIX" }
     }

@@ -21,11 +21,6 @@ const Orchestrator = ({ source, data, close, surveyUnit, save }) => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log('data : ', data);
-    console.log('questionnaire : ', questionnaire);
-  }, [data, questionnaire]);
-
-  useEffect(() => {
     const activeComponent = () => {
       if (currentPage === undefined) return undefined;
       const foundComponent = components.find(({ page }) => page === currentPage);
@@ -45,20 +40,18 @@ const Orchestrator = ({ source, data, close, surveyUnit, save }) => {
   const saveWithData = async () => {
     const reperageData = lunatic.getState(questionnaire);
     const updatedSurveyUnit = { ...activeSurveyUnit, reperageData };
-    console.log('reperageData ', reperageData);
 
     setActiveSurveyUnit(updatedSurveyUnit);
     await surveyUnitDBService.update(updatedSurveyUnit);
   };
 
   const validate = () => {
-    console.log('validate : su=', activeSurveyUnit);
     save(activeSurveyUnit, history.location.pathname);
   };
 
   const goNext = async () => {
     await saveWithData();
-    const nextPage = getNextPage(/* components)(currentPage */);
+    const nextPage = getNextPage();
     setCurrentPage(nextPage);
   };
 
