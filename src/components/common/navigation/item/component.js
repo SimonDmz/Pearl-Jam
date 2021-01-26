@@ -1,8 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import Notif from './notif.icon';
 
-const NavigationItem = ({ disabled = false, path, label, notif = 0 }) => {
+const NavigationItem = ({ disabled = false, path, label }) => {
   const handleCkick = e => {
     if (disabled) {
       console.log('disabled');
@@ -22,7 +21,6 @@ const NavigationItem = ({ disabled = false, path, label, notif = 0 }) => {
         >
           {label}
         </NavLink>
-        {notif > 0 && <Notif number={notif} />}
       </div>
     </>
   );

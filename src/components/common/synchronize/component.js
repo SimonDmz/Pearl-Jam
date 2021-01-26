@@ -1,20 +1,22 @@
-import React, { useState, useEffect /* useContext */ } from 'react';
-import { useHistory } from 'react-router-dom';
-import Modal from 'react-modal';
-import { addOnlineStatusObserver } from 'common-tools/';
+import IconButton from '@material-ui/core/IconButton';
+import { addOnlineStatusObserver } from 'common-tools';
+import SyncIcon from 'common-tools/icons/SyncIcon';
 import { synchronizePearl, synchronizeQueen } from 'common-tools/synchronize';
 import D from 'i18n';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import Modal from 'react-modal';
+import { useHistory } from 'react-router-dom';
 import Loader from '../loader';
 import './result.scss';
 
 Modal.setAppElement('#root');
 
-const Synchronize = () => {
+const Synchronize = ({ materialClass }) => {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [syncResult, setSyncResult] = useState(undefined);
   const [pearlSync, setPearlSync] = useState(undefined);
-
   const [status, setStatus] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -115,16 +117,19 @@ const Synchronize = () => {
         </Modal>
       )}
 
-      <div className={!status ? 'sync offline' : 'sync'}>
-        <button type="button" disabled={!status} onClick={() => syncOnClick()}>
-          <i
-            alt="sync-logo"
-            className={loading ? 'fa fa-refresh fa-2x rotate' : 'fa fa-refresh fa-2x'}
-          />
-        </button>
-      </div>
+      <IconButton
+        edge="end"
+        disabled={status !== true}
+        aria-label="launch synchronization"
+        onClick={() => syncOnClick()}
+      >
+        <SyncIcon className={materialClass} />
+      </IconButton>
     </>
   );
 };
 
 export default Synchronize;
+Synchronize.propTypes = {
+  materialClass: PropTypes.string.isRequired,
+};

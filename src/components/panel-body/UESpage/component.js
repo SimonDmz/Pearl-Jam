@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import D from 'i18n';
-import Modal from 'react-modal';
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import suStateEnum from 'common-tools/enum/SUStateEnum';
 import {
-  isValidForTransmission,
   addNewState,
-  sortOnColumnCompareFunction,
   convertSUStateInToDo,
   getLastState,
+  isValidForTransmission,
+  sortOnColumnCompareFunction,
   updateStateWithDates,
 } from 'common-tools/functions';
-import Form from './transmitForm';
+import D from 'i18n';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import React, { useEffect, useState } from 'react';
+import Modal from 'react-modal';
+import FilterPanel from './filterPanel';
+import SurveyUnitCard from './material/surveyUnitCard';
 import PageList from './pageList';
 import Search from './search';
+import Form from './transmitForm';
 import './ues.scss';
 
 const UESPage = () => {
@@ -186,42 +190,79 @@ const UESPage = () => {
     );
   };
 
-  return (
-    <div className="panel-body ues">
-      <div className="column">
-        <div className="filters">
-          <div className="button-ue">
-            <button
-              id="ShowAll"
-              type="button"
-              onClick={() => {
-                updateFilter('');
-                setColumnFilter(undefined);
-              }}
-            >
-              <i className="fa fa-bars" aria-hidden="true" />
-              &nbsp;
-              {D.showAll}
-            </button>
-            {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>}
-            <Search setFilter={updateFilter} />
-          </div>
-        </div>
-        <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
-      </div>
-      <PageList
-        surveyUnits={surveyUnits}
-        toggleAllSUSelection={toggleAllSUSelection}
-        toggleOneSUSelection={toggleOneSUSelection}
-        transmitButton={transmitButton}
-        sortOnColumn={sortOnColumn}
-        columnFilter={columnFilter}
-      />
+  const classes = makeStyles(theme => ({
+    root: {
+      flexGrow: 1,
+      padding: 8,
+      '&:last-child': {
+        paddingBottom: 8,
+      },
+    },
+    paper: {
+      height: 140,
+      width: 375,
+    },
+    control: {
+      padding: theme.spacing(2),
+    },
+  }));
 
-      <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
-        <Form closeModal={closeModal} summary={transmitSummary} />
-      </Modal>
-    </div>
+  return (
+    <>
+      <Grid container spaceing={2}>
+        <Grid item xs={3}>
+          <FilterPanel />
+        </Grid>
+        <Grid item xs={9}>
+          <Grid container className={classes.root} spacing={2}>
+            <Grid item xs={12}>
+              <Grid container justify="center" spacing={2}>
+                {surveyUnits.map(su => (
+                  <Grid key={su.id} item className="SUCard">
+                    <SurveyUnitCard className={classes.paper} surveyUnit={su} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <div className="panel-body ues">
+        <div className="column">
+          <div className="filters">
+            <div className="button-ue">
+              <button
+                id="ShowAll"
+                type="button"
+                onClick={() => {
+                  updateFilter('');
+                  setColumnFilter(undefined);
+                }}
+              >
+                <i className="fa fa-bars" aria-hidden="true" />
+                &nbsp;
+                {D.showAll}
+              </button>
+              {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>}
+              <Search setFilter={updateFilter} />
+            </div>
+          </div>
+          <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
+        </div>
+        <PageList
+          surveyUnits={surveyUnits}
+          toggleAllSUSelection={toggleAllSUSelection}
+          toggleOneSUSelection={toggleOneSUSelection}
+          transmitButton={transmitButton}
+          sortOnColumn={sortOnColumn}
+          columnFilter={columnFilter}
+        />
+
+        <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
+          <Form closeModal={closeModal} summary={transmitSummary} />
+        </Modal>
+      </div>
+    </>
   );
 };
 
