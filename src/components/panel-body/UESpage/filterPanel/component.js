@@ -204,7 +204,7 @@ const FilterPanel = ({
                         name={campaign}
                       />
                     }
-                    label={campaign}
+                    label={campaign.toLowerCase()}
                   />
                 ))}
               </FormGroup>

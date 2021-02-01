@@ -7,6 +7,7 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import { intervalInDays } from 'common-tools/functions';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './surveyUnitCard.scss';
@@ -94,7 +95,7 @@ const SurveyUnitCard = ({ surveyUnit }) => {
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h6" variant="h6" noWrap className="name-field centered">
-            {campaign}
+            {campaign.toLowerCase()}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary" className="leftPadding">
             <CheckCircleOutlineOutlinedIcon className={`${classes.icon} green`} />
@@ -111,3 +112,15 @@ const SurveyUnitCard = ({ surveyUnit }) => {
 };
 
 export default SurveyUnitCard;
+SurveyUnitCard.propTypes = {
+  surveyUnit: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    address: PropTypes.shape({ l6: PropTypes.string.isRequired }).isRequired,
+    campaign: PropTypes.string.isRequired,
+    states: PropTypes.arrayOf(PropTypes.shape({ type: PropTypes.string.isRequired })).isRequired,
+    sampleIdentifiers: PropTypes.shape({ ssech: PropTypes.number.isRequired }).isRequired,
+    priority: PropTypes.bool.isRequired,
+  }).isRequired,
+};

@@ -5,12 +5,10 @@ import {
   sortOnColumnCompareFunction,
   updateStateWithDates,
 } from 'common-tools/functions';
-import D from 'i18n';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import React, { useEffect, useState } from 'react';
 import FilterPanel from './filterPanel';
 import SurveyUnitCard from './material/surveyUnitCard';
-import Search from './search';
 import './ues.scss';
 
 const UESPage = ({ textSearch }) => {
@@ -63,6 +61,7 @@ const UESPage = ({ textSearch }) => {
     const { searchFilteredSU, totalEchoes, matchingEchoes } = filteredSU;
     setFilteredSurveyUnits(sortSU(searchFilteredSU));
     setSearchEchoes([matchingEchoes, totalEchoes]);
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, [filters, sortCriteria, surveyUnits]);
 
   const isSelectable = su => {
@@ -119,22 +118,6 @@ const UESPage = ({ textSearch }) => {
           </Grid>
         </Grid>
       </Grid>
-      <div className="panel-body ues">
-        <div className="column">
-          <div className="filters">
-            <div className="button-ue">
-              <button id="ShowAll" type="button" onClick={() => {}}>
-                <i className="fa fa-bars" aria-hidden="true" />
-                &nbsp;
-                {D.showAll}
-              </button>
-              {/* {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>} */}
-              <Search setFilter={() => {}} />
-            </div>
-          </div>
-          <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
-        </div>
-      </div>
     </>
   );
 };
