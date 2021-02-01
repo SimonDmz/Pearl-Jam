@@ -1,33 +1,32 @@
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import suStateEnum from 'common-tools/enum/SUStateEnum';
 import {
-  addNewState,
-  convertSUStateInToDo,
-  getLastState,
-  isValidForTransmission,
+  applyFilters,
   sortOnColumnCompareFunction,
   updateStateWithDates,
 } from 'common-tools/functions';
 import D from 'i18n';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import React, { useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import FilterPanel from './filterPanel';
 import SurveyUnitCard from './material/surveyUnitCard';
-import PageList from './pageList';
 import Search from './search';
-import Form from './transmitForm';
 import './ues.scss';
 
-const UESPage = () => {
+const UESPage = ({ textSearch }) => {
   const [surveyUnits, setSurveyUnits] = useState([]);
-  const [filter, setFilter] = useState('');
+  const [filteredSurveyUnits, setFilteredSurveyUnits] = useState([]);
   const [searchEchoes, setSearchEchoes] = useState([0, 0]);
+  const [campaigns, setCampaigns] = useState([]);
   const [init, setInit] = useState(false);
-  const [showTransmitSummary, setShowTransmitSummary] = useState(false);
-  const [transmitSummary, setTransmitSummary] = useState({ ok: 0, ko: 0 });
-  const [columnFilter, setColumnFilter] = useState(undefined);
+  const [sortCriteria, setSortCriteria] = useState('remainingDays');
+  const [filters, setFilters] = useState({
+    search: textSearch,
+    campaigns: [],
+    toDos: [],
+    priority: false,
+    terminated: false,
+  });
 
   useEffect(() => {
     if (!init) {
@@ -36,11 +35,12 @@ const UESPage = () => {
         const initializedSU = units.map(su => {
           return { ...su, selected: false };
         });
+        setCampaigns([...new Set(units.map(unit => unit.campaign))]);
         setSurveyUnits(initializedSU);
         setSearchEchoes([initializedSU.length, initializedSU.length]);
       });
     }
-  }, [init, surveyUnits]);
+  }, [init]);
 
   useEffect(() => {
     surveyUnitDBService.getAll().then(units => {
@@ -55,53 +55,15 @@ const UESPage = () => {
 
   useEffect(() => {
     const sortSU = su => {
-      return su.sort(sortOnColumnCompareFunction(columnFilter));
+      return su.sort(sortOnColumnCompareFunction(sortCriteria));
     };
 
-    const suPromise = surveyUnitDBService.getAll();
-    let totalEchoes = 0;
-    let matchingEchoes = totalEchoes;
+    const filteredSU = applyFilters(surveyUnits, filters);
 
-    if (filter === '') {
-      suPromise.then(units => {
-        setSurveyUnits(sortSU(units));
-        totalEchoes = units.length;
-        matchingEchoes = units.length;
-        setSearchEchoes([matchingEchoes, totalEchoes]);
-      });
-    } else {
-      suPromise
-        .then(us => {
-          totalEchoes = us.length;
-          return us;
-        })
-        .then(units => {
-          const filteredSU = units.filter(unit => {
-            const filterCondition =
-              unit.firstName.toLowerCase().includes(filter) ||
-              unit.lastName.toLowerCase().includes(filter) ||
-              unit.id
-                .toString()
-                .toLowerCase()
-                .includes(filter) ||
-              unit.address.l6
-                .split(' ')
-                .slice(1)
-                .toString()
-                .toLowerCase()
-                .includes(filter) ||
-              convertSUStateInToDo(getLastState(unit).type)
-                .value.toLowerCase()
-                .includes(filter) ||
-              unit.campaign.toLowerCase().includes(filter);
-            return filterCondition;
-          });
-          matchingEchoes = filteredSU.length;
-          setSurveyUnits(sortSU(filteredSU));
-          setSearchEchoes([matchingEchoes, totalEchoes]);
-        });
-    }
-  }, [filter, columnFilter]);
+    const { searchFilteredSU, totalEchoes, matchingEchoes } = filteredSU;
+    setFilteredSurveyUnits(sortSU(searchFilteredSU));
+    setSearchEchoes([matchingEchoes, totalEchoes]);
+  }, [filters, sortCriteria, surveyUnits]);
 
   const isSelectable = su => {
     const { identificationPhaseStartDate, endDate } = su;
@@ -111,92 +73,19 @@ const UESPage = () => {
     return endTime > instantTime && instantTime > identificationPhaseStartTime;
   };
 
-  const sortOnColumn = column => {
-    if (columnFilter === undefined || columnFilter.column !== column) {
-      setColumnFilter({ column, order: 'ASC' });
-    } else if (columnFilter.order === 'ASC') {
-      setColumnFilter({ column, order: 'DESC' });
-    } else {
-      setColumnFilter(undefined);
-    }
-  };
-
-  const toggleAllSUSelection = newValue => {
-    setSurveyUnits(
-      surveyUnits.map(su => {
-        const selectable = isSelectable(su);
-        return { ...su, selected: selectable ? newValue : false };
-      })
-    );
-  };
-
-  const toggleOneSUSelection = (id, newValue) => {
-    setSurveyUnits(
-      surveyUnits.map(su => {
-        if (su.id === id) {
-          return { ...su, selected: newValue };
-        }
-        return su;
-      })
-    );
-  };
-
-  const processSU = async surveyUnitsToProcess => {
-    const newType = suStateEnum.WAITING_FOR_SYNCHRONIZATION.type;
-    let nbOk = 0;
-    let nbKo = 0;
-
-    surveyUnitsToProcess.forEach(su => {
-      if (su.valid) {
-        addNewState(su, newType);
-        nbOk += 1;
-      } else {
-        nbKo += 1;
-      }
-    });
-
-    setSurveyUnits(await surveyUnitDBService.getAll());
-    setTransmitSummary({ ok: nbOk, ko: nbKo });
-  };
-
-  const transmit = async () => {
-    const filteredSU = surveyUnits
-      .filter(su => su.selected)
-      .map(su => {
-        return { ...su, valid: isValidForTransmission(su) };
-      });
-    await processSU(filteredSU);
-    setShowTransmitSummary(true);
-    setInit(false);
-  };
-
-  const closeModal = () => {
-    setShowTransmitSummary(false);
-  };
-
-  const anySuSelected = surveyUnits.filter(su => su.selected).length > 0 ? '' : '"disabled"';
-
-  const updateFilter = searchedString => {
-    toggleAllSUSelection(false);
-    setFilter(searchedString);
-  };
-
-  const transmitButton = () => {
-    return (
-      <button type="button" className="transmit" disabled={anySuSelected} onClick={transmit}>
-        <i className="fa fa-paper-plane" aria-hidden="true" />
-        &nbsp;Transmettre
-      </button>
-    );
-  };
-
   const classes = makeStyles(theme => ({
     root: {
+      display: 'flex',
       flexGrow: 1,
       padding: 8,
       '&:last-child': {
         paddingBottom: 8,
       },
+    },
+    stuck: {
+      position: 'sticky',
+      top: '0px',
+      zIndex: 8,
     },
     paper: {
       height: 140,
@@ -209,21 +98,24 @@ const UESPage = () => {
 
   return (
     <>
-      <Grid container spaceing={2}>
-        <Grid item xs={3}>
-          <FilterPanel />
+      <Grid container spaceing={2} style={{ position: 'sticky', top: '0px' }}>
+        <Grid item xs={2}>
+          <FilterPanel
+            searchEchoes={searchEchoes}
+            campaigns={campaigns}
+            sortCriteria={sortCriteria}
+            setSortCriteria={setSortCriteria}
+            filters={filters}
+            setFilters={setFilters}
+          />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
           <Grid container className={classes.root} spacing={2}>
-            <Grid item xs={12}>
-              <Grid container justify="center" spacing={2}>
-                {surveyUnits.map(su => (
-                  <Grid key={su.id} item className="SUCard">
-                    <SurveyUnitCard className={classes.paper} surveyUnit={su} />
-                  </Grid>
-                ))}
+            {filteredSurveyUnits.map(su => (
+              <Grid key={su.id} item className="SUCard">
+                <SurveyUnitCard className={classes.paper} surveyUnit={su} />
               </Grid>
-            </Grid>
+            ))}
           </Grid>
         </Grid>
       </Grid>
@@ -231,36 +123,17 @@ const UESPage = () => {
         <div className="column">
           <div className="filters">
             <div className="button-ue">
-              <button
-                id="ShowAll"
-                type="button"
-                onClick={() => {
-                  updateFilter('');
-                  setColumnFilter(undefined);
-                }}
-              >
+              <button id="ShowAll" type="button" onClick={() => {}}>
                 <i className="fa fa-bars" aria-hidden="true" />
                 &nbsp;
                 {D.showAll}
               </button>
-              {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>}
-              <Search setFilter={updateFilter} />
+              {/* {filter && <div className="searchedString">{`${D.activeFilter} : ${filter}`}</div>} */}
+              <Search setFilter={() => {}} />
             </div>
           </div>
           <div className="searchResults">{`Résultat : ${searchEchoes[0]} / ${searchEchoes[1]} unités`}</div>
         </div>
-        <PageList
-          surveyUnits={surveyUnits}
-          toggleAllSUSelection={toggleAllSUSelection}
-          toggleOneSUSelection={toggleOneSUSelection}
-          transmitButton={transmitButton}
-          sortOnColumn={sortOnColumn}
-          columnFilter={columnFilter}
-        />
-
-        <Modal isOpen={showTransmitSummary} onRequestClose={closeModal} className="modal">
-          <Form closeModal={closeModal} summary={transmitSummary} />
-        </Modal>
       </div>
     </>
   );

@@ -15,7 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import OnlineStatus from '../online-status';
 
-const Navigation = ({ location }) => {
+const Navigation = ({ location, textSearch, setTextSearch }) => {
   const [disabled, setDisable] = useState(location.pathname.startsWith('/queen'));
 
   useEffect(() => {
@@ -29,6 +29,22 @@ const Navigation = ({ location }) => {
           JSON.parse(interviewerFromLocalStorage).lastName
         }`
       : '';
+  };
+
+  const [motFilter, setMotFilter] = useState(textSearch);
+
+  const updateFilter = () => {
+    setTextSearch(motFilter.toLowerCase());
+  };
+  const handleKeyUp = e => {
+    if (e.key === 'Enter') {
+      updateFilter();
+    }
+  };
+
+  const handleChange = e => {
+    const txt = e.target.value;
+    setMotFilter(txt);
   };
 
   const useStyles = makeStyles(theme => ({
@@ -151,8 +167,14 @@ const Navigation = ({ location }) => {
                     input: classes.inputInput,
                   }}
                   inputProps={{ 'aria-label': 'search' }}
+                  onChange={handleChange}
+                  onKeyUp={handleKeyUp}
                 />
-                <Button size="large" className={classes.searchButton}>
+                <Button
+                  size="large"
+                  className={classes.searchButton}
+                  onClick={() => updateFilter()}
+                >
                   Rechercher
                 </Button>
               </div>

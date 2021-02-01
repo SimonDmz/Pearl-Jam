@@ -8,6 +8,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import { intervalInDays } from 'common-tools/functions';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import './surveyUnitCard.scss';
 
 const SurveyUnitCard = ({ surveyUnit }) => {
@@ -47,6 +48,8 @@ const SurveyUnitCard = ({ surveyUnit }) => {
 
   const classes = useStyles();
 
+  const history = useHistory();
+
   const {
     id,
     firstName,
@@ -63,7 +66,7 @@ const SurveyUnitCard = ({ surveyUnit }) => {
   const visibility = priority === true ? '' : 'hidden';
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={() => history.push(`/survey-unit/${id}/details`)}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h6" variant="h6" noWrap className="name-field">

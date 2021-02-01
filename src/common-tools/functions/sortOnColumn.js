@@ -1,7 +1,6 @@
-import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
-import { getLastState, intervalInDays } from 'common-tools/functions/surveyUnitFunctions';
+import { intervalInDays } from 'common-tools/functions/surveyUnitFunctions';
 
-export const sortOnColumnCompareFunction = columnFilter => {
+export const sortOnColumnCompareFunction = criteria => {
   let compareFunction;
 
   // eslint-disable-next-line no-unused-vars
@@ -9,32 +8,8 @@ export const sortOnColumnCompareFunction = columnFilter => {
     return 0;
   };
 
-  const reverse = f => (a, b) => {
-    return f(b, a);
-  };
-
   const ssechSortFunction = (a, b) => {
     return a.sampleIdentifiers.ssech - b.sampleIdentifiers.ssech;
-  };
-
-  const citySortFunction = (a, b) => {
-    return a.address.l6
-      .split(' ')
-      .slice(1)
-      .toString()
-      .localeCompare(
-        b.address.l6
-          .split(' ')
-          .slice(1)
-          .toString()
-      );
-  };
-
-  const toDoSortFunction = (a, b) => {
-    return (
-      convertSUStateInToDo(getLastState(a).type).order -
-      convertSUStateInToDo(getLastState(b).type).order
-    );
   };
 
   const prioritySortFunction = (a, b) => {
@@ -49,39 +24,26 @@ export const sortOnColumnCompareFunction = columnFilter => {
     return intervalInDays(a) - intervalInDays(b);
   };
 
-  if (columnFilter === undefined) {
-    compareFunction = noSortFunction;
-  } else {
-    const { column, order } = columnFilter;
-    switch (column) {
-      case 'sampleIdentifiers':
-        compareFunction = order === 'ASC' ? ssechSortFunction : reverse(ssechSortFunction);
-        break;
+  switch (criteria) {
+    case 'sampleIdentifiers':
+      compareFunction = ssechSortFunction;
+      break;
 
-      case 'geographicalLocation':
-        compareFunction = order === 'ASC' ? citySortFunction : reverse(citySortFunction);
-        break;
+    case 'priority':
+      compareFunction = prioritySortFunction;
+      break;
 
-      case 'toDo':
-        compareFunction = order === 'ASC' ? toDoSortFunction : reverse(toDoSortFunction);
-        break;
+    case 'campaign':
+      compareFunction = campaignSortFunction;
+      break;
 
-      case 'priority':
-        compareFunction = order === 'ASC' ? prioritySortFunction : reverse(prioritySortFunction);
-        break;
+    case 'remainingDays':
+      compareFunction = remainingDaysSortFunction;
+      break;
 
-      case 'campaign':
-        compareFunction = order === 'ASC' ? campaignSortFunction : reverse(campaignSortFunction);
-        break;
-
-      case 'remainingDays':
-        compareFunction =
-          order === 'ASC' ? remainingDaysSortFunction : reverse(remainingDaysSortFunction);
-        break;
-
-      default:
-        break;
-    }
+    default:
+      compareFunction = noSortFunction;
+      break;
   }
   return compareFunction;
 };
