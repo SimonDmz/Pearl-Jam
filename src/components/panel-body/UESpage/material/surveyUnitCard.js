@@ -27,6 +27,9 @@ const SurveyUnitCard = ({ surveyUnit, className }) => {
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
+    justifyStart: {
+      justifyContent: 'flex-start',
+    },
     flexColumn: {
       display: 'flex',
       flexDirection: 'column',
@@ -50,6 +53,9 @@ const SurveyUnitCard = ({ surveyUnit, className }) => {
     paddingTop: {
       paddingTop: '10px',
       fontSize: 'xxx-large',
+    },
+    fixedWidth: {
+      width: '120px',
     },
   }));
 
@@ -92,39 +98,39 @@ const SurveyUnitCard = ({ surveyUnit, className }) => {
           {ssech}
         </Typography>
       </CardContent>
-      <div className={classes.flexRow}>
-        <CardContent className={`${classes.content} ${classes.flexColumn}`}>
-          <div className={classes.flexRow}>
-            <PersonIcon className={`${classes.icon} ${classes.paddingTop}`} />
-            <div className={classes.flexColumn}>
-              <Typography component="h6" variant="h6" noWrap className="name-field">
-                {firstName}
-              </Typography>
-              <Typography component="h6" variant="h6" noWrap className="name-field">
-                {lastName}
-              </Typography>
-            </div>
-          </div>
-          <Typography variant="subtitle1" color="textSecondary" noWrap className="name-field">
-            <LocationOnIcon className={`${classes.icon} negativeLeftMargin`} />
-            {`${l6}`}
+      <CardContent className={`${classes.content} ${classes.flexRow}  ${classes.justifyStart}`}>
+        <PersonIcon className={`${classes.icon} ${classes.paddingTop}`} />
+        <div className={classes.flexColumn}>
+          <Typography component="h6" variant="h6" noWrap>
+            {firstName}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            {` # ${id}`}
+          <Typography component="h6" variant="h6" noWrap>
+            {lastName}
           </Typography>
-        </CardContent>
+        </div>
+      </CardContent>
+      <CardContent className={`${classes.content} ${classes.flexRow}`}>
+        <Typography variant="subtitle1" color="textSecondary" noWrap className="name-field">
+          <LocationOnIcon className={`${classes.icon} negativeLeftMargin`} />
+          {`${l6}`}
+        </Typography>
+        <Typography variant="subtitle1" color="textSecondary">
+          <CheckCircleOutlineOutlinedIcon className={`${classes.icon} green`} />
+          {lastState}
+        </Typography>
+      </CardContent>
+      <CardContent className={`${classes.content} ${classes.flexRow}`}>
+        <Typography variant="subtitle1" color="textSecondary">
+          {` # ${id}`}
+        </Typography>
+        <div className={`${classes.flexRow}`}>
+          <ScheduleIcon className={classes.icon} />
 
-        <CardContent className={`${classes.content} ${classes.flexColumn}`}>
           <Typography variant="subtitle1" color="textSecondary">
-            <CheckCircleOutlineOutlinedIcon className={`${classes.icon} green`} />
-            {lastState}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            <ScheduleIcon className={classes.icon} />
             {`  ${nbJoursRestant} jours`}
           </Typography>
-        </CardContent>
-      </div>
+        </div>
+      </CardContent>
     </Card>
   );
 };

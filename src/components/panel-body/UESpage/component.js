@@ -75,7 +75,7 @@ const UESPage = ({ textSearch }) => {
       paddingTop: 4,
     },
     paper: {
-      height: 145,
+      height: 165,
       minWidth: 325,
     },
     control: {
