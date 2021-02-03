@@ -31,20 +31,9 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
       : '';
   };
 
-  const [motFilter, setMotFilter] = useState(textSearch);
-
-  const updateFilter = () => {
-    setTextSearch(motFilter.toLowerCase());
-  };
-  const handleKeyUp = e => {
-    if (e.key === 'Enter') {
-      updateFilter();
-    }
-  };
-
   const handleChange = e => {
     const txt = e.target.value;
-    setMotFilter(txt);
+    setTextSearch(txt);
   };
 
   const useStyles = makeStyles(theme => ({
@@ -168,13 +157,8 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
                   }}
                   inputProps={{ 'aria-label': 'search' }}
                   onChange={handleChange}
-                  onKeyUp={handleKeyUp}
                 />
-                <Button
-                  size="large"
-                  className={classes.searchButton}
-                  onClick={() => updateFilter()}
-                >
+                <Button size="large" className={classes.searchButton} onClick={() => {}}>
                   Rechercher
                 </Button>
               </div>
@@ -191,23 +175,6 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
           </AppBar>
         </div>
       </>
-
-      {/* <nav className="nav-bar" disabled={disabled}>
-        <div className="items">
-          <NavigationItem disabled={false} path="/" label={D.goToHomePage} />
-          <NavigationItem
-            disabled={disabled}
-            notif={5}
-            path="/notifications"
-            label={D.goToNotificationsPage}
-          />
-          <NavigationItem disabled={disabled} path="/training" label={D.goToTrainingPage} />
-        </div>
-
-        <div className="top-right">
-          <Synchronize disabled={disabled} />
-        </div>
-      </nav> */}
     </>
   );
 };

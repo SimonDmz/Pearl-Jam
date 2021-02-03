@@ -4,52 +4,60 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import PersonIcon from '@material-ui/icons/Person';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import { intervalInDays } from 'common-tools/functions';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
+import { isSelectable } from 'common-tools/functions/surveyUnitFunctions';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './surveyUnitCard.scss';
 
-const SurveyUnitCard = ({ surveyUnit }) => {
+const SurveyUnitCard = ({ surveyUnit, className }) => {
   const useStyles = makeStyles(() => ({
     root: {
-      display: 'flex',
       padding: 8,
-      '&:last-child': {
-        paddingBottom: 8,
-      },
-      borderRadius: 25,
+      borderRadius: 15,
+      '&:hover': { cursor: 'pointer' },
+      paddingTop: 10,
     },
-    details: {
+    flexRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    flexColumn: {
       display: 'flex',
       flexDirection: 'column',
+      justifyContent: 'flex-end',
     },
     content: {
       flex: '1 0 auto',
-      padding: 8,
+      padding: 0,
       '&:last-child': {
-        paddingBottom: 8,
+        paddingBottom: 0,
       },
     },
-    middleContent: {
-      flex: '1 0 auto',
-      padding: 8,
-      '&:last-child': {
-        paddingBottom: 8,
-      },
-      paddingRight: 0,
-      paddingLeft: 0,
-    },
+
     icon: {
       verticalAlign: 'bottom',
+    },
+    active: {
+      backgroundColor: 'grey',
+      '&:hover': { cursor: 'not-allowed' },
+    },
+    paddingTop: {
+      paddingTop: '10px',
+      fontSize: 'xxx-large',
     },
   }));
 
   const classes = useStyles();
 
   const history = useHistory();
+
+  const active = isSelectable(surveyUnit);
 
   const {
     id,
@@ -67,41 +75,51 @@ const SurveyUnitCard = ({ surveyUnit }) => {
   const visibility = priority === true ? '' : 'hidden';
 
   return (
-    <Card className={classes.root} onClick={() => history.push(`/survey-unit/${id}/details`)}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h6" variant="h6" noWrap className="name-field">
-            {`${firstName} ${lastName}`}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            {` # ${id}`}
-          </Typography>
+    <Card
+      className={`${className} ${classes.root} ${classes.flexColumn} ${
+        active ? '' : classes.active
+      }`}
+      onClick={() => (active ? history.push(`/survey-unit/${id}/details`) : {})}
+    >
+      <CardContent className={`${classes.content} ${classes.flexRow}`}>
+        <Typography component="h5" variant="h5" className={`${visibility} centered`}>
+          !
+        </Typography>
+        <Typography component="h6" variant="h6" noWrap className="name-field centered">
+          {campaign.toLowerCase()}
+        </Typography>
+        <Typography variant="subtitle1" color="textSecondary" className="rounded centered">
+          {ssech}
+        </Typography>
+      </CardContent>
+      <div className={classes.flexRow}>
+        <CardContent className={`${classes.content} ${classes.flexColumn}`}>
+          <div className={classes.flexRow}>
+            <PersonIcon className={`${classes.icon} ${classes.paddingTop}`} />
+            <div className={classes.flexColumn}>
+              <Typography component="h6" variant="h6" noWrap className="name-field">
+                {firstName}
+              </Typography>
+              <Typography component="h6" variant="h6" noWrap className="name-field">
+                {lastName}
+              </Typography>
+            </div>
+          </div>
           <Typography variant="subtitle1" color="textSecondary" noWrap className="name-field">
             <LocationOnIcon className={`${classes.icon} negativeLeftMargin`} />
             {`${l6}`}
           </Typography>
-        </CardContent>
-      </div>
-      <div className={classes.details}>
-        <CardContent className={classes.middleContent}>
-          <Typography component="h5" variant="h5" className={`${visibility} centered`}>
-            !
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary" className="rounded centered">
-            {ssech}
+          <Typography variant="subtitle1" color="textSecondary">
+            {` # ${id}`}
           </Typography>
         </CardContent>
-      </div>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h6" variant="h6" noWrap className="name-field centered">
-            {campaign.toLowerCase()}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary" className="leftPadding">
+
+        <CardContent className={`${classes.content} ${classes.flexColumn}`}>
+          <Typography variant="subtitle1" color="textSecondary">
             <CheckCircleOutlineOutlinedIcon className={`${classes.icon} green`} />
             {lastState}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary" className="leftPadding">
+          <Typography variant="subtitle1" color="textSecondary">
             <ScheduleIcon className={classes.icon} />
             {`  ${nbJoursRestant} jours`}
           </Typography>
@@ -123,4 +141,5 @@ SurveyUnitCard.propTypes = {
     sampleIdentifiers: PropTypes.shape({ ssech: PropTypes.number.isRequired }).isRequired,
     priority: PropTypes.bool.isRequired,
   }).isRequired,
+  className: PropTypes.string.isRequired,
 };

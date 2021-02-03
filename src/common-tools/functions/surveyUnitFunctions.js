@@ -265,3 +265,11 @@ export const applyFilters = (surveyUnits, filters) => {
 
   return { searchFilteredSU, totalEchoes, matchingEchoes };
 };
+
+export const isSelectable = su => {
+  const { identificationPhaseStartDate, endDate } = su;
+  const endTime = new Date(endDate).getTime();
+  const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
+  const instantTime = new Date().getTime();
+  return endTime > instantTime && instantTime > identificationPhaseStartTime;
+};

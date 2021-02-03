@@ -64,40 +64,29 @@ const UESPage = ({ textSearch }) => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, [filters, sortCriteria, surveyUnits]);
 
-  const isSelectable = su => {
-    const { identificationPhaseStartDate, endDate } = su;
-    const endTime = new Date(endDate).getTime();
-    const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
-    const instantTime = new Date().getTime();
-    return endTime > instantTime && instantTime > identificationPhaseStartTime;
-  };
-
-  const classes = makeStyles(theme => ({
+  const useStyles = makeStyles(theme => ({
     root: {
       display: 'flex',
-      flexGrow: 1,
-      padding: 8,
+      flexGrow: 0,
+      padding: 0,
       '&:last-child': {
-        paddingBottom: 8,
+        paddingBottom: 0,
       },
-    },
-    stuck: {
-      position: 'sticky',
-      top: '0px',
-      zIndex: 8,
+      paddingTop: 4,
     },
     paper: {
-      height: 140,
-      width: 375,
+      height: 145,
+      minWidth: 325,
     },
     control: {
       padding: theme.spacing(2),
     },
   }));
+  const classes = useStyles();
 
   return (
     <>
-      <Grid container spaceing={2} style={{ position: 'sticky', top: '0px' }}>
+      <Grid container spaceing={2}>
         <Grid item xs={2}>
           <FilterPanel
             searchEchoes={searchEchoes}
@@ -108,7 +97,7 @@ const UESPage = ({ textSearch }) => {
             setFilters={setFilters}
           />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={10} className="overflow">
           <Grid container className={classes.root} spacing={2}>
             {filteredSurveyUnits.map(su => (
               <Grid key={su.id} item className="SUCard">

@@ -24,16 +24,20 @@ const FilterPanel = ({
 }) => {
   const useStyles = makeStyles(() => ({
     drawer: {
-      width: 240,
+      width: 200,
       flexShrink: 0,
     },
     drawerPaper: {
-      width: 240,
       top: 20,
       position: 'relative',
     },
     drawerContainer: {
       overflow: 'auto',
+      height: '750px',
+      'scrollbar-width': 'none',
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
     },
   }));
 

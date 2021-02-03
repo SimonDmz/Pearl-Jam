@@ -1,47 +1,11 @@
-button {
-  cursor: pointer;
-  background: transparent;
+// button {
+//   cursor: pointer;
+//   background: transparent;
 
-  &:hover {
-    background: transparent;
-  }
-}
-
-.pearl-container {
-  min-width: 1000px;
-}
-
-.nav-item {
-  width: auto !important;
-
-  a {
-    letter-spacing: 1px;
-    border-radius: 4px !important;
-    margin: 0 10px 0 0;
-    padding: 15px 20px;
-  }
-}
-
-div.button-ue {
-  height: 30px;
-}
-
-#ShowAll {
-  height: 200%;
-}
-
-button.rechercher {
-  border-radius: 0 3px 3px 0 !important;
-}
-
-.nav-item a:hover,
-.nav-item a.active {
-  -webkit-text-stroke-width: 0.8px;
-  -webkit-text-stroke-color: black;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(to top right, #dddddd, #eaeaea);
-  font-weight: normal !important;
-}
+//   &:hover {
+//     background: transparent;
+//   }
+// }
 
 .button-ue > button,
 .button-back-home,
@@ -117,33 +81,8 @@ svg.edit-icon {
   }
 }
 
-.sync {
-  width: 100%;
-  height: 100%;
-  max-height: none;
-}
-
 .fa-refresh:hover:before {
   background: none !important;
-}
-
-.sync > button {
-  flex: auto;
-  height: 100%;
-  outline: none;
-  i {
-    padding-top: 0.25em;
-    flex: auto;
-  }
-}
-
-.sync:hover,
-svg.edit-icon:hover {
-  background: linear-gradient(to top right, #667791, #b7bec7);
-}
-
-.searchResults {
-  margin-bottom: 6px;
 }
 
 .sub-page {
@@ -259,7 +198,6 @@ div.Contacts div.ContactAttempts .row > button {
   margin: 0 0 15px 0;
 }
 
-/* Tooltip text */
 .HeaderTooltip .tooltiptext {
   visibility: hidden;
   width: 150px;
@@ -272,12 +210,10 @@ div.Contacts div.ContactAttempts .row > button {
   font-weight: normal !important;
   font-size: 11px;
 
-  /* Position the tooltip text - see examples below! */
   position: absolute;
   z-index: 1;
 }
 
-/* Show the tooltip text when you mouse over the tooltip container */
 .HeaderTooltip:hover .tooltiptext {
   visibility: visible;
 }

@@ -1,8 +1,14 @@
 $background-body: white;
 $background-panel: #eeeeee;
 
+* {
+  box-sizing: unset !important;
+}
+
+html,
 body {
   margin: 0;
+  height: 100%;
   font-family: Arial, Helvetica, sans-serif;
   background-color: $background-body;
 }

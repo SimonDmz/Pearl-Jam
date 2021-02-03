@@ -61,3 +61,12 @@ button {
 .searchResults {
   align-self: flex-end;
 }
+
+.overflow {
+  height: 750px;
+  overflow: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
