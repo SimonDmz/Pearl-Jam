@@ -5,11 +5,12 @@ import Button from '@material-ui/core/Button';
 import { grey } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import { PEARL_USER_KEY } from 'common-tools/constants';
+import { backgroundColor, secondaryColor, secondaryColorDarker } from 'common-tools/cssAccess';
 import Synchronize from 'components/common/synchronize';
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -38,7 +39,7 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
 
   const useStyles = makeStyles(theme => ({
     appBar: {
-      backgroundColor: 'black',
+      backgroundColor,
     },
     column: {
       display: 'flex',
@@ -53,7 +54,7 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
       width: '3em',
     },
     grow: {
-      flexGrow: 1,
+      flex: '1 1 auto',
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -64,13 +65,10 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
       [theme.breakpoints.up('sm')]: {
         display: 'inline-block',
       },
+      color: 'black',
     },
     search: {
       position: 'relative',
-      backgroundColor: fade(theme.palette.common.white, 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
-      },
       marginRight: theme.spacing(2),
       marginLeft: 0,
       height: '2em',
@@ -81,7 +79,7 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
     },
     searchButton: {
       color: theme.palette.getContrastText(grey[700]),
-      backgroundColor: grey[700],
+      backgroundColor: secondaryColor,
       '&:hover': {
         backgroundColor: grey[800],
       },
@@ -95,20 +93,16 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       paddingLeft: `1em`,
+      backgroundColor,
+      border: 'solid 1px black',
+      color: 'black',
       transition: theme.transitions.create('width'),
-      [theme.breakpoints.up('md')]: {
-        width: '80%',
-      },
-    },
-    sectionDesktop: {
-      display: 'none',
-      [theme.breakpoints.up('md')]: {
-        display: 'flex',
-      },
+      marginRight: '1em',
     },
     notificationsIcon: {
       fontSize: 'xxx-large',
-      color: 'white',
+      color: secondaryColor,
+      '&:hover': { color: secondaryColorDarker },
     },
     syncIcon: {
       fontSize: 'xxx-large',
@@ -122,58 +116,54 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
   return (
     <>
       <>
-        <div className={classes.grow}>
-          <AppBar position="static" className={classes.appBar}>
-            <Toolbar>
-              <NavLink activeClassName="active" exact to="/notifications">
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="open notifications"
-                >
-                  <Badge badgeContent={4} color="secondary">
-                    <MenuIcon className={classes.notificationsIcon} />
-                  </Badge>
-                </IconButton>
-              </NavLink>
-              <NavLink activeClassName="active" exact to="/">
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.media}
-                    image="/static/images/cards/logo-insee-header.png"
-                    title="Insee"
-                  />
-                </Card>
-              </NavLink>
-
-              <div className={classes.grow}>
-                <InputBase
-                  className={classes.search}
-                  placeholder="Nom, prénom, enquête, ..."
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ 'aria-label': 'search' }}
-                  onChange={handleChange}
+        <AppBar position="static" className={classes.appBar}>
+          <Toolbar>
+            <NavLink activeClassName="active" exact to="/notifications">
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="open notifications"
+              >
+                <Badge badgeContent={4} color="secondary">
+                  <MenuIcon className={classes.notificationsIcon} />
+                </Badge>
+              </IconButton>
+            </NavLink>
+            <NavLink activeClassName="active" exact to="/">
+              <Card className={classes.card}>
+                <CardMedia
+                  className={classes.media}
+                  image="/static/images/cards/logo-insee-header.png"
+                  title="Insee"
                 />
-                <Button size="large" className={classes.searchButton} onClick={() => {}}>
-                  Rechercher
-                </Button>
-              </div>
-              <div className={classes.sectionDesktop}>
-                <div className={classes.column}>
-                  <OnlineStatus />
-                  <Typography className={classes.title} variant="subtitle1" noWrap>
-                    {getName()}
-                  </Typography>
-                </div>
-                <Synchronize disabled={disabled} materialClass={classes.syncIcon} />
-              </div>
-            </Toolbar>
-          </AppBar>
-        </div>
+              </Card>
+            </NavLink>
+
+            <div className={classes.grow}>
+              <InputBase
+                className={classes.search}
+                placeholder="Nom, prénom, enquête, ..."
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={handleChange}
+              />
+              <Button size="large" className={classes.searchButton} onClick={() => {}}>
+                Rechercher
+              </Button>
+            </div>
+            <div className={classes.column}>
+              <OnlineStatus />
+              <Typography className={classes.title} variant="subtitle1" noWrap>
+                {getName()}
+              </Typography>
+            </div>
+            <Synchronize disabled={disabled} materialClass={classes.syncIcon} />
+          </Toolbar>
+        </AppBar>
       </>
     </>
   );

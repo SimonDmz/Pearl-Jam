@@ -3,6 +3,7 @@ import UESPage from 'components/panel-body/UESpage';
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { version } from '../../../../package.json';
+import './home.scss';
 
 const Home = ({ match, textSearch }) => {
   return (

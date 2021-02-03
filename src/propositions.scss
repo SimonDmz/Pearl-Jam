@@ -1,12 +1,3 @@
-// button {
-//   cursor: pointer;
-//   background: transparent;
-
-//   &:hover {
-//     background: transparent;
-//   }
-// }
-
 .button-ue > button,
 .button-back-home,
 div.Comment button,
@@ -64,29 +55,8 @@ div.ReactModal__Content > button {
   position: absolute;
 }
 
-.sync,
-svg.edit-icon {
-  overflow: hidden;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none !important;
-
-  border-radius: 4px !important;
-
-  g > rect,
-  g > path {
-    fill: #c3ddff;
-  }
-}
-
 .fa-refresh:hover:before {
   background: none !important;
-}
-
-.sub-page {
-  background-color: transparent !important;
 }
 
 .sub-page > div:not(.div-nav-ue) {
