@@ -1,22 +1,23 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import formEnum from 'common-tools/enum/formEnum';
 import PropTypes from 'prop-types';
+import React from 'react';
 import Comment from './comment';
 import './comments.scss';
 
-const Comments = ({ saveUE }) => {
-  const locationUrl = useHistory().location.pathname;
-  const save = unite => {
-    saveUE(unite, locationUrl);
-  };
+const Comments = ({ selectFormType }) => {
   return (
-    <div className="Comments">
-      <Comment editable saveUE={save} />
+    <div
+      role="button"
+      tabIndex={-2}
+      onKeyDown={() => {}}
+      onClick={() => selectFormType(formEnum.COMMENT, true)}
+    >
+      <Comment editable />
     </div>
   );
 };
 
 export default Comments;
 Comments.propTypes = {
-  saveUE: PropTypes.func.isRequired,
+  selectFormType: PropTypes.func.isRequired,
 };

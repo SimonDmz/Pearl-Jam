@@ -1,21 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Modal from 'react-modal';
+import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
+import formEnum from 'common-tools/enum/formEnum';
+import format from 'date-fns/format';
 import D from 'i18n';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-import { deleteContactAttempt } from 'common-tools/functions';
-import format from 'date-fns/format';
-import { findContactAttemptValueByType } from 'common-tools/enum/ContactAttemptEnum';
-import Form from './form';
-import DeletionForm from './deletionForm';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
 import SurveyUnitContext from '../../UEContext';
 
-const ContactAttempts = ({ saveUE }) => {
+const ContactAttempts = ({ selectFormType }) => {
   const su = useContext(SurveyUnitContext);
   const [contactAttempt, setContactAttempt] = useState({ status: 'titi', date: 12345 });
   const [contactToBeDeletedId, setContactToBeDeletedId] = useState(undefined);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [deletionModalIsOpen, setDeletionModalIsOpen] = useState(false);
   const [contactAttempts, setcontactAttempts] = useState([]);
   const [refresh, setRefresh] = useState(true);
 
@@ -34,10 +29,6 @@ const ContactAttempts = ({ saveUE }) => {
     }
   }, [su, refresh]);
 
-  const openDeletionModal = () => {
-    setDeletionModalIsOpen(true);
-  };
-
   const lines = () => {
     if (Array.isArray(contactAttempts) && contactAttempts.length > 0)
       return contactAttempts.map((contAtt, index) => {
@@ -54,7 +45,7 @@ const ContactAttempts = ({ saveUE }) => {
                 hidden={isLastContact}
                 onClick={() => {
                   setContactToBeDeletedId(contAtt.id);
-                  openDeletionModal();
+                  // openDeletionModal();
                 }}
               >
                 <i className="fa fa-times" aria-hidden="true" />
@@ -77,27 +68,18 @@ const ContactAttempts = ({ saveUE }) => {
       </tr>
     );
   };
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-  const closeDeletionModal = () => {
-    setDeletionModalIsOpen(false);
-  };
-
-  const save = surveyUnit => {
-    saveUE(surveyUnit);
-  };
-
+  // const onValidate = () => {
+  //   deleteContactAttempt(su, contactToBeDeletedId);
+  // };
   return (
     <div className="ContactAttempts">
       <div className="row">
         <h2>{D.contactAttempts}</h2>
-        <button type="button" className="bottom-right" onClick={openModal}>
+        <button
+          type="button"
+          className="bottom-right"
+          onClick={() => selectFormType(formEnum.CONTACT_ATTEMPT, false)}
+        >
           <i className="fa fa-plus" aria-hidden="true" />
           &nbsp;
           {D.addButton}
@@ -110,30 +92,11 @@ const ContactAttempts = ({ saveUE }) => {
         </colgroup>
         <tbody>{lines()}</tbody>
       </table>
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
-        <Form
-          closeModal={closeModal}
-          surveyUnit={su}
-          setContactAttempt={setContactAttempt}
-          contactAttempt={contactAttempt}
-          saveUE={save}
-        />
-      </Modal>
-      <Modal isOpen={deletionModalIsOpen} onRequestClose={closeDeletionModal} className="modal">
-        <DeletionForm
-          onValidate={() => {
-            deleteContactAttempt(su, contactToBeDeletedId);
-            setRefresh(true);
-            closeDeletionModal();
-          }}
-          onCancel={closeDeletionModal}
-        />
-      </Modal>
     </div>
   );
 };
 
 export default ContactAttempts;
 ContactAttempts.propTypes = {
-  saveUE: PropTypes.func.isRequired,
+  selectFormType: PropTypes.func.isRequired,
 };

@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import toDoEnum from 'common-tools/enum/SUToDoEnum';
+import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
@@ -23,22 +24,27 @@ const FilterPanel = ({
   setFilters,
 }) => {
   const useStyles = makeStyles(() => ({
+    leftMargin: { marginLeft: '16px' },
     drawer: {
+      height: 'calc(100vh - 5em)',
       width: 200,
-      flexShrink: 0,
     },
     drawerPaper: {
-      top: 20,
       position: 'relative',
     },
     drawerContainer: {
       overflow: 'auto',
-      height: '750px',
+      height: '100%',
       'scrollbar-width': 'none',
       '&::-webkit-scrollbar': {
         display: 'none',
       },
     },
+    paddingFour: {
+      padding: 4,
+    },
+    accordion: { '&.MuiAccordion-root.Mui-expanded': { margin: '0px' } },
+    accordionSummary: { '&.MuiAccordionSummary-root.Mui-expanded': { minHeight: '0px' } },
   }));
 
   const classes = useStyles();
@@ -62,7 +68,7 @@ const FilterPanel = ({
   };
 
   const setSelectedTodos = array => {
-    setFilters({ ...filters, toDos: array });
+    setFilters({ ...filters, toDos: array, terminated: false });
   };
 
   const setTerminated = value => {
@@ -85,7 +91,7 @@ const FilterPanel = ({
 
   const toggleToDoSelection = value => {
     if (!selectedToDos.includes(value)) {
-      setSelectedTodos([...selectedToDos, value]);
+      setSelectedTodos([...selectedToDos, value].filter(c => c !== '7'));
     } else {
       setSelectedTodos(selectedToDos.filter(c => c !== value));
     }
@@ -146,10 +152,17 @@ const FilterPanel = ({
           paper: classes.drawerPaper,
         }}
       >
-        <div>{`${searchEchoes[0]} / ${searchEchoes[1]} unités enquêtées`}</div>
+        <div className={classes.leftMargin}>
+          {`${searchEchoes[0]} / ${searchEchoes[1]} ${D.surveyUnits}`}
+        </div>
         <div className={classes.drawerContainer}>
-          <Accordion expanded={sortCriteriaExpanded} onChange={handleChange('sortAccordion')}>
+          <Accordion
+            expanded={sortCriteriaExpanded}
+            onChange={handleChange('sortAccordion')}
+            className={classes.accordion}
+          >
             <AccordionSummary
+              className={classes.accordionSummary}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel4bh-content"
               id="sortAccordion-header"
@@ -164,32 +177,34 @@ const FilterPanel = ({
               >
                 <FormControlLabel
                   value="remainingDays"
-                  control={<Radio onClick={changeCriteria} />}
-                  label="Jours restants"
+                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
+                  label={D.remainingDays}
                 />
                 <FormControlLabel
                   value="priority"
-                  control={<Radio onClick={changeCriteria} />}
-                  label="Priorité"
+                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
+                  label={D.priority}
                 />
                 <FormControlLabel
                   value="campaign"
-                  control={<Radio onClick={changeCriteria} />}
-                  label="Enquête"
+                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
+                  label={D.survey}
                 />
                 <FormControlLabel
                   value="sampleIdentifiers"
-                  control={<Radio onClick={changeCriteria} />}
-                  label="Sous-échantillon"
+                  control={<Radio onClick={changeCriteria} className={classes.paddingFour} />}
+                  label={D.subSample}
                 />
               </RadioGroup>
             </AccordionDetails>
           </Accordion>
           <Accordion
+            className={classes.accordion}
             expanded={campaignFilterExpanded}
             onChange={handleChange('campaignFilterAccordion')}
           >
             <AccordionSummary
+              className={classes.accordionSummary}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel4bh-content"
               id="campaignFilterAccordion-header"
@@ -203,6 +218,7 @@ const FilterPanel = ({
                     key={campaign}
                     control={
                       <Checkbox
+                        className={classes.paddingFour}
                         checked={selectedCampaigns.includes(campaign)}
                         onChange={handleChange('campaignCheckbox')}
                         name={campaign}
@@ -215,10 +231,12 @@ const FilterPanel = ({
             </AccordionDetails>
           </Accordion>
           <Accordion
+            className={classes.accordion}
             expanded={priorityFilterExpanded}
             onChange={handleChange('priorityFilterAccordion')}
           >
             <AccordionSummary
+              className={classes.accordionSummary}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel4bh-content"
               id="priorityFilterAccordion-header"
@@ -231,18 +249,24 @@ const FilterPanel = ({
                   key={priority}
                   control={
                     <Checkbox
+                      className={classes.paddingFour}
                       checked={priority}
                       onChange={handleChange('priority')}
                       name="priority"
                     />
                   }
-                  label="Oui"
+                  label={D.yesButton}
                 />
               </FormGroup>
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={toDoFilterExpanded} onChange={handleChange('toDoFilterAccordion')}>
+          <Accordion
+            expanded={toDoFilterExpanded}
+            onChange={handleChange('toDoFilterAccordion')}
+            className={classes.accordion}
+          >
             <AccordionSummary
+              className={classes.accordionSummary}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel4bh-content"
               id="toDoFilterAccordion-header"
@@ -256,6 +280,7 @@ const FilterPanel = ({
                     key={todo.order}
                     control={
                       <Checkbox
+                        className={classes.paddingFour}
                         checked={selectedToDos.includes(todo.order.toString())}
                         onChange={handleChange('toDoCheckbox')}
                         name={todo.order.toString()}
@@ -270,8 +295,10 @@ const FilterPanel = ({
           <Accordion
             expanded={terminatedFilterExpanded}
             onChange={handleChange('terminatedFilterAccordion')}
+            className={classes.accordion}
           >
             <AccordionSummary
+              className={classes.accordionSummary}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel4bh-content"
               id="priorityFilterAccordion-header"
@@ -284,12 +311,13 @@ const FilterPanel = ({
                   key={terminated}
                   control={
                     <Checkbox
+                      className={classes.paddingFour}
                       checked={terminated}
                       onChange={handleChange('terminated')}
                       name="terminated"
                     />
                   }
-                  label="Oui"
+                  label={D.yesButton}
                 />
               </FormGroup>
             </AccordionDetails>

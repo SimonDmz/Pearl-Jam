@@ -2,6 +2,7 @@ import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/const
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
 import { formatDistanceStrict } from 'date-fns';
+import D from 'i18n';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
@@ -259,7 +260,7 @@ export const applyFilters = (surveyUnits, filters) => {
     .filter(unit => filterByToDo(unit))
     .filter(unit => filterByCampaign(unit));
 
-  const totalEchoes = filteredSU.length;
+  const totalEchoes = surveyUnits.length;
   const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));
   const matchingEchoes = searchFilteredSU.length;
 
@@ -273,3 +274,20 @@ export const isSelectable = su => {
   const instantTime = new Date().getTime();
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
+
+export const getAddressData = su => [
+  { label: D.addressName, value: su.address.l1 },
+  { label: D.addressFullAddress, value: su.address.l4 },
+  { label: D.addressCity, value: su.address.l6 },
+  { label: D.addressCountry, value: su.address.l7 },
+];
+
+export const getUserData = su => [
+  { label: D.surveyUnitLastName, value: su.lastName },
+  { label: D.surveyUnitFirstName, value: su.firstName },
+];
+
+export const getPhoneData = su =>
+  su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
+
+export const getMailData = su => [{ label: undefined, value: su.email }];

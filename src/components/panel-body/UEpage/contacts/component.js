@@ -1,24 +1,19 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import React from 'react';
 import ContactAttempts from './contactAttempts';
 import ContactOutcome from './contactOutcome';
 import './contacts.scss';
 
-const Contacts = ({ saveUE }) => {
-  const locationUrl = useHistory().location.pathname;
-  const save = unite => {
-    saveUE(unite, locationUrl);
-  };
+const Contacts = ({ selectFormType }) => {
   return (
     <div className="Contacts">
-      <ContactAttempts saveUE={save} />
-      <ContactOutcome saveUE={save} />
+      <ContactAttempts selectFormType={selectFormType} />
+      <ContactOutcome selectFormType={selectFormType} />
     </div>
   );
 };
 
 export default Contacts;
 Contacts.propTypes = {
-  saveUE: PropTypes.func.isRequired,
+  selectFormType: PropTypes.func.isRequired,
 };

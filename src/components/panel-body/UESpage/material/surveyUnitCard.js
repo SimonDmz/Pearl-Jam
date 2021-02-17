@@ -2,9 +2,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
+import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheckedSharp';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import { intervalInDays } from 'common-tools/functions';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
@@ -12,15 +12,16 @@ import { isSelectable } from 'common-tools/functions/surveyUnitFunctions';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import './surveyUnitCard.scss';
 
-const SurveyUnitCard = ({ surveyUnit, className }) => {
+const SurveyUnitCard = ({ surveyUnit }) => {
   const useStyles = makeStyles(() => ({
     root: {
       padding: 8,
       borderRadius: 15,
       '&:hover': { cursor: 'pointer' },
-      paddingTop: 10,
+      border: ' LightGray solid 1px',
+      height: 165,
+      width: 325,
     },
     flexRow: {
       display: 'flex',
@@ -45,8 +46,9 @@ const SurveyUnitCard = ({ surveyUnit, className }) => {
 
     icon: {
       verticalAlign: 'bottom',
+      color: 'LightGray',
     },
-    active: {
+    inactive: {
       backgroundColor: 'grey',
       '&:hover': { cursor: 'not-allowed' },
     },
@@ -54,9 +56,18 @@ const SurveyUnitCard = ({ surveyUnit, className }) => {
       paddingTop: '10px',
       fontSize: 'xxx-large',
     },
-    fixedWidth: {
-      width: '120px',
+    stateIcon: {
+      color: 'green',
+      verticalAlign: 'center',
     },
+    rounded: {
+      border: '1px solid',
+      borderRadius: '50%',
+      width: '1.8em',
+      height: '1.8em',
+    },
+    negativeLeftMargin: { marginLeft: '-5px' },
+    hidden: { visibility: 'hidden' },
   }));
 
   const classes = useStyles();
@@ -78,23 +89,26 @@ const SurveyUnitCard = ({ surveyUnit, className }) => {
 
   const lastState = convertSUStateInToDo(states[states.length - 1].type).value;
   const nbJoursRestant = intervalInDays(surveyUnit);
-  const visibility = priority === true ? '' : 'hidden';
 
   return (
     <Card
-      className={`${className} ${classes.root} ${classes.flexColumn} ${
-        active ? '' : classes.active
-      }`}
+      className={`${classes.root} ${classes.flexColumn} ${active ? '' : classes.inactive}`}
       onClick={() => (active ? history.push(`/survey-unit/${id}/details`) : {})}
+      elevation={0}
     >
       <CardContent className={`${classes.content} ${classes.flexRow}`}>
-        <Typography component="h5" variant="h5" className={`${visibility} centered`}>
+        <Typography component="h5" variant="h5" className={`${priority ? '' : classes.hidden}`}>
           !
         </Typography>
-        <Typography component="h6" variant="h6" noWrap className="name-field centered">
+        <Typography component="h6" variant="h6" noWrap>
           {campaign.toLowerCase()}
         </Typography>
-        <Typography variant="subtitle1" color="textSecondary" className="rounded centered">
+        <Typography
+          variant="subtitle1"
+          color="textSecondary"
+          align="center"
+          className={classes.rounded}
+        >
           {ssech}
         </Typography>
       </CardContent>
@@ -110,12 +124,12 @@ const SurveyUnitCard = ({ surveyUnit, className }) => {
         </div>
       </CardContent>
       <CardContent className={`${classes.content} ${classes.flexRow}`}>
-        <Typography variant="subtitle1" color="textSecondary" noWrap className="name-field">
-          <LocationOnIcon className={`${classes.icon} negativeLeftMargin`} />
+        <Typography variant="subtitle1" color="textSecondary" noWrap>
+          <LocationOnIcon className={`${classes.icon} ${classes.negativeLeftMargin}`} />
           {`${l6}`}
         </Typography>
         <Typography variant="subtitle1" color="textSecondary">
-          <CheckCircleOutlineOutlinedIcon className={`${classes.icon} green`} />
+          <RadioButtonUncheckedSharpIcon className={`${classes.icon} ${classes.stateIcon}`} />
           {lastState}
         </Typography>
       </CardContent>
@@ -147,5 +161,4 @@ SurveyUnitCard.propTypes = {
     sampleIdentifiers: PropTypes.shape({ ssech: PropTypes.number.isRequired }).isRequired,
     priority: PropTypes.bool.isRequired,
   }).isRequired,
-  className: PropTypes.string.isRequired,
 };

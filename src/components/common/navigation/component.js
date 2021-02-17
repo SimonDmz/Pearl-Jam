@@ -1,22 +1,24 @@
 import { Card, CardMedia } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
 import { grey } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import { PEARL_USER_KEY } from 'common-tools/constants';
 import { backgroundColor, secondaryColor, secondaryColorDarker } from 'common-tools/cssAccess';
 import Synchronize from 'components/common/synchronize';
+import InfoTile from 'components/panel-body/UEpage/infoTile';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 import OnlineStatus from '../online-status';
+import SearchBar from '../search/component';
 
-const Navigation = ({ location, textSearch, setTextSearch }) => {
+const Navigation = ({ location, textSearch, setTextSearch, version }) => {
   const [disabled, setDisable] = useState(location.pathname.startsWith('/queen'));
 
   useEffect(() => {
@@ -32,14 +34,10 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
       : '';
   };
 
-  const handleChange = e => {
-    const txt = e.target.value;
-    setTextSearch(txt);
-  };
-
   const useStyles = makeStyles(theme => ({
     appBar: {
       backgroundColor,
+      height: '5em',
     },
     column: {
       display: 'flex',
@@ -116,19 +114,21 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
   return (
     <>
       <>
-        <AppBar position="static" className={classes.appBar}>
-          <Toolbar>
+        <AppBar position="static" className={classes.appBar} elevation={0}>
+          <Toolbar className={classes.appBar}>
             <NavLink activeClassName="active" exact to="/notifications">
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="open notifications"
-              >
-                <Badge badgeContent={4} color="secondary">
-                  <MenuIcon className={classes.notificationsIcon} />
-                </Badge>
-              </IconButton>
+              <Tooltip title={`Version : ${version}`}>
+                <IconButton
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="open notifications"
+                >
+                  <Badge badgeContent={4} color="secondary">
+                    <MenuIcon className={classes.notificationsIcon} />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
             </NavLink>
             <NavLink activeClassName="active" exact to="/">
               <Card className={classes.card}>
@@ -141,19 +141,18 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
             </NavLink>
 
             <div className={classes.grow}>
-              <InputBase
-                className={classes.search}
-                placeholder="Nom, prénom, enquête, ..."
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={handleChange}
+              <Route
+                exact
+                path="/"
+                render={routeProps => (
+                  <SearchBar
+                    {...routeProps}
+                    textSearch={textSearch}
+                    setTextSearch={setTextSearch}
+                  />
+                )}
               />
-              <Button size="large" className={classes.searchButton} onClick={() => {}}>
-                Rechercher
-              </Button>
+              <Route path="/survey-unit/:id" render={routeProps => <InfoTile {...routeProps} />} />
             </div>
             <div className={classes.column}>
               <OnlineStatus />
@@ -170,3 +169,9 @@ const Navigation = ({ location, textSearch, setTextSearch }) => {
 };
 
 export default Navigation;
+Navigation.propTypes = {
+  location: PropTypes.shape({}).isRequired,
+  textSearch: PropTypes.string.isRequired,
+  setTextSearch: PropTypes.func.isRequired,
+  version: PropTypes.string.isRequired,
+};

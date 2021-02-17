@@ -6,10 +6,10 @@ import {
   updateStateWithDates,
 } from 'common-tools/functions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import FilterPanel from './filterPanel';
 import SurveyUnitCard from './material/surveyUnitCard';
-import './ues.scss';
 
 const UESPage = ({ textSearch }) => {
   const [surveyUnits, setSurveyUnits] = useState([]);
@@ -41,6 +41,10 @@ const UESPage = ({ textSearch }) => {
   }, [init]);
 
   useEffect(() => {
+    setFilters(f => ({ ...f, search: textSearch }));
+  }, [textSearch]);
+
+  useEffect(() => {
     surveyUnitDBService.getAll().then(units => {
       const updateNb = units
         .map(su => {
@@ -55,56 +59,51 @@ const UESPage = ({ textSearch }) => {
     const sortSU = su => {
       return su.sort(sortOnColumnCompareFunction(sortCriteria));
     };
-
     const filteredSU = applyFilters(surveyUnits, filters);
 
     const { searchFilteredSU, totalEchoes, matchingEchoes } = filteredSU;
     setFilteredSurveyUnits(sortSU(searchFilteredSU));
     setSearchEchoes([matchingEchoes, totalEchoes]);
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  }, [filters, sortCriteria, surveyUnits]);
+  }, [textSearch, filters, sortCriteria, surveyUnits]);
 
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles(() => ({
     root: {
-      display: 'flex',
-      flexGrow: 0,
-      padding: 0,
+      height: 'calc(100vh - 5em)',
+      scrollbarWidth: 'none',
+    },
+    grid: {
+      height: '100%',
+      width: 'calc(100vw - 200px)',
+      overflow: 'auto',
+      scrollbarWidth: 'none',
+      padding: 10,
       '&:last-child': {
         paddingBottom: 0,
       },
-      paddingTop: 4,
-    },
-    paper: {
-      height: 165,
-      minWidth: 325,
-    },
-    control: {
-      padding: theme.spacing(2),
+      paddingTop: 0,
+      alignContent: 'flex-start',
     },
   }));
   const classes = useStyles();
 
   return (
     <>
-      <Grid container spaceing={2}>
-        <Grid item xs={2}>
-          <FilterPanel
-            searchEchoes={searchEchoes}
-            campaigns={campaigns}
-            sortCriteria={sortCriteria}
-            setSortCriteria={setSortCriteria}
-            filters={filters}
-            setFilters={setFilters}
-          />
-        </Grid>
-        <Grid item xs={10} className="overflow">
-          <Grid container className={classes.root} spacing={2}>
-            {filteredSurveyUnits.map(su => (
-              <Grid key={su.id} item className="SUCard">
-                <SurveyUnitCard className={classes.paper} surveyUnit={su} />
-              </Grid>
-            ))}
-          </Grid>
+      <Grid container className={classes.root} spacing={0}>
+        <FilterPanel
+          searchEchoes={searchEchoes}
+          campaigns={campaigns}
+          sortCriteria={sortCriteria}
+          setSortCriteria={setSortCriteria}
+          filters={filters}
+          setFilters={setFilters}
+        />
+        <Grid container className={classes.grid} spacing={4}>
+          {filteredSurveyUnits.map(su => (
+            <Grid key={su.id} item>
+              <SurveyUnitCard surveyUnit={su} />
+            </Grid>
+          ))}
         </Grid>
       </Grid>
     </>
@@ -112,3 +111,6 @@ const UESPage = ({ textSearch }) => {
 };
 
 export default UESPage;
+UESPage.propTypes = {
+  textSearch: PropTypes.string.isRequired,
+};

@@ -22,6 +22,10 @@ html,
 body,
 .pearl-container {
   height: 100%;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 body {
   margin: 0;
@@ -155,11 +159,6 @@ form label {
 .panel-body.ue,
 .panel-body.ues {
   height: 500px;
-  .button-back-home {
-    color: white;
-    border: none;
-    padding: 0.5em 1em 0.5em 1em;
-  }
 
   .button-ue {
     justify-content: flex-end;
