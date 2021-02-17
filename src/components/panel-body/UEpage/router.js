@@ -1,4 +1,4 @@
-import { makeStyles, Modal } from '@material-ui/core';
+import { makeStyles, Modal, Paper } from '@material-ui/core';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -50,12 +50,20 @@ const Router = ({ match, saveUE }) => {
     setOpenModal(false);
   };
 
-  // const selectedForm = getForm(saveUE, previousValue)[formType];
   const selectedForm = getForm(formType, saveUE, previousValue, closeModal);
 
   const useStyles = makeStyles(() => ({
     ajustScroll: {
       height: 'calc(100vh - 3em)',
+    },
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    form: {
+      // margin: '0 auto',
+      width: '50%',
     },
   }));
   const classes = useStyles();
@@ -88,12 +96,15 @@ const Router = ({ match, saveUE }) => {
         </div>
       </div>
       <Modal
+        className={classes.modal}
         open={openModal}
         onClose={closeModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        {selectedForm !== undefined ? selectedForm : <div>toto</div>}
+        <Paper className={classes.form}>
+          {selectedForm !== undefined ? selectedForm : <div>toto</div>}
+        </Paper>
       </Modal>
       <button type="button" onClick={() => setOpenModal(true)}>
         open form

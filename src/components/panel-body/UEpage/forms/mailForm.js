@@ -1,46 +1,34 @@
 import D from 'i18n';
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import React, { useContext, useState } from 'react';
+import SurveyUnitContext from '../UEContext';
 
-const Form = ({ closeModal, surveyUnit, saveUE }) => {
-  const useField = defaultValue => {
-    const [email, setEmail] = useState(defaultValue.email);
+const Form = ({ closeModal, save, previousValue }) => {
+  const surveyUnit = useContext(SurveyUnitContext);
 
-    const onChange = event => {
-      if (event.target.name === 'email') {
-        setEmail(event.target.value);
-      }
-    };
-    return {
-      email,
-      onChange,
-    };
+  const [email, setEmail] = useState(previousValue);
+
+  const onChange = event => {
+    if (event.target.name === 'email') {
+      setEmail(event.target.value);
+    }
   };
 
-  const ueState = useField(surveyUnit);
-
-  const saveTempUE = () => {
-    surveyUnit.email = ueState.email;
-    saveUE(surveyUnit);
+  const saveUE = () => {
+    save({ ...surveyUnit, email });
   };
 
   return (
     <>
       <h3>{`${D.surveyUnitEmailChange}`}</h3>
-      <form onSubmit={saveTempUE}>
+      <form>
         <label htmlFor="email">
           {`${D.surveyUnitEmail} :`}
-          <input
-            type="text"
-            autoFocus
-            id="email"
-            name="email"
-            value={ueState.email || ''}
-            onChange={ueState.onChange}
-          />
+          <input type="text" id="email" name="email" value={email || ''} onChange={onChange} />
         </label>
       </form>
 
-      <button type="button" onClick={saveTempUE}>
+      <button type="button" onClick={saveUE}>
         <i className="fa fa-check" aria-hidden="true" />
         &nbsp;
         {D.validateButton}
@@ -55,3 +43,8 @@ const Form = ({ closeModal, surveyUnit, saveUE }) => {
 };
 
 export default Form;
+Form.propTypes = {
+  save: PropTypes.func.isRequired,
+  previousValue: PropTypes.string.isRequired,
+  closeModal: PropTypes.func.isRequired,
+};

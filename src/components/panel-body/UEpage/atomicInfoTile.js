@@ -49,8 +49,7 @@ const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
 export default AtomicInfoTile;
 AtomicInfoTile.propTypes = {
   iconType: PropTypes.string.isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({ key: PropTypes.string, value: PropTypes.string.isRequired })
-  ).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({ key: PropTypes.string, value: PropTypes.string }))
+    .isRequired,
   onClickFunction: PropTypes.func.isRequired,
 };

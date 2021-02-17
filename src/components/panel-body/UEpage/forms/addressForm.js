@@ -160,5 +160,5 @@ export default Form;
 Form.propTypes = {
   closeModal: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
-  previousValue: PropTypes.arrayOf().isRequired,
+  previousValue: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };

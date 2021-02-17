@@ -16,38 +16,45 @@ export const getForm = (formType, saveFunction, previousValue, closeModal) => {
     saveFunction(surveyUnit);
   };
 
-  return {
-    [formEnum.ADDRESS]: (
-      <AddressForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
-    ),
-    [formEnum.COMMENT]: (
-      <CommentForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
-    ),
-    [formEnum.CONTACT_ATTEMPT]: (
-      <ContactAttemptsForm
-        save={saveAndClose}
-        previousValue={previousValue}
-        closeModal={closeModal}
-      />
-    ),
-    [formEnum.CONTACT_OUTCOME]: (
-      <ContactOutcomeForm
-        save={saveAndClose}
-        previousValue={previousValue}
-        closeModal={closeModal}
-      />
-    ),
-    [formEnum.DELETION]: <DeletionForm save={saveAndClose} />,
-    [formEnum.MAIL]: (
-      <MailForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
-    ),
-    [formEnum.PHONE]: (
-      <PhoneForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
-    ),
-    [formEnum.USER]: (
-      <UserForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
-    ),
-  }[formType];
+  switch (formType) {
+    case formEnum.ADDRESS:
+      return (
+        <AddressForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
+      );
+    case formEnum.COMMENT:
+      return (
+        <CommentForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
+      );
+    case formEnum.CONTACT_ATTEMPT:
+      return (
+        <ContactAttemptsForm
+          save={saveAndClose}
+          previousValue={previousValue}
+          closeModal={closeModal}
+        />
+      );
+    case formEnum.CONTACT_OUTCOME:
+      return (
+        <ContactOutcomeForm
+          save={saveAndClose}
+          previousValue={previousValue}
+          closeModal={closeModal}
+        />
+      );
+    case formEnum.DELETION:
+      return <DeletionForm save={saveAndClose} />;
+    case formEnum.MAIL:
+      return <MailForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />;
+    case formEnum.PHONE:
+      return (
+        <PhoneForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
+      );
+    case formEnum.USER:
+      return <UserForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />;
+
+    default:
+      return null;
+  }
 };
 
 export const getPreviousValue = (formType, surveyUnit) => {
@@ -59,6 +66,12 @@ export const getPreviousValue = (formType, surveyUnit) => {
       break;
     case formEnum.USER:
       value = { firstName: surveyUnit.firstName, lastName: surveyUnit.lastName };
+      break;
+    case formEnum.MAIL:
+      value = surveyUnit.email;
+      break;
+    case formEnum.PHONE:
+      value = surveyUnit.phoneNumbers;
       break;
 
     default:
