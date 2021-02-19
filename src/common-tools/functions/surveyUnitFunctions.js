@@ -35,7 +35,7 @@ export const intervalInDays = su => {
 export const isValidForTransmission = ue => {
   /* const { contactOutcome } = ue;
   return contactOutcome !== null; */
-  return true;
+  return ue !== undefined;
 };
 
 const getContactAttempts = async surveyUnit => {

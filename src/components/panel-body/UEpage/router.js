@@ -106,9 +106,6 @@ const Router = ({ match, saveUE }) => {
           {selectedForm !== undefined ? selectedForm : <div>toto</div>}
         </Paper>
       </Modal>
-      <button type="button" onClick={() => setOpenModal(true)}>
-        open form
-      </button>
     </>
   );
 };

@@ -55,7 +55,7 @@ const Navigation = ({ location, textSearch, setTextSearch, version }) => {
       flex: '1 1 auto',
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      // marginRight: theme.spacing(2),
     },
     title: {
       display: 'none',
@@ -67,13 +67,13 @@ const Navigation = ({ location, textSearch, setTextSearch, version }) => {
     },
     search: {
       position: 'relative',
-      marginRight: theme.spacing(2),
+      // marginRight: theme.spacing(2),
       marginLeft: 0,
       height: '2em',
-      [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(3),
-        width: '75%',
-      },
+      // [theme.breakpoints.up('sm')]: {
+      // marginLeft: theme.spacing(3),
+      // width: '75%',
+      // },
     },
     searchButton: {
       color: theme.palette.getContrastText(grey[700]),

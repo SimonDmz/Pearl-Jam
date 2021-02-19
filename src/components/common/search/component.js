@@ -1,6 +1,5 @@
 import InputBase from '@material-ui/core/InputBase';
 import { makeStyles } from '@material-ui/core/styles';
-import { backgroundColor } from 'common-tools/cssAccess';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -29,10 +28,9 @@ const SearchBar = ({ textSearch, setTextSearch }) => {
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       paddingLeft: `1em`,
-      backgroundColor,
+      // backgroundColor: theme.color.backgroundColor,
       border: 'solid 1px black',
       color: 'black',
-      transition: theme.transitions.create('width'),
       marginRight: '1em',
     },
   }));

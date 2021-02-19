@@ -1,3 +1,4 @@
+import { CssBaseline } from '@material-ui/core';
 import { useAuth } from 'common-tools/auth/initAuth';
 import useServiceWorker from 'common-tools/hooks/useServiceWorker';
 import Preloader from 'components/common/loader';
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <>
+      <CssBaseline />
       <Notification serviceWorkerInfo={serviceWorkerInfo} />
       <div className="pearl-container">
         {!authenticated && <Preloader message={D.pleaseWait} />}
