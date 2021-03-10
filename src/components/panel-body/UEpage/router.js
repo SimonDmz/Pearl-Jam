@@ -119,7 +119,7 @@ const Router = ({ match, saveUE, refresh }) => {
         PaperProps={{ className: smartModalClass, onClick: smartCloseModal }}
       >
         <Grid container className={classes.row}>
-          {selectedForm !== undefined ? selectedForm : <div>toto</div>}
+          {selectedForm !== undefined && selectedForm}
         </Grid>
       </Dialog>
     </>
