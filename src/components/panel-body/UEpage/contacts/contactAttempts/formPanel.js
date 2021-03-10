@@ -21,7 +21,15 @@ const useStyles = makeStyles(() => ({
   top: { marginBottom: '1em' },
 }));
 
-const FormPanel = ({ title, hidden, children, backFunction, actionFunction, actionLabel }) => {
+const FormPanel = ({
+  title,
+  hidden,
+  children,
+  backFunction,
+  actionFunction,
+  actionLabel,
+  actionDisabled,
+}) => {
   const classes = useStyles();
 
   const actions = backFunction !== undefined || actionFunction !== undefined;
@@ -41,7 +49,7 @@ const FormPanel = ({ title, hidden, children, backFunction, actionFunction, acti
           )}
           {actionFunction !== undefined && (
             <DialogActions>
-              <Button type="button" onClick={actionFunction}>
+              <Button type="button" onClick={actionFunction} disabled={actionDisabled}>
                 {actionLabel}
               </Button>
             </DialogActions>
@@ -59,6 +67,7 @@ FormPanel.propTypes = {
   backFunction: PropTypes.func,
   actionFunction: PropTypes.func,
   hidden: PropTypes.bool,
+  actionDisabled: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };
 FormPanel.defaultProps = {
@@ -66,4 +75,5 @@ FormPanel.defaultProps = {
   backFunction: undefined,
   actionFunction: undefined,
   hidden: false,
+  actionDisabled: false,
 };

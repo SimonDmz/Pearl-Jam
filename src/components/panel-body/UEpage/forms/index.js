@@ -9,10 +9,10 @@ import MailForm from './mailForm';
 import PhoneForm from './phoneForm';
 import UserForm from './userForm';
 
-export const getForm = (formType, saveFunction, previousValue, closeModal, refresh, match) => {
+export const getForm = (formType, saveFunction, previousValue, closeModal, refresh) => {
   const saveAndClose = surveyUnit => {
     closeModal();
-    saveFunction(surveyUnit, match.url);
+    saveFunction(surveyUnit);
     refresh();
   };
 
@@ -84,6 +84,9 @@ export const getPreviousValue = (formType, surveyUnit, injectableData) => {
       break;
     case formEnum.CONTACT_ATTEMPT:
       value = injectableData;
+      break;
+    case formEnum.CONTACT_OUTCOME:
+      value = surveyUnit.contactOutcome === null ? undefined : surveyUnit.contactOutcome;
       break;
     default:
       value = { titi: 'tutu' };

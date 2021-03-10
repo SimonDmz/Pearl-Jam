@@ -31,10 +31,10 @@ const UEPage = ({ match }) => {
     setShouldRefresh(true);
   };
 
-  const saveUE = (ue, url) => {
+  const saveUE = ue => {
     setSurveyUnit(ue);
     surveyUnitDBService.update(ue);
-    history.push(url); // force to update
+    // history.push(url); // force to update
   };
 
   useEffect(() => {

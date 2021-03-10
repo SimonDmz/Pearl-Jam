@@ -1,37 +1,65 @@
+import { makeStyles, Paper, TextareaAutosize } from '@material-ui/core';
 import { getCommentByType } from 'common-tools/functions/surveyUnitFunctions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
-import Modal from 'react-modal';
 import SurveyUnitContext from '../../UEContext';
-import './comment.scss';
-import Form from './form';
 
-const Comment = ({ editable }) => {
-  const ue = useContext(SurveyUnitContext);
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const closeModal = () => {
-    setIsOpen(false);
+const useStyles = makeStyles(() => ({
+  noResize: {
+    resize: 'none',
+    border: 'none',
+    margin: '10px',
+  },
+  paper: {
+    borderRadius: '15px',
+    boxShadow: 'unset',
+    border: 'LightGray solid 1px',
+    marginTop: '1em',
+  },
+}));
+
+const Comment = ({ editable, save }) => {
+  const surveyUnit = useContext(SurveyUnitContext);
+  const value = editable
+    ? getCommentByType('INTERVIEWER', surveyUnit)
+    : getCommentByType('MANAGEMENT', surveyUnit);
+  const [interviewerComment, setInterviewerComment] = useState(value);
+
+  const saveUE = comment => {
+    const managementCommentValue = getCommentByType('MANAGEMENT', surveyUnit);
+    const managementComment = { type: 'MANAGEMENT', value: managementCommentValue };
+    const newInterviewerComment = { type: 'INTERVIEWER', value: comment };
+
+    const newComments = [];
+    newComments.push(managementComment);
+    newComments.push(newInterviewerComment);
+    surveyUnit.comments = newComments;
+    save(surveyUnit);
   };
 
-  const value = editable ? getCommentByType('INTERVIEWER', ue) : getCommentByType('MANAGEMENT', ue);
+  const onChange = event => {
+    setInterviewerComment(event.target.value);
+    saveUE(event.target.value);
+  };
+  const classes = useStyles();
 
   return (
-    <div className="Comment">
-      <div className="border">
-        <div className="text" data-placeholder={D.organizationComment}>
-          {value}
-        </div>
-      </div>
-
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
-        <Form closeModal={closeModal} surveyUnit={ue} />
-      </Modal>
-    </div>
+    <Paper className={classes.paper}>
+      <TextareaAutosize
+        className={classes.noResize}
+        rowsMin={10}
+        cols={50}
+        placeholder={D.organizationComment}
+        defaultValue={interviewerComment}
+        onChange={onChange}
+      />
+    </Paper>
   );
 };
 
 export default Comment;
 Comment.propTypes = {
   editable: PropTypes.bool.isRequired,
+  save: PropTypes.func.isRequired,
 };

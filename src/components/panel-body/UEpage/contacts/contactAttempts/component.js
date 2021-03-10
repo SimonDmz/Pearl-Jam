@@ -8,12 +8,6 @@ import SurveyUnitContext from '../../UEContext';
 import ContactAttemptLine from './contactAttemptLine';
 
 const useStyles = makeStyles(() => ({
-  button: {
-    '&:hover': { cursor: 'pointer' },
-  },
-  alignEnd: {
-    alignSelf: 'flex-end',
-  },
   column: {
     display: 'flex',
     flexDirection: 'column',
@@ -23,6 +17,7 @@ const useStyles = makeStyles(() => ({
     padding: '1em',
     boxShadow: 'unset',
     border: 'LightGray solid 1px',
+    borderRadius: '15px',
   },
 }));
 

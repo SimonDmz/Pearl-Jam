@@ -69,7 +69,7 @@ const Router = ({ match, saveUE, refresh }) => {
     setOpenModal(false);
   };
 
-  const selectedForm = getForm(formType, saveUE, previousValue, closeModal, refresh, match);
+  const selectedForm = getForm(formType, saveUE, previousValue, closeModal, refresh);
 
   const classes = useStyles();
 
@@ -95,18 +95,14 @@ const Router = ({ match, saveUE, refresh }) => {
             <Letters selectFormType={selectFormType} />
           </UeSubInfoTile>
           <UeSubInfoTile reference={contactsRef} title={D.goToContactPage}>
-            <Contacts
-              saveUE={saveUE}
-              selectFormType={selectFormType}
-              setInjectableData={setInjectableData}
-            />
+            <Contacts selectFormType={selectFormType} setInjectableData={setInjectableData} />
           </UeSubInfoTile>
           <UeSubInfoTile
             reference={commentsRef}
             title={D.goToCommentsPage}
             className={classes.ajustScroll}
           >
-            <Comments saveUE={saveUE} selectFormType={selectFormType} />
+            <Comments save={saveUE} />
           </UeSubInfoTile>
         </div>
       </div>
