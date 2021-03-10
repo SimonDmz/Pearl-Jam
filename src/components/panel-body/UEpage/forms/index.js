@@ -2,7 +2,6 @@ import formEnum from 'common-tools/enum/formEnum';
 import { deleteContactAttempt, getAddressData, getCommentByType } from 'common-tools/functions';
 import React from 'react';
 import AddressForm from './addressForm';
-import CommentForm from './commentForm';
 import ContactAttemptsForm from './contactAttemptsForm';
 import ContactOutcomeForm from './contactOutcomeForm';
 import MailForm from './mailForm';
@@ -27,10 +26,7 @@ export const getForm = (formType, saveFunction, previousValue, closeModal, refre
       return (
         <AddressForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
       );
-    case formEnum.COMMENT:
-      return (
-        <CommentForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />
-      );
+
     case formEnum.CONTACT_ATTEMPT:
       return (
         <ContactAttemptsForm
@@ -95,3 +91,5 @@ export const getPreviousValue = (formType, surveyUnit, injectableData) => {
 
   return value;
 };
+
+export const smartForms = [formEnum.CONTACT_ATTEMPT, formEnum.CONTACT_OUTCOME];

@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import Comments from './comments';
 import Contacts from './contacts';
 import Details from './details';
-import { getForm, getPreviousValue } from './forms';
+import { getForm, getPreviousValue, smartForms } from './forms';
 import Identification from './identification';
 import Letters from './letters';
 import Navigation from './navigation/component';
@@ -24,6 +24,7 @@ const useStyles = makeStyles(() => ({
   },
   row: {
     flexWrap: 'nowrap',
+    padding: '1em',
   },
   paperModal: {
     boxShadow: 'unset',
@@ -79,6 +80,8 @@ const Router = ({ match, saveUE, refresh }) => {
     }
   };
 
+  const smartModalClass = smartForms.includes(formType) ? classes.paperModal : '';
+
   return (
     <>
       <div>
@@ -113,8 +116,7 @@ const Router = ({ match, saveUE, refresh }) => {
         onClose={closeModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        PaperProps={{ className: classes.paperModal, onClick: smartCloseModal }}
-        // PaperProps={{ className: classes.paperModal }}
+        PaperProps={{ className: smartModalClass, onClick: smartCloseModal }}
       >
         <Grid container className={classes.row}>
           {selectedForm !== undefined ? selectedForm : <div>toto</div>}

@@ -8,7 +8,7 @@ const Contacts = ({ selectFormType, setInjectableData }) => {
   return (
     <Grid container>
       <ContactAttempts selectFormType={selectFormType} setInjectableData={setInjectableData} />
-      <ContactOutcome selectFormType={selectFormType} setInjectableData={setInjectableData} />
+      <ContactOutcome selectFormType={selectFormType} />
     </Grid>
   );
 };

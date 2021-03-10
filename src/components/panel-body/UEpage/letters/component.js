@@ -9,6 +9,9 @@ const Letters = ({ selectFormType }) => {
     void: {
       height: '200px',
       width: '200px',
+      boxShadow: 'unset',
+      borderRadius: '15px',
+      border: 'LightGray solid 1px',
     },
   }));
 

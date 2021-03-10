@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ContactOutcome = ({ selectFormType, setInjectableData }) => {
+const ContactOutcome = ({ selectFormType }) => {
   const su = useContext(SurveyUnitContext);
   const defaultContactOutcome =
     su.contactOutcome !== undefined && su.contactOutcome !== null
@@ -68,5 +68,4 @@ const ContactOutcome = ({ selectFormType, setInjectableData }) => {
 export default ContactOutcome;
 ContactOutcome.propTypes = {
   selectFormType: PropTypes.func.isRequired,
-  setInjectableData: PropTypes.func.isRequired,
 };
