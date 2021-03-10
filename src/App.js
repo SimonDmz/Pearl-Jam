@@ -2,6 +2,7 @@ import { useAuth } from 'common-tools/auth/initAuth';
 import useServiceWorker from 'common-tools/hooks/useServiceWorker';
 import Preloader from 'components/common/loader';
 import Notification from 'components/common/Notification';
+import Palette from 'components/common/palette';
 import ChatPage from 'components/panel-body/chat';
 import Home from 'components/panel-body/home';
 import NotificationsPage from 'components/panel-body/notifications';
@@ -22,9 +23,10 @@ function App() {
         {authenticated && (
           <>
             <Route path="/notifications" component={NotificationsPage} />
+            <Route path="/" render={routeProps => <Home {...routeProps} />} />
             <Route path="/chat" component={ChatPage} />
             <Route path="/training" component={TrainingPage} />
-            <Route path="/" render={routeProps => <Home {...routeProps} />} />
+            <Route path="/palette" component={Palette} />
           </>
         )}
       </div>

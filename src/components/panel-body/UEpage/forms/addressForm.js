@@ -1,7 +1,15 @@
+import { Button, DialogActions, DialogTitle, makeStyles, TextField } from '@material-ui/core';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
 import SurveyUnitContext from '../UEContext';
+
+const useStyles = makeStyles(() => ({
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
 
 const Form = ({ closeModal, save, previousValue }) => {
   const surveyUnit = useContext(SurveyUnitContext);
@@ -80,79 +88,65 @@ const Form = ({ closeModal, save, previousValue }) => {
     save({ ...surveyUnit, address: buildAddress() });
   };
 
-  return (
-    <>
-      <h3>{D.surveyUnitAddressChange}</h3>
-      <form>
-        <label htmlFor="deliveryPoint">
-          {`${D.addressName} :`}
-          <input
-            type="text"
-            id="deliveryPoint"
-            name="deliveryPoint"
-            value={deliveryPoint}
-            onChange={onChange}
-          />
-        </label>
-        <div hidden="hidden">
-          <label htmlFor="additionalAddress">
-            {`${D.addressAdditionalAddress} :`}
-            <input
-              type="text"
-              id="additionalAddress"
-              name="additionalAddress"
-              value={additionalAddress}
-              onChange={onChange}
-            />
-          </label>
-          <label htmlFor="number">
-            {`${D.addressNumber} :`}
-            <input type="text" id="number" name="number" value={number} onChange={onChange} />
-          </label>
-        </div>
-        <label htmlFor="streetType">
-          {`${D.addressFullAddress} :`}
-          <input
-            type="text"
-            id="streetType"
-            name="streetType"
-            value={streetType}
-            onChange={onChange}
-          />
-        </label>
-        <div hidden="hidden">
-          <label htmlFor="streetName">
-            {`${D.addressStreetName} :`}
-            <input
-              type="text"
-              id="streetName"
-              name="streetName"
-              value={streetName}
-              onChange={onChange}
-            />
-          </label>
-        </div>
-        <label htmlFor="postcode">
-          {`${D.addressCity} :`}
-          <input type="text" id="postcode" name="postcode" value={postcode} onChange={onChange} />
-        </label>
-        <label htmlFor="city">
-          {`${D.addressCountry} :`}
-          <input type="text" id="city" name="city" value={city} onChange={onChange} />
-        </label>
-      </form>
+  const classes = useStyles();
 
-      <button type="button" onClick={saveUE}>
-        <i className="fa fa-check" aria-hidden="true" />
-        &nbsp;
-        {D.validateButton}
-      </button>
-      <button type="button" onClick={closeModal}>
-        <i className="fa fa-times" aria-hidden="true" />
-        &nbsp;
-        {D.cancelButton}
-      </button>
-    </>
+  return (
+    <div className={classes.column}>
+      <DialogTitle id="form-dialog-title">{D.surveyUnitAddressChange}</DialogTitle>
+      <TextField
+        margin="dense"
+        id="deliveryPoint"
+        name="deliveryPoint"
+        label={D.addressName}
+        type="text"
+        fullWidth
+        defaultValue={deliveryPoint}
+        onChange={onChange}
+      />
+      <TextField
+        margin="dense"
+        id="streetType"
+        name="streetType"
+        label={D.addressFullAddress}
+        type="text"
+        fullWidth
+        defaultValue={streetType}
+        onChange={onChange}
+      />
+      <TextField
+        margin="dense"
+        id="postcode"
+        name="postcode"
+        label={D.addressCity}
+        type="text"
+        fullWidth
+        defaultValue={postcode}
+        onChange={onChange}
+      />
+      <TextField
+        margin="dense"
+        id="city"
+        name="city"
+        label={D.addressCountry}
+        type="text"
+        fullWidth
+        defaultValue={city}
+        onChange={onChange}
+      />
+
+      <DialogActions>
+        <Button type="button" onClick={saveUE}>
+          <i className="fa fa-check" aria-hidden="true" />
+          &nbsp;
+          {D.validateButton}
+        </Button>
+        <Button type="button" onClick={closeModal}>
+          <i className="fa fa-times" aria-hidden="true" />
+          &nbsp;
+          {D.cancelButton}
+        </Button>
+      </DialogActions>
+    </div>
   );
 };
 

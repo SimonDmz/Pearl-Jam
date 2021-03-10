@@ -1,19 +1,25 @@
 import formEnum from 'common-tools/enum/formEnum';
-import { getAddressData } from 'common-tools/functions';
+import { deleteContactAttempt, getAddressData, getCommentByType } from 'common-tools/functions';
 import React from 'react';
 import AddressForm from './addressForm';
 import CommentForm from './commentForm';
 import ContactAttemptsForm from './contactAttemptsForm';
 import ContactOutcomeForm from './contactOutcomeForm';
-import DeletionForm from './deletionForm';
 import MailForm from './mailForm';
 import PhoneForm from './phoneForm';
 import UserForm from './userForm';
 
-export const getForm = (formType, saveFunction, previousValue, closeModal) => {
+export const getForm = (formType, saveFunction, previousValue, closeModal, refresh, match) => {
   const saveAndClose = surveyUnit => {
     closeModal();
-    saveFunction(surveyUnit);
+    saveFunction(surveyUnit, match.url);
+    refresh();
+  };
+
+  const deleteAndClose = (surveyUnit, contactAttemptId) => {
+    closeModal();
+    deleteContactAttempt(surveyUnit, contactAttemptId);
+    refresh();
   };
 
   switch (formType) {
@@ -29,6 +35,7 @@ export const getForm = (formType, saveFunction, previousValue, closeModal) => {
       return (
         <ContactAttemptsForm
           save={saveAndClose}
+          deleteAction={deleteAndClose}
           previousValue={previousValue}
           closeModal={closeModal}
         />
@@ -41,8 +48,7 @@ export const getForm = (formType, saveFunction, previousValue, closeModal) => {
           closeModal={closeModal}
         />
       );
-    case formEnum.DELETION:
-      return <DeletionForm save={saveAndClose} />;
+
     case formEnum.MAIL:
       return <MailForm save={saveAndClose} previousValue={previousValue} closeModal={closeModal} />;
     case formEnum.PHONE:
@@ -57,7 +63,7 @@ export const getForm = (formType, saveFunction, previousValue, closeModal) => {
   }
 };
 
-export const getPreviousValue = (formType, surveyUnit) => {
+export const getPreviousValue = (formType, surveyUnit, injectableData) => {
   let value;
 
   switch (formType) {
@@ -73,7 +79,12 @@ export const getPreviousValue = (formType, surveyUnit) => {
     case formEnum.PHONE:
       value = surveyUnit.phoneNumbers;
       break;
-
+    case formEnum.COMMENT:
+      value = getCommentByType('INTERVIEWER', surveyUnit);
+      break;
+    case formEnum.CONTACT_ATTEMPT:
+      value = injectableData;
+      break;
     default:
       value = { titi: 'tutu' };
       break;

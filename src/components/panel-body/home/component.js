@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import { version } from '../../../../package.json';
-import './home.scss';
 
 const Home = ({ location, match }) => {
   const [textSearch, setTextSearch] = useState('');

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import contactOutcomeEnum from 'common-tools/enum/ContactOutcomEnum';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { addNewState } from 'common-tools/functions';
 import D from 'i18n';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import './form.scss';
 
 const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
@@ -52,7 +52,6 @@ const Form = ({ closeModal, surveyUnit, contactOutcome, saveUE }) => {
     } else {
       await addNewState(surveyUnit, surveyUnitStateEnum.WAITING_FOR_TRANSMISSION.type);
     }
-    console.log('newSu after adding new state : ', newSu);
     saveUE(newSu);
   };
 

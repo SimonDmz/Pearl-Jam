@@ -1,4 +1,4 @@
-import { makeStyles, Modal, Paper } from '@material-ui/core';
+import { Dialog, Grid, makeStyles } from '@material-ui/core';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -13,7 +13,25 @@ import StateLine from './stateLine';
 import SurveyUnitContext from './UEContext';
 import UeSubInfoTile from './ueSubInfoTile';
 
-const Router = ({ match, saveUE }) => {
+const useStyles = makeStyles(() => ({
+  ajustScroll: {
+    height: 'calc(100vh - 3em)',
+  },
+  modal: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  row: {
+    flexWrap: 'nowrap',
+  },
+  paperModal: {
+    boxShadow: 'unset',
+    backgroundColor: 'transparent',
+  },
+}));
+
+const Router = ({ match, saveUE, refresh }) => {
   const surveyUnit = useContext(SurveyUnitContext);
 
   /** refs are used for scrolling, dispatched to the clickable link and linked element */
@@ -28,16 +46,17 @@ const Router = ({ match, saveUE }) => {
   const [formType, setFormType] = useState(undefined);
   const [editionMode, setEditionMode] = useState(false);
   const [previousValue, setPreviousValue] = useState(undefined);
+  const [injectableData, setInjectableData] = useState(undefined);
   const [openModal, setOpenModal] = useState(false);
 
   /** update the previousValue */
   useEffect(() => {
     let value;
     if (editionMode) {
-      value = getPreviousValue(formType, surveyUnit);
+      value = getPreviousValue(formType, surveyUnit, injectableData);
     }
     setPreviousValue(value);
-  }, [formType, editionMode, surveyUnit]);
+  }, [formType, editionMode, surveyUnit, injectableData]);
 
   /** double setter given to sub-components */
   const selectFormType = (newFormType, isEditionMode) => {
@@ -50,23 +69,15 @@ const Router = ({ match, saveUE }) => {
     setOpenModal(false);
   };
 
-  const selectedForm = getForm(formType, saveUE, previousValue, closeModal);
+  const selectedForm = getForm(formType, saveUE, previousValue, closeModal, refresh, match);
 
-  const useStyles = makeStyles(() => ({
-    ajustScroll: {
-      height: 'calc(100vh - 3em)',
-    },
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    form: {
-      // margin: '0 auto',
-      width: '50%',
-    },
-  }));
   const classes = useStyles();
+
+  const smartCloseModal = event => {
+    if (event.target.id === 'dialogRoot') {
+      closeModal();
+    }
+  };
 
   return (
     <>
@@ -84,7 +95,11 @@ const Router = ({ match, saveUE }) => {
             <Letters selectFormType={selectFormType} />
           </UeSubInfoTile>
           <UeSubInfoTile reference={contactsRef} title={D.goToContactPage}>
-            <Contacts saveUE={saveUE} selectFormType={selectFormType} />
+            <Contacts
+              saveUE={saveUE}
+              selectFormType={selectFormType}
+              setInjectableData={setInjectableData}
+            />
           </UeSubInfoTile>
           <UeSubInfoTile
             reference={commentsRef}
@@ -95,17 +110,20 @@ const Router = ({ match, saveUE }) => {
           </UeSubInfoTile>
         </div>
       </div>
-      <Modal
+      <Dialog
+        maxWidth={false}
         className={classes.modal}
         open={openModal}
         onClose={closeModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        PaperProps={{ className: classes.paperModal, onClick: smartCloseModal }}
+        // PaperProps={{ className: classes.paperModal }}
       >
-        <Paper className={classes.form}>
+        <Grid container className={classes.row}>
           {selectedForm !== undefined ? selectedForm : <div>toto</div>}
-        </Paper>
-      </Modal>
+        </Grid>
+      </Dialog>
     </>
   );
 };
@@ -117,4 +135,5 @@ Router.propTypes = {
     url: PropTypes.string.isRequired,
   }).isRequired,
   saveUE: PropTypes.func.isRequired,
+  refresh: PropTypes.func.isRequired,
 };

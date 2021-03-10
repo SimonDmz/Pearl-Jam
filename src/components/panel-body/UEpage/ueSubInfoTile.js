@@ -3,15 +3,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+const useStyles = makeStyles(() => ({
+  root: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    scrollMarginTop: '3em',
+    padding: '1em',
+    borderRadius: '15px',
+    minHeight: '400px',
+  },
+}));
+
 const UeSubInfoTile = ({ title, children, reference, className }) => {
-  const useStyles = makeStyles(() => ({
-    root: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      scrollMarginTop: '3em',
-    },
-  }));
   const classes = useStyles();
   return (
     <div className={`${classes.root} ${className}`} ref={reference}>

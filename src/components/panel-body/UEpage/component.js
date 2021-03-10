@@ -10,15 +10,26 @@ import { SurveyUnitProvider } from './UEContext';
 
 const UEPage = ({ match }) => {
   const [surveyUnit, setSurveyUnit] = useState(undefined);
+  const [shouldRefresh, setShouldRefresh] = useState(true);
 
   const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
-    surveyUnitDBService.getById(id).then(ue => {
-      setSurveyUnit(ue);
-    });
-  }, [id]);
+    const updateSurveyUnit = async () => {
+      await surveyUnitDBService.getById(id).then(ue => {
+        setSurveyUnit(ue);
+      });
+    };
+    if (shouldRefresh) {
+      updateSurveyUnit();
+      setShouldRefresh(false);
+    }
+  }, [id, shouldRefresh]);
+
+  const refresh = () => {
+    setShouldRefresh(true);
+  };
 
   const saveUE = (ue, url) => {
     setSurveyUnit(ue);
@@ -40,7 +51,7 @@ const UEPage = ({ match }) => {
     <>
       {surveyUnit && (
         <SurveyUnitProvider value={surveyUnit}>
-          <Router match={match} saveUE={saveUE} />
+          <Router match={match} saveUE={saveUE} refresh={refresh} />
         </SurveyUnitProvider>
       )}
 

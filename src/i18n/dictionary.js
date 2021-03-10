@@ -57,6 +57,7 @@ const dictionary = {
     en: 'The application is ready to be used offline. (Remember to synchronize your data before)',
   },
   areYouSure: { fr: 'Êtes-vous sûr ?', en: 'Are you sure ?' },
+  delete: { fr: 'Supprimer', en: 'Delete' },
   ...buttonMessage,
   ...navigationMessage,
   ...waitingMessage,

@@ -1,7 +1,15 @@
+import { Button, DialogActions, DialogTitle, makeStyles, TextField } from '@material-ui/core';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
 import SurveyUnitContext from '../UEContext';
+
+const useStyles = makeStyles(() => ({
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
 
 const Form = ({ closeModal, save, previousValue }) => {
   const surveyUnit = useContext(SurveyUnitContext);
@@ -29,40 +37,45 @@ const Form = ({ closeModal, save, previousValue }) => {
     save({ ...surveyUnit, phoneNumbers: cleanPhoneNumbers(phone) });
   };
 
+  const classes = useStyles();
+
   return (
-    <>
-      <h3>{D.surveyUnitPhoneChange}</h3>
+    <div className={classes.column}>
+      <DialogTitle id="form-dialog-title">{D.surveyUnitPhoneChange}</DialogTitle>
       <form onSubmit={save}>
         {phone &&
           phone.map(phoneNumber => (
-            <label htmlFor={`phone-${phoneNumber.order}`} key={phoneNumber.order}>
-              <input
-                type="tel"
-                id={`phone-${phoneNumber.order}`}
-                name={`phone-${phoneNumber.order}`}
-                value={phoneNumber.value}
-                onChange={onChange}
-              />
-            </label>
+            <TextField
+              margin="dense"
+              id={`phone-${phoneNumber.order}`}
+              name={`phone-${phoneNumber.order}`}
+              label={`#${phoneNumber.order + 1}`}
+              type="text"
+              fullWidth
+              defaultValue={phoneNumber.value}
+              onChange={onChange}
+              variant="outlined"
+            />
           ))}
       </form>
-
-      <button type="button" onClick={addPhone}>
-        <i className="fa fa-plus" aria-hidden="true" />
-        &nbsp;
-        {D.addPhoneNumberButton}
-      </button>
-      <button type="button" onClick={saveUE}>
-        <i className="fa fa-check" aria-hidden="true" />
-        &nbsp;
-        {D.validateButton}
-      </button>
-      <button type="button" onClick={closeModal}>
-        <i className="fa fa-times" aria-hidden="true" />
-        &nbsp;
-        {D.cancelButton}
-      </button>
-    </>
+      <DialogActions>
+        <Button type="button" onClick={addPhone}>
+          <i className="fa fa-plus" aria-hidden="true" />
+          &nbsp;
+          {D.addPhoneNumberButton}
+        </Button>
+        <Button type="button" onClick={saveUE}>
+          <i className="fa fa-check" aria-hidden="true" />
+          &nbsp;
+          {D.validateButton}
+        </Button>
+        <Button type="button" onClick={closeModal}>
+          <i className="fa fa-times" aria-hidden="true" />
+          &nbsp;
+          {D.cancelButton}
+        </Button>
+      </DialogActions>
+    </div>
   );
 };
 
