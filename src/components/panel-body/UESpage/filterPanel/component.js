@@ -217,6 +217,7 @@ const FilterPanel = ({
                   <FormControlLabel
                     key={campaign}
                     control={
+                      // eslint-disable-next-line react/jsx-wrap-multilines
                       <Checkbox
                         className={classes.paddingFour}
                         checked={selectedCampaigns.includes(campaign)}
@@ -248,6 +249,7 @@ const FilterPanel = ({
                 <FormControlLabel
                   key={priority}
                   control={
+                    // eslint-disable-next-line react/jsx-wrap-multilines
                     <Checkbox
                       className={classes.paddingFour}
                       checked={priority}
@@ -279,6 +281,7 @@ const FilterPanel = ({
                   <FormControlLabel
                     key={todo.order}
                     control={
+                      // eslint-disable-next-line react/jsx-wrap-multilines
                       <Checkbox
                         className={classes.paddingFour}
                         checked={selectedToDos.includes(todo.order.toString())}
@@ -310,6 +313,7 @@ const FilterPanel = ({
                 <FormControlLabel
                   key={terminated}
                   control={
+                    // eslint-disable-next-line react/jsx-wrap-multilines
                     <Checkbox
                       className={classes.paddingFour}
                       checked={terminated}
