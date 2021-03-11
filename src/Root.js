@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@material-ui/core';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import App from 'App';
 import { useQueenFromConfig } from 'common-tools/hooks/useQueenFromConfig';
 import QueenContainer from 'components/panel-body/queen-container';
@@ -13,6 +13,7 @@ function Root() {
       <Switch>
         <Route path="/queen" component={routeProps => <QueenContainer {...routeProps} />} />
         <ThemeProvider theme={theme}>
+          <CssBaseline />
           <Route path="/" component={App} />
         </ThemeProvider>
       </Switch>

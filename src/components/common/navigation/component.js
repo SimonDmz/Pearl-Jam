@@ -9,7 +9,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import { PEARL_USER_KEY } from 'common-tools/constants';
-import { backgroundColor, secondaryColor, secondaryColorDarker } from 'common-tools/cssAccess';
 import Synchronize from 'components/common/synchronize';
 import InfoTile from 'components/panel-body/UEpage/infoTile';
 import PropTypes from 'prop-types';
@@ -36,7 +35,7 @@ const Navigation = ({ location, textSearch, setTextSearch, version }) => {
 
   const useStyles = makeStyles(theme => ({
     appBar: {
-      backgroundColor,
+      backgroundColor: theme.palette.primary.main,
       height: '5em',
     },
     column: {
@@ -67,17 +66,12 @@ const Navigation = ({ location, textSearch, setTextSearch, version }) => {
     },
     search: {
       position: 'relative',
-      // marginRight: theme.spacing(2),
       marginLeft: 0,
       height: '2em',
-      // [theme.breakpoints.up('sm')]: {
-      // marginLeft: theme.spacing(3),
-      // width: '75%',
-      // },
     },
     searchButton: {
       color: theme.palette.getContrastText(grey[700]),
-      backgroundColor: secondaryColor,
+      backgroundColor: theme.palette.secondary.main,
       '&:hover': {
         backgroundColor: grey[800],
       },
@@ -91,7 +85,7 @@ const Navigation = ({ location, textSearch, setTextSearch, version }) => {
     inputInput: {
       padding: theme.spacing(1, 1, 1, 0),
       paddingLeft: `1em`,
-      backgroundColor,
+      backgroundColor: theme.palette.primary.main,
       border: 'solid 1px black',
       color: 'black',
       transition: theme.transitions.create('width'),
@@ -99,8 +93,8 @@ const Navigation = ({ location, textSearch, setTextSearch, version }) => {
     },
     notificationsIcon: {
       fontSize: 'xxx-large',
-      color: secondaryColor,
-      '&:hover': { color: secondaryColorDarker },
+      color: theme.palette.secondary.main,
+      '&:hover': { color: theme.palette.secondary.dark },
     },
     syncIcon: {
       fontSize: 'xxx-large',
