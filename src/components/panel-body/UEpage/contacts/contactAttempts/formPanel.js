@@ -12,6 +12,8 @@ const useStyles = makeStyles(() => ({
     margin: '1em',
     height: 'max-content',
     borderRadius: '15px',
+    minHeight: '200px',
+    minWidth: '300px',
   },
   row: {
     display: 'flex',

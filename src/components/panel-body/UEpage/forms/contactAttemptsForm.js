@@ -36,6 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
   alignEnd: {
     alignSelf: 'flex-end',
+    marginTop: 'auto',
   },
   selected: { backgroundColor: theme.palette.primary.dark },
   column: {

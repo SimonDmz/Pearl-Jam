@@ -18,6 +18,8 @@ const useStyles = makeStyles(() => ({
     boxShadow: 'unset',
     border: 'LightGray solid 1px',
     borderRadius: '15px',
+    minWidth: '300px',
+    minHeight: '200px',
   },
 }));
 

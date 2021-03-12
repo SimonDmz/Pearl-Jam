@@ -18,6 +18,7 @@ const useStyles = makeStyles(() => ({
     border: 'LightGray solid 1px',
     borderRadius: '15px',
     minWidth: '300px',
+    minHeight: '200px',
   },
   upDownMargin: {
     marginTop: '1em',
@@ -60,7 +61,10 @@ const ContactOutcome = ({ selectFormType }) => {
     >
       <Typography variant="h6">{D.contactOutcome}</Typography>
       <Typography className={classes.upDownMargin}>{outcomeValue}</Typography>
-      <Typography>{`> ${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts}`}</Typography>
+      <Typography>
+        {contactOutcome.totalNumberOfContactAttempts > 0 &&
+          `> ${contactOutcome.totalNumberOfContactAttempts} ${D.contactOutcomeAttempts}`}
+      </Typography>
     </Paper>
   );
 };
