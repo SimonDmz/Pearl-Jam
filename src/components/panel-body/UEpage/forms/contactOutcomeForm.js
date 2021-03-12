@@ -130,6 +130,11 @@ const Form = ({ previousValue, save }) => {
     setContactOutcome({ date: new Date().getTime(), totalNumberOfContactAttempts: 0 });
   };
 
+  const { offsetTop } =
+    contactOutcome && contactOutcome.type
+      ? document.getElementById(contactOutcome.type)
+      : { offsetTop: 0 };
+
   const classes = useStyles();
 
   return (
@@ -159,6 +164,7 @@ const Form = ({ previousValue, save }) => {
           <div>
             {Object.values(contactOutcomeEnum).map(({ value, type }) => (
               <Paper
+                id={type}
                 key={type}
                 name={type}
                 value={type}
@@ -169,7 +175,10 @@ const Form = ({ previousValue, save }) => {
               </Paper>
             ))}
           </div>
-          <div className={classes.flexRow}>
+          <div
+            className={classes.flexRow}
+            style={{ marginTop: offsetTop > 0 ? offsetTop - 96 : offsetTop }}
+          >
             <Fab
               size="small"
               aria-label="remove contact attempts total"
