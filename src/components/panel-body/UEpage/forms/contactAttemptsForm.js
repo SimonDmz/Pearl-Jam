@@ -97,7 +97,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
   }, [surveyUnit]);
 
   const onChange = newStatus => {
-    setContactAttempt({ ...contactAttempt, status: newStatus, date: new Date() });
+    setContactAttempt({ ...contactAttempt, status: newStatus, date: new Date().getTime() });
   };
 
   useEffect(() => {

@@ -1,9 +1,10 @@
 import { IconButton, makeStyles } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import useCounter from 'common-tools/hooks/useCounter';
 import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -19,24 +20,39 @@ const useStyles = makeStyles(() => ({
 const UpDownCounter = ({ selectedDate, handleDateChange, type }) => {
   const classes = useStyles();
 
+  const isHours = type === 'hours';
+  const getData = () => (isHours ? getHours(selectedDate) : getMinutes(selectedDate));
+
+  const counterParams = {
+    initialValue: getData(),
+    interval: isHours ? 13 : 10,
+    deltaValue: isHours ? 2 : 5,
+  };
+  const {
+    counter: { current: counter },
+    startAdd,
+    startRemove,
+    stop,
+  } = useCounter(counterParams);
   //* keep value in [min-max] range to prevent hour/day leap
-  const clean = value => (type === 'hours' ? (value + 24) % 24 : (value + 60) % 60);
 
-  const getData = () => (type === 'hours' ? getHours(selectedDate) : getMinutes(selectedDate));
-
+  const clean = value => (isHours ? (value + 24) % 24 : (value + 60) % 60);
   const setData = value => {
     const cleanedValue = clean(value);
-    return type === 'hours'
-      ? setHours(selectedDate, cleanedValue)
-      : setMinutes(selectedDate, cleanedValue);
+    return isHours ? setHours(selectedDate, cleanedValue) : setMinutes(selectedDate, cleanedValue);
   };
+  useEffect(() => {
+    handleDateChange(setData(counter));
+  }, [counter, handleDateChange, isHours]);
 
   return (
     <div className={classes.column}>
       <IconButton
-        onClick={() => {
-          handleDateChange(setData(getData() + 1));
-        }}
+        onMouseDown={startAdd}
+        onTouchStart={startAdd}
+        onMouseUp={stop}
+        onMouseLeave={stop}
+        onTouchEnd={stop}
       >
         <ExpandLessIcon className={classes.icon} />
       </IconButton>
@@ -44,9 +60,11 @@ const UpDownCounter = ({ selectedDate, handleDateChange, type }) => {
         .toString()
         .padStart(2, '0')}
       <IconButton
-        onClick={() => {
-          handleDateChange(setData(getData() - 1));
-        }}
+        onMouseDown={startRemove}
+        onTouchStart={startRemove}
+        onMouseUp={stop}
+        onMouseLeave={stop}
+        onTouchEnd={stop}
       >
         <ExpandMoreIcon className={classes.icon} />
       </IconButton>
