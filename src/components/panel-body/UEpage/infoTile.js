@@ -29,6 +29,7 @@ const InfoTile = () => {
       padding: '0px',
       '&:last-child': { paddingBottom: '0px' },
     },
+    alignItems: { alignItems: 'center' },
 
     title: {
       fontSize: 14,
@@ -43,6 +44,7 @@ const InfoTile = () => {
       width: '1.4em',
       height: '1.4em',
       marginLeft: '1em',
+      lineHeight: 'initial',
     },
   });
 
@@ -54,7 +56,12 @@ const InfoTile = () => {
   return surveyUnit !== undefined ? (
     <Card className={classes.root} elevation={0}>
       <CardContent className={classes.column}>
-        <Typography component="h6" variant="h6" color="textSecondary">
+        <Typography
+          component="h6"
+          variant="h6"
+          color="textSecondary"
+          className={`${classes.row} ${classes.alignItems}`}
+        >
           <PersonIcon />
           {`${firstName} ${lastName}`}
         </Typography>

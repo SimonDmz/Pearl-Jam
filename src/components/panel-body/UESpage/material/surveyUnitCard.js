@@ -68,6 +68,9 @@ const SurveyUnitCard = ({ surveyUnit }) => {
     },
     negativeLeftMargin: { marginLeft: '-5px' },
     hidden: { visibility: 'hidden' },
+    maxWidth: {
+      maxWidth: '180px',
+    },
   }));
 
   const classes = useStyles();
@@ -115,16 +118,16 @@ const SurveyUnitCard = ({ surveyUnit }) => {
       <CardContent className={`${classes.content} ${classes.flexRow}  ${classes.justifyStart}`}>
         <PersonIcon className={`${classes.icon} ${classes.paddingTop}`} />
         <div className={classes.flexColumn}>
-          <Typography component="h6" variant="h6" noWrap>
+          <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
             {firstName}
           </Typography>
-          <Typography component="h6" variant="h6" noWrap>
+          <Typography component="h6" variant="h6" noWrap className={classes.maxWidth}>
             {lastName}
           </Typography>
         </div>
       </CardContent>
       <CardContent className={`${classes.content} ${classes.flexRow}`}>
-        <Typography variant="subtitle1" color="textSecondary" noWrap>
+        <Typography variant="subtitle1" color="textSecondary" noWrap className={classes.maxWidth}>
           <LocationOnIcon className={`${classes.icon} ${classes.negativeLeftMargin}`} />
           {`${l6}`}
         </Typography>
