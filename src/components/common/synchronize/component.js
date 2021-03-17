@@ -1,3 +1,4 @@
+import { Dialog, makeStyles, Typography } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { addOnlineStatusObserver } from 'common-tools';
 import SyncIcon from 'common-tools/icons/SyncIcon';
@@ -5,12 +6,16 @@ import { synchronizePearl, synchronizeQueen } from 'common-tools/synchronize';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
 import Loader from '../loader';
-import './result.scss';
 
-Modal.setAppElement('#root');
+const useStyles = makeStyles(() => ({
+  dialogPaper: {
+    padding: '1em',
+    borderRadius: '15px',
+    textAlign: 'center',
+  },
+}));
 
 const Synchronize = ({ materialClass }) => {
   const history = useHistory();
@@ -100,21 +105,24 @@ const Synchronize = ({ materialClass }) => {
     window.localStorage.removeItem('PEARL_SYNC_RESULT');
   };
 
+  const classes = useStyles();
+
   return (
     <>
       {loading && <Loader message={D.synchronizationInProgress} />}
       {!loading && syncResult && (
-        <Modal
-          className={`sync-result ${syncResult.state ? 'success' : 'failure'}`}
-          isOpen={!!syncResult}
-          onRequestClose={close}
+        <Dialog
+          className={classes.syncResult}
+          open={!!syncResult}
+          onClose={close}
+          onClick={close}
+          PaperProps={{ className: classes.dialogPaper }}
         >
-          <button type="button" className="close-result" onClick={close}>
-            ╳
-          </button>
-          <h2>{D.syncResult}</h2>
-          <p>{syncResult.message}</p>
-        </Modal>
+          <Typography variant="h4" color={syncResult.state ? 'initial' : 'error'}>
+            {D.syncResult}
+          </Typography>
+          <Typography variant="h6">{syncResult.message}</Typography>
+        </Dialog>
       )}
 
       <IconButton
