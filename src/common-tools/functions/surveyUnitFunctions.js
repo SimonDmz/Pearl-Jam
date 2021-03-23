@@ -52,7 +52,7 @@ export const deleteContactAttempt = (surveyUnit, contactAttemptId) => {
   contactAttemptDBService.delete(contactAttemptId);
 };
 
-const getContactAttemptNumber = surveyUnit => {
+export const getContactAttemptNumber = surveyUnit => {
   return surveyUnit.states.filter(
     state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
   ).length;
@@ -175,10 +175,6 @@ export const addNewState = async (surveyUnit, stateType) => {
   }
   newSu.selected = false;
   await surveyUnitDBService.addOrUpdate(newSu);
-};
-
-export const checkIfContactAttemptCanBeDeleted = surveyUnit => {
-  return getContactAttemptNumber(surveyUnit) > 1;
 };
 
 export const updateStateWithDates = surveyUnit => {

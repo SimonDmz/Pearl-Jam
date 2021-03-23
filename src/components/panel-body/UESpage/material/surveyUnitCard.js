@@ -53,6 +53,7 @@ const SurveyUnitCard = ({ surveyUnit }) => {
       '&:hover': { cursor: 'not-allowed' },
     },
     paddingTop: {
+      height: 'max-content',
       paddingTop: '10px',
       fontSize: 'xxx-large',
     },
@@ -70,6 +71,9 @@ const SurveyUnitCard = ({ surveyUnit }) => {
     hidden: { visibility: 'hidden' },
     maxWidth: {
       maxWidth: '180px',
+    },
+    leftMargin: {
+      marginLeft: '2px',
     },
   }));
 
@@ -131,20 +135,19 @@ const SurveyUnitCard = ({ surveyUnit }) => {
           <LocationOnIcon className={`${classes.icon} ${classes.negativeLeftMargin}`} />
           {`${l6}`}
         </Typography>
-        <Typography variant="subtitle1" color="textSecondary">
+        <Typography variant="subtitle1" color="textSecondary" className={classes.flexRow}>
           <RadioButtonUncheckedSharpIcon className={`${classes.icon} ${classes.stateIcon}`} />
-          {lastState}
+          <Typography className={classes.leftMargin}>{lastState}</Typography>
         </Typography>
       </CardContent>
       <CardContent className={`${classes.content} ${classes.flexRow}`}>
         <Typography variant="subtitle1" color="textSecondary">
           {` # ${id}`}
         </Typography>
-        <div className={`${classes.flexRow}`}>
+        <div className={classes.flexRow}>
           <ScheduleIcon className={classes.icon} />
-
-          <Typography variant="subtitle1" color="textSecondary">
-            {`  ${nbJoursRestant} jours`}
+          <Typography className={classes.leftMargin} variant="subtitle1" color="textSecondary">
+            {`${nbJoursRestant} jours`}
           </Typography>
         </div>
       </CardContent>

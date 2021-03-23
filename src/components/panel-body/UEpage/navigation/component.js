@@ -11,6 +11,29 @@ import React, { useContext, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import SurveyUnitContext from '../UEContext';
 
+const useStyles = makeStyles(theme => ({
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'sticky',
+    top: '0px',
+    backgroundColor: 'white',
+    borderBottom: '1px solid gray',
+    height: '3em',
+    boxSizing: 'unset',
+  },
+  button: {
+    backgroundColor: theme.palette.primary.darker,
+    color: 'white',
+    marginRight: '1em',
+  },
+  tabs: {
+    marginBottom: 'none',
+  },
+  scroller: { position: 'unset' },
+}));
+
 const Navigation = ({ match, refs }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const surveyUnit = useContext(SurveyUnitContext);
@@ -34,29 +57,18 @@ const Navigation = ({ match, refs }) => {
     }
   };
 
-  const useStyles = makeStyles(() => ({
-    row: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      position: 'sticky',
-      top: '0px',
-      backgroundColor: 'white',
-      borderBottom: '1px solid gray',
-      height: '3em',
-      boxSizing: 'unset',
-    },
-    button: {
-      backgroundColor: '#666666',
-      color: 'white',
-    },
-  }));
-
   const classes = useStyles();
 
   return (
     <div className={classes.row}>
-      <Tabs value={tabIndex} onChange={(e, index) => setTabIndex(index)}>
+      <Tabs
+        classes={{
+          scroller: classes.scroller,
+        }}
+        className={classes.tabs}
+        value={tabIndex}
+        onChange={(e, index) => setTabIndex(index)}
+      >
         <Tab label={D.goToContactDetailsPage} onClick={() => scrollTo(detailsRef)} />
         <Tab label={D.goToSpottingPage} onClick={() => scrollTo(identificationRef)} />
         <Tab label={D.goToMailsPage} onClick={() => scrollTo(lettersRef)} />

@@ -5,9 +5,11 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import { version } from '../../../../package.json';
+import LateralMenu from '../lateralMenu';
 
 const Home = ({ location, match }) => {
   const [textSearch, setTextSearch] = useState('');
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
     <div className="home">
@@ -15,8 +17,11 @@ const Home = ({ location, match }) => {
         location={location}
         textSearch={textSearch}
         setTextSearch={setTextSearch}
+        setOpenDrawer={setOpenDrawer}
         version={version}
       />
+      <LateralMenu openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+
       <Route path="/survey-unit/:id" render={routeProps => <UEPage {...routeProps} />} />
       <Route
         exact
