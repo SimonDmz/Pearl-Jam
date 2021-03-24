@@ -78,10 +78,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Form = ({ previousValue, save }) => {
+  console.log('previousValue ', previousValue);
   const surveyUnit = useContext(SurveyUnitContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactOutcome, setContactOutcome] = useState(previousValue);
   const [secondPanelVisible, setSecondPanelVisible] = useState(false);
+  const [offsetTop, setOffsetTop] = useState(0);
 
   const changeContactOutcomeTry = add => {
     const previousTotal = contactOutcome.totalNumberOfContactAttempts;
@@ -101,7 +103,6 @@ const Form = ({ previousValue, save }) => {
 
       if (isValid !== formIsValid) setFormIsValid(isValid);
     };
-
     checkForm();
   }, [contactOutcome, formIsValid]);
 
@@ -120,7 +121,7 @@ const Form = ({ previousValue, save }) => {
   const isSelected = type => contactOutcome && contactOutcome.type === type;
 
   const onChange = newStatus => {
-    setContactOutcome({ ...contactOutcome, type: newStatus, date: new Date() });
+    setContactOutcome({ ...contactOutcome, type: newStatus, date: new Date().getTime() });
   };
 
   const caType = contactOutcome && contactOutcome.type;
@@ -130,10 +131,10 @@ const Form = ({ previousValue, save }) => {
     setContactOutcome({ date: new Date().getTime(), totalNumberOfContactAttempts: 0 });
   };
 
-  const { offsetTop } =
-    contactOutcome && contactOutcome.type
-      ? document.getElementById(contactOutcome.type)
-      : { offsetTop: 0 };
+  useEffect(() => {
+    const element = document.getElementById(contactOutcome.type);
+    if (element !== null) setOffsetTop(element.offsetTop);
+  });
 
   const classes = useStyles();
 
