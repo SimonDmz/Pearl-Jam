@@ -1,6 +1,6 @@
 import AbstractIdbService from './abstract-idb-service';
 
-class ContactAttemptIdbService extends AbstractIdbService {
+export class ContactAttemptIdbService extends AbstractIdbService {
   constructor() {
     super('contactAttempt');
   }

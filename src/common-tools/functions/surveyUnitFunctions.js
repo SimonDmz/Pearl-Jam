@@ -1,8 +1,10 @@
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
+import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
 import { formatDistanceStrict } from 'date-fns';
+import D from 'i18n';
+import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 export const getCommentByType = (type, ue) => {
   if (Array.isArray(ue.comments) && ue.comments.length > 0) {
@@ -33,7 +35,7 @@ export const intervalInDays = su => {
 export const isValidForTransmission = ue => {
   /* const { contactOutcome } = ue;
   return contactOutcome !== null; */
-  return true;
+  return ue !== undefined;
 };
 
 const getContactAttempts = async surveyUnit => {
@@ -50,7 +52,7 @@ export const deleteContactAttempt = (surveyUnit, contactAttemptId) => {
   contactAttemptDBService.delete(contactAttemptId);
 };
 
-const getContactAttemptNumber = surveyUnit => {
+export const getContactAttemptNumber = surveyUnit => {
   return surveyUnit.states.filter(
     state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
   ).length;
@@ -175,10 +177,6 @@ export const addNewState = async (surveyUnit, stateType) => {
   await surveyUnitDBService.addOrUpdate(newSu);
 };
 
-export const checkIfContactAttemptCanBeDeleted = surveyUnit => {
-  return getContactAttemptNumber(surveyUnit) > 1;
-};
-
 export const updateStateWithDates = surveyUnit => {
   const lastState = getLastState(surveyUnit).type;
   const currentDate = new Date().getTime();
@@ -198,3 +196,94 @@ export const updateStateWithDates = surveyUnit => {
 export const isQuestionnaireAvailable = su => {
   return getLastState(su).type !== 'QNA';
 };
+
+export const applyFilters = (surveyUnits, filters) => {
+  const {
+    search: searchFilter,
+    campaigns: campaignFilter,
+    toDos: toDoFilter,
+    priority: priorityFilter,
+  } = filters;
+
+  const filterBySearch = su => {
+    if (searchFilter !== '') {
+      return (
+        su.firstName.toLowerCase().includes(searchFilter) ||
+        su.lastName.toLowerCase().includes(searchFilter) ||
+        su.id
+          .toString()
+          .toLowerCase()
+          .includes(searchFilter) ||
+        su.address.l6
+          .split(' ')
+          .slice(1)
+          .toString()
+          .toLowerCase()
+          .includes(searchFilter) ||
+        convertSUStateInToDo(getLastState(su).type)
+          .value.toLowerCase()
+          .includes(searchFilter) ||
+        su.campaign.toLowerCase().includes(searchFilter)
+      );
+    }
+
+    return true;
+  };
+
+  const filterByCampaign = su => {
+    if (campaignFilter.length > 0) {
+      return campaignFilter.includes(su.campaign.toString());
+    }
+
+    return true;
+  };
+
+  const filterByToDo = su => {
+    if (toDoFilter.length > 0) {
+      return toDoFilter.includes(convertSUStateInToDo(getLastState(su).type).order.toString());
+    }
+    return true;
+  };
+  const filterByPriority = su => {
+    if (priorityFilter === true) {
+      return su.priority;
+    }
+    return true;
+  };
+
+  const filteredSU = surveyUnits
+    .filter(unit => filterByPriority(unit))
+    .filter(unit => filterByToDo(unit))
+    .filter(unit => filterByCampaign(unit));
+
+  const totalEchoes = surveyUnits.length;
+  const searchFilteredSU = filteredSU.filter(unit => filterBySearch(unit));
+  const matchingEchoes = searchFilteredSU.length;
+
+  return { searchFilteredSU, totalEchoes, matchingEchoes };
+};
+
+export const isSelectable = su => {
+  const { identificationPhaseStartDate, endDate } = su;
+  const endTime = new Date(endDate).getTime();
+  const identificationPhaseStartTime = new Date(identificationPhaseStartDate).getTime();
+  const instantTime = new Date().getTime();
+  return endTime > instantTime && instantTime > identificationPhaseStartTime;
+};
+
+export const getAddressData = su => [
+  { label: D.addressName, value: su.address.l1 },
+  { label: D.addressFullAddress, value: su.address.l4 },
+  { label: D.addressCity, value: su.address.l6 },
+  { label: D.addressCountry, value: su.address.l7 },
+];
+
+export const getUserData = su => [
+  { label: D.surveyUnitLastName, value: su.lastName },
+  { label: D.surveyUnitFirstName, value: su.firstName },
+];
+
+export const getPhoneData = su =>
+  su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
+
+export const getMailData = su => [{ label: undefined, value: su.email }];

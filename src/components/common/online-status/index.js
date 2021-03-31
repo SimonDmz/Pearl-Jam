@@ -1,6 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import WifiIcon from '@material-ui/icons/Wifi';
+import clsx from 'clsx';
 import { addOnlineStatusObserver } from 'common-tools';
-import D from 'i18n';
+import React, { useEffect, useState } from 'react';
+
+const useStyles = makeStyles(() => ({
+  grey: {
+    color: 'disabled',
+  },
+  green: {
+    color: 'green',
+  },
+  icon: {
+    transform: 'rotate(45deg)',
+    fontSize: 'xxx-large',
+    marginBottom: '-10px',
+    alignSelf: 'center',
+  },
+}));
 
 export default () => {
   const [init, setInit] = useState(false);
@@ -14,22 +31,7 @@ export default () => {
     }
   }, [init]);
 
-  return (
-    <>
-      {status && (
-        <div id="connexionOK" className="connexion">
-          <i className="fa fa-check" aria-hidden="true" />
-          &nbsp;
-          <span className="online">{D.connexionOK}</span>
-        </div>
-      )}
-      {!status && (
-        <div id="connexionKO" className="connexion">
-          <i className="fa fa-times" aria-hidden="true" />
-          &nbsp;
-          <span className="offline">{D.connexionKO}</span>
-        </div>
-      )}
-    </>
-  );
+  const { icon, green, grey } = useStyles();
+
+  return <WifiIcon className={clsx(icon, status ? green : grey)} />;
 };

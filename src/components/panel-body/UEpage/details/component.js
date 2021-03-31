@@ -1,31 +1,38 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import formEnum from 'common-tools/enum/formEnum';
+import { getAddressData, getMailData, getPhoneData, getUserData } from 'common-tools/functions';
 import PropTypes from 'prop-types';
-import Address from './address';
-import User from './ue';
-import Phone from './phone';
-import Email from './email';
+import React, { useContext } from 'react';
+import AtomicInfoTile from '../atomicInfoTile';
+import SurveyUnitContext from '../UEContext';
 
-const UEItem = ({ saveUE }) => {
-  const locationUrl = useHistory().location.pathname;
-
-  const save = unite => {
-    saveUE(unite, locationUrl);
-  };
+const UEItem = ({ selectFormType }) => {
+  const surveyUnit = useContext(SurveyUnitContext);
 
   return (
-    <div className="tab">
-      <div className="row">
-        <User saveUE={save} />
-        <Phone saveUE={save} />
-        <Email saveUE={save} />
-      </div>
-      <Address saveUE={save} />
-    </div>
+    <>
+      <AtomicInfoTile
+        iconType="home"
+        data={getAddressData(surveyUnit)}
+        onClickFunction={() => selectFormType(formEnum.ADDRESS, true)}
+      />
+      <AtomicInfoTile
+        iconType="user"
+        data={getUserData(surveyUnit)}
+        onClickFunction={() => selectFormType(formEnum.USER, true)}
+      />
+      <AtomicInfoTile
+        iconType="mail"
+        data={getMailData(surveyUnit)}
+        onClickFunction={() => selectFormType(formEnum.MAIL, true)}
+      />
+      <AtomicInfoTile
+        iconType="phone"
+        data={getPhoneData(surveyUnit)}
+        onClickFunction={() => selectFormType(formEnum.PHONE, true)}
+      />
+    </>
   );
 };
 
 export default UEItem;
-UEItem.propTypes = {
-  saveUE: PropTypes.func.isRequired,
-};
+UEItem.propTypes = { selectFormType: PropTypes.func.isRequired };

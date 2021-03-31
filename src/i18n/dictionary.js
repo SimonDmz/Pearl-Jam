@@ -1,18 +1,19 @@
-import buttonMessage from './buttonMessage';
-import navigationMessage from './navigationMessage';
-import waitingMessage from './waitingMessage';
-import errorMessage from './errorMessage';
-import tableHeader from './tableHeaderMessage';
-import detailsMessage from './detailsMessage';
-import toDoMessage from './toDoMessage';
-import suStateMessage from './suStateMessage';
-import questionnaireStateMessage from './questionnaireStateMessage';
 import addressMessage from './addressMessage';
-import surveyUnitMessage from './surveyUnitMessage';
-import searchMessage from './searchMessage';
-import transmissionMessage from './transmissionMessage';
+import buttonMessage from './buttonMessage';
 import contactAttemptMessage from './contactAttemptMessage';
 import contactOutcomeMessage from './contactOutcomeMessage';
+import criteriaMessage from './criteriaMessage';
+import detailsMessage from './detailsMessage';
+import errorMessage from './errorMessage';
+import navigationMessage from './navigationMessage';
+import questionnaireStateMessage from './questionnaireStateMessage';
+import searchMessage from './searchMessage';
+import surveyUnitMessage from './surveyUnitMessage';
+import suStateMessage from './suStateMessage';
+import tableHeader from './tableHeaderMessage';
+import toDoMessage from './toDoMessage';
+import transmissionMessage from './transmissionMessage';
+import waitingMessage from './waitingMessage';
 
 const dictionary = {
   pageNotFound: {
@@ -56,6 +57,7 @@ const dictionary = {
     en: 'The application is ready to be used offline. (Remember to synchronize your data before)',
   },
   areYouSure: { fr: 'Êtes-vous sûr ?', en: 'Are you sure ?' },
+  delete: { fr: 'Supprimer', en: 'Delete' },
   ...buttonMessage,
   ...navigationMessage,
   ...waitingMessage,
@@ -71,6 +73,7 @@ const dictionary = {
   ...transmissionMessage,
   ...contactAttemptMessage,
   ...contactOutcomeMessage,
+  ...criteriaMessage,
 };
 
 export default dictionary;
