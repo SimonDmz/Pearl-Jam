@@ -1,6 +1,5 @@
 import { Badge, Card, CardMedia, IconButton, Tooltip } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import { grey } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -50,44 +49,6 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
     grow: {
       flex: '1 1 auto',
     },
-    menuButton: {
-      // marginRight: theme.spacing(2),
-    },
-    title: {
-      display: 'none',
-      verticalAlign: 'middle',
-      [theme.breakpoints.up('sm')]: {
-        display: 'inline-block',
-      },
-      color: 'black',
-    },
-    search: {
-      position: 'relative',
-      marginLeft: 0,
-      height: '2em',
-    },
-    searchButton: {
-      color: theme.palette.getContrastText(grey[700]),
-      backgroundColor: theme.palette.secondary.main,
-      '&:hover': {
-        backgroundColor: grey[800],
-      },
-      lineHeight: 'unset',
-      borderRadius: 0,
-    },
-    inputRoot: {
-      color: 'inherit',
-      height: '2em',
-    },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `1em`,
-      backgroundColor: theme.palette.primary.main,
-      border: 'solid 1px black',
-      color: 'black',
-      transition: theme.transitions.create('width'),
-      marginRight: '1em',
-    },
     notificationsIcon: {
       fontSize: 'xxx-large',
       color: theme.palette.secondary.main,
@@ -95,8 +56,13 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
     },
     syncIcon: {
       fontSize: 'xxx-large',
-      color: '#3f51b5',
+      color: theme.palette.secondary.main,
       alignSelf: 'center',
+    },
+    noVisibleFocus: {
+      '&:focus, &:hover': {
+        backgroundColor: theme.palette.primary.main,
+      },
     },
   }));
 
@@ -106,11 +72,10 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
     <>
       <AppBar position="static" className={classes.appBar} elevation={0}>
         <Toolbar className={classes.appBar}>
-          {/* <NavLink activeClassName="active" exact to="/notifications"> */}
           <Tooltip title={`Version : ${version}`}>
             <IconButton
+              className={classes.noVisibleFocus}
               edge="start"
-              className={classes.menuButton}
               color="inherit"
               aria-label="open notifications"
             >
@@ -122,7 +87,6 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
               </Badge>
             </IconButton>
           </Tooltip>
-          {/* </NavLink> */}
           <NavLink activeClassName="active" exact to="/">
             <Card className={classes.card}>
               <CardMedia
@@ -144,7 +108,7 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
           </div>
           <div className={classes.column}>
             <OnlineStatus />
-            <Typography className={classes.title} variant="subtitle1" noWrap>
+            <Typography variant="subtitle1" noWrap>
               {getName()}
             </Typography>
           </div>
@@ -154,11 +118,13 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
     </>
   );
 };
-
 export default Navigation;
 Navigation.propTypes = {
-  location: PropTypes.shape({}).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.shape({ startsWith: PropTypes.func.isRequired }).isRequired,
+  }).isRequired,
   textSearch: PropTypes.string.isRequired,
   setTextSearch: PropTypes.func.isRequired,
   version: PropTypes.string.isRequired,
+  setOpenDrawer: PropTypes.func.isRequired,
 };

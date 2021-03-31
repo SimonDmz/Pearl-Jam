@@ -78,7 +78,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Form = ({ previousValue, save }) => {
-  console.log('previousValue ', previousValue);
   const surveyUnit = useContext(SurveyUnitContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactOutcome, setContactOutcome] = useState(previousValue);
@@ -134,7 +133,7 @@ const Form = ({ previousValue, save }) => {
   useEffect(() => {
     const element = document.getElementById(contactOutcome.type);
     if (element !== null) setOffsetTop(element.offsetTop);
-  });
+  }, [contactOutcome.type]);
 
   const classes = useStyles();
 
@@ -208,7 +207,7 @@ const Form = ({ previousValue, save }) => {
 export default Form;
 Form.propTypes = {
   surveyUnit: PropTypes.shape({
-    contactAttempts: PropTypes.array,
+    contactAttempts: PropTypes.arrayOf(PropTypes.shape({})),
     id: PropTypes.string,
     campaign: PropTypes.string,
   }).isRequired,

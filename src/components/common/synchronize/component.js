@@ -9,11 +9,16 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Loader from '../loader';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   dialogPaper: {
     padding: '1em',
     borderRadius: '15px',
     textAlign: 'center',
+  },
+  noVisibleFocus: {
+    '&:focus, &:hover': {
+      backgroundColor: theme.palette.primary.main,
+    },
   },
 }));
 
@@ -126,6 +131,9 @@ const Synchronize = ({ materialClass }) => {
       )}
 
       <IconButton
+        classes={{
+          root: classes.noVisibleFocus,
+        }}
         edge="end"
         disabled={status !== true}
         aria-label="launch synchronization"
