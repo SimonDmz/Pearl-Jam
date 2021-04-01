@@ -1,7 +1,7 @@
-import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
-import { getLastState } from 'common-tools/functions';
 import * as api from 'common-tools/api';
+import { getLastState } from 'common-tools/functions';
+import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
+import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 export const synchronizeQueen = async history => {
   // 5 seconds limit before throwing error
@@ -46,8 +46,8 @@ const sendData = async (urlPearlApi, authenticationMode) => {
       const lastState = getLastState(surveyUnit);
       let contactAttempts = await contactAttemptDBService.findByIds(surveyUnit.contactAttempts);
       contactAttempts = contactAttempts.map(ca => {
-        delete ca.id;
-        return ca;
+        const { id, ...rest } = ca;
+        return rest;
       });
       const { id } = surveyUnit;
       await api.putDataSurveyUnitById(urlPearlApi, authenticationMode)(id, {

@@ -43,7 +43,6 @@ const UpDownCounter = ({ selectedDate, handleDateChange, type }) => {
   };
   useEffect(() => {
     handleDateChange(setData(counter));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [counter, handleDateChange, isHours]);
 
   return (

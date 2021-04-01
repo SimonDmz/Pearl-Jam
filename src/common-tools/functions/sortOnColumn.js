@@ -4,25 +4,15 @@ export const sortOnColumnCompareFunction = criteria => {
   let compareFunction;
 
   // eslint-disable-next-line no-unused-vars
-  const noSortFunction = (a, b) => {
-    return 0;
-  };
+  const noSortFunction = (a, b) => 0;
 
-  const ssechSortFunction = (a, b) => {
-    return a.sampleIdentifiers.ssech - b.sampleIdentifiers.ssech;
-  };
+  const ssechSortFunction = (a, b) => a.sampleIdentifiers.ssech - b.sampleIdentifiers.ssech;
 
-  const prioritySortFunction = (a, b) => {
-    return b.priority - a.priority;
-  };
+  const prioritySortFunction = (a, b) => b.priority - a.priority;
 
-  const campaignSortFunction = (a, b) => {
-    return a.campaign.localeCompare(b.campaign);
-  };
+  const campaignSortFunction = (a, b) => a.campaign.localeCompare(b.campaign);
 
-  const remainingDaysSortFunction = (a, b) => {
-    return intervalInDays(a) - intervalInDays(b);
-  };
+  const remainingDaysSortFunction = (a, b) => intervalInDays(a) - intervalInDays(b);
 
   switch (criteria) {
     case 'sampleIdentifiers':

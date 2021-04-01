@@ -91,7 +91,7 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
             <Card className={classes.card}>
               <CardMedia
                 className={classes.media}
-                image="/static/images/cards/logo-insee-header.png"
+                image="/static/images/logo-insee-header.png"
                 title="Insee"
               />
             </Card>

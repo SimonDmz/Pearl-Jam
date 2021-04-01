@@ -43,17 +43,15 @@ const Form = ({ closeModal, save, previousValue }) => {
     previousData[D.addressCountry] ? previousData[D.addressCountry] : ''
   );
 
-  const buildAddress = () => {
-    return {
-      l1: deliveryPoint,
-      l2: additionalAddress,
-      l3: number,
-      l4: streetType,
-      l5: streetName,
-      l6: postcode,
-      l7: city,
-    };
-  };
+  const buildAddress = () => ({
+    l1: deliveryPoint,
+    l2: additionalAddress,
+    l3: number,
+    l4: streetType,
+    l5: streetName,
+    l6: postcode,
+    l7: city,
+  });
 
   const onChange = event => {
     const key = event.target.name;

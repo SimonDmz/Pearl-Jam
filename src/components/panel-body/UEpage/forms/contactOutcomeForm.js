@@ -94,9 +94,7 @@ const Form = ({ previousValue, save }) => {
     const checkForm = () => {
       const { type, totalNumberOfContactAttempts } = contactOutcome;
       const typeIsValid = Object.keys(contactOutcomeEnum)
-        .map(enumKey => {
-          return contactOutcomeEnum[enumKey].type;
-        })
+        .map(enumKey => contactOutcomeEnum[enumKey].type)
         .includes(type);
       const isValid = typeIsValid && totalNumberOfContactAttempts > 0;
 

@@ -4,14 +4,12 @@ import React from 'react';
 import ContactAttempts from './contactAttempts';
 import ContactOutcome from './contactOutcome';
 
-const Contacts = ({ selectFormType, setInjectableData }) => {
-  return (
-    <Grid container>
-      <ContactAttempts selectFormType={selectFormType} setInjectableData={setInjectableData} />
-      <ContactOutcome selectFormType={selectFormType} />
-    </Grid>
-  );
-};
+const Contacts = ({ selectFormType, setInjectableData }) => (
+  <Grid container>
+    <ContactAttempts selectFormType={selectFormType} setInjectableData={setInjectableData} />
+    <ContactOutcome selectFormType={selectFormType} />
+  </Grid>
+);
 
 export default Contacts;
 Contacts.propTypes = {

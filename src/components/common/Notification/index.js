@@ -78,9 +78,12 @@ const Notification = ({ serviceWorkerInfo }) => {
 export default Notification;
 Notification.propTypes = {
   serviceWorkerInfo: PropTypes.shape({
-    installingServiceWorker: PropTypes.any.isRequired,
-    waitingServiceWorker: PropTypes.any.isRequired,
-    isUpdateAvailable: PropTypes.any.isRequired,
-    isServiceWorkerInstalled: PropTypes.any.isRequired,
+    installingServiceWorker: PropTypes.shape({}).isRequired,
+    waitingServiceWorker: PropTypes.shape({
+      postMessage: PropTypes.shape({}),
+      addEventListener: PropTypes.shape({}),
+    }).isRequired,
+    isUpdateAvailable: PropTypes.shape({}).isRequired,
+    isServiceWorkerInstalled: PropTypes.shape({}).isRequired,
   }).isRequired,
 };
