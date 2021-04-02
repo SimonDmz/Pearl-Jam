@@ -15,6 +15,7 @@ const useTimer = setOpen => {
     return () => {
       clearInterval(timer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return [progress, setProgress];
 };
