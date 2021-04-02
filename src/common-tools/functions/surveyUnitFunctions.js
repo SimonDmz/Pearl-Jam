@@ -198,25 +198,32 @@ export const applyFilters = (surveyUnits, filters) => {
     priority: priorityFilter,
   } = filters;
 
+  const normalize = string =>
+    string
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
   const filterBySearch = su => {
     if (searchFilter !== '') {
+      const normalizedSearchFilter = normalize(searchFilter);
       return (
-        su.firstName.toLowerCase().includes(searchFilter) ||
-        su.lastName.toLowerCase().includes(searchFilter) ||
+        normalize(su.firstName).includes(normalizedSearchFilter) ||
+        normalize(su.lastName).includes(normalizedSearchFilter) ||
         su.id
           .toString()
           .toLowerCase()
-          .includes(searchFilter) ||
-        su.address.l6
-          .split(' ')
-          .slice(1)
-          .toString()
-          .toLowerCase()
-          .includes(searchFilter) ||
+          .includes(normalizedSearchFilter) ||
+        normalize(
+          su.address.l6
+            .split(' ')
+            .slice(1)
+            .toString()
+        ).includes(normalizedSearchFilter) ||
         convertSUStateInToDo(getLastState(su).type)
           .value.toLowerCase()
-          .includes(searchFilter) ||
-        su.campaign.toLowerCase().includes(searchFilter)
+          .includes(normalizedSearchFilter) ||
+        normalize(su.campaign).includes(normalizedSearchFilter)
       );
     }
 
