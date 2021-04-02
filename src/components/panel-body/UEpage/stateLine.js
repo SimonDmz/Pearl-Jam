@@ -18,12 +18,19 @@ const StateLine = () => {
   const currentState = convertSUStateInToDo(type);
   const { order: activeState } = currentState;
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles(theme => ({
     root: {
       width: '50%',
     },
     icon: {
       color: 'green',
+    },
+    background: {
+      width: '100%',
+      height: 'max-content',
+      backgroundColor: theme.palette.primary.main,
+      position: 'sticky',
+      top: '6em',
     },
   }));
   const classes = useStyles();
@@ -46,7 +53,7 @@ const StateLine = () => {
   };
 
   return (
-    <>
+    <div className={classes.background}>
       <Stepper className={classes.root} activeStep={activeState}>
         {toDos.map(({ order, value }) => {
           const stepProps = {};
@@ -60,7 +67,7 @@ const StateLine = () => {
           );
         })}
       </Stepper>
-    </>
+    </div>
   );
 };
 

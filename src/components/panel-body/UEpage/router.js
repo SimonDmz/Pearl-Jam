@@ -30,6 +30,7 @@ const useStyles = makeStyles(() => ({
     boxShadow: 'unset',
     backgroundColor: 'transparent',
   },
+  topSticky: { position: 'sticky', top: '0px' },
 }));
 
 const Router = ({ match, saveUE, refresh }) => {
@@ -84,7 +85,7 @@ const Router = ({ match, saveUE, refresh }) => {
 
   return (
     <>
-      <div>
+      <div className={classes.topSticky}>
         <StateLine />
         <Navigation refs={refs} match={match} />
         <div>
