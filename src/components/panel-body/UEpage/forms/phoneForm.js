@@ -14,9 +14,10 @@ const useStyles = makeStyles(() => ({
 const Form = ({ closeModal, save, previousValue }) => {
   const surveyUnit = useContext(SurveyUnitContext);
 
-  const indexedPhoneNumbers = previousValue.map((number, index) => {
-    return { value: number, order: index };
-  });
+  const indexedPhoneNumbers = previousValue.map((number, index) => ({
+    value: number,
+    order: index,
+  }));
 
   const cleanPhoneNumbers = numbers => numbers.map(({ value }) => value);
 

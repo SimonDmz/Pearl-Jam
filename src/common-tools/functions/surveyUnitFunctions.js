@@ -32,11 +32,10 @@ export const intervalInDays = su => {
   return remainingDays.split(' ')[0];
 };
 
-export const isValidForTransmission = ue => {
+export const isValidForTransmission = ue =>
   /* const { contactOutcome } = ue;
   return contactOutcome !== null; */
-  return ue !== undefined;
-};
+  ue !== undefined;
 
 const getContactAttempts = async surveyUnit => {
   const { contactAttempts } = surveyUnit;
@@ -52,11 +51,9 @@ export const deleteContactAttempt = (surveyUnit, contactAttemptId) => {
   contactAttemptDBService.delete(contactAttemptId);
 };
 
-export const getContactAttemptNumber = surveyUnit => {
-  return surveyUnit.states.filter(
-    state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type
-  ).length;
-};
+export const getContactAttemptNumber = surveyUnit =>
+  surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
+    .length;
 
 const lastContactAttemptIsSuccessfull = async surveyUnit => {
   const contactAttempts = await getContactAttempts(surveyUnit);
@@ -69,9 +66,7 @@ const lastContactAttemptIsSuccessfull = async surveyUnit => {
   return CONTACT_SUCCESS_LIST.includes(lastContactAttempt.status);
 };
 
-const isContactAttemptOk = async surveyUnit => {
-  return lastContactAttemptIsSuccessfull(surveyUnit);
-};
+const isContactAttemptOk = async surveyUnit => lastContactAttemptIsSuccessfull(surveyUnit);
 
 const addContactState = async (surveyUnit, newState) => {
   switch (newState.type) {
@@ -193,9 +188,7 @@ export const updateStateWithDates = surveyUnit => {
   return result;
 };
 
-export const isQuestionnaireAvailable = su => {
-  return getLastState(su).type !== 'QNA';
-};
+export const isQuestionnaireAvailable = su => getLastState(su).type !== 'QNA';
 
 export const applyFilters = (surveyUnits, filters) => {
   const {

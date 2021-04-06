@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default () => {
+const OnlineStatus = () => {
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState(navigator.onLine);
   useEffect(() => {
@@ -35,3 +35,5 @@ export default () => {
 
   return <WifiIcon className={clsx(icon, status ? green : grey)} />;
 };
+
+export default OnlineStatus;

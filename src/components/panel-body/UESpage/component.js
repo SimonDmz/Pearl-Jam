@@ -30,9 +30,7 @@ const UESPage = ({ textSearch }) => {
     if (!init) {
       setInit(true);
       surveyUnitDBService.getAll().then(units => {
-        const initializedSU = units.map(su => {
-          return { ...su, selected: false };
-        });
+        const initializedSU = units.map(su => ({ ...su, selected: false }));
         setCampaigns([...new Set(units.map(unit => unit.campaign))]);
         setSurveyUnits(initializedSU);
         setSearchEchoes([initializedSU.length, initializedSU.length]);
@@ -46,19 +44,13 @@ const UESPage = ({ textSearch }) => {
 
   useEffect(() => {
     surveyUnitDBService.getAll().then(units => {
-      const updateNb = units
-        .map(su => {
-          return updateStateWithDates(su);
-        })
-        .reduce((a, b) => a + b, 0);
+      const updateNb = units.map(su => updateStateWithDates(su)).reduce((a, b) => a + b, 0);
       if (updateNb > 0) setInit(false);
     });
   }, [surveyUnits]);
 
   useEffect(() => {
-    const sortSU = su => {
-      return su.sort(sortOnColumnCompareFunction(sortCriteria));
-    };
+    const sortSU = su => su.sort(sortOnColumnCompareFunction(sortCriteria));
     const filteredSU = applyFilters(surveyUnits, filters);
 
     const { searchFilteredSU, totalEchoes, matchingEchoes } = filteredSU;

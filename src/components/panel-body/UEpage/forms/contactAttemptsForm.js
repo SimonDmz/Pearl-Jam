@@ -106,9 +106,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
       const { status } = contactAttempt;
       const isValid = () =>
         Object.keys(contactAttemptEnum)
-          .map(enumKey => {
-            return contactAttemptEnum[enumKey].type;
-          })
+          .map(enumKey => contactAttemptEnum[enumKey].type)
           .includes(status);
       if (isValid !== formIsValid) setFormIsValid(isValid);
     };

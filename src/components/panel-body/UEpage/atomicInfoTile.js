@@ -34,14 +34,12 @@ const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
       <div className={classes.firstLine}>
         <MaterialIcons type={iconType} />
       </div>
-      {data.map(({ label, value }) => {
-        return (
-          <div key={`${label}-${value}`} className={classes.row}>
-            {label !== undefined ? <Typography className={classes.label}>{label}</Typography> : ''}
-            <Typography>{value}</Typography>
-          </div>
-        );
-      })}
+      {data.map(({ label, value }) => (
+        <div key={`${label}-${value}`} className={classes.row}>
+          {label !== undefined ? <Typography className={classes.label}>{label}</Typography> : ''}
+          <Typography>{value}</Typography>
+        </div>
+      ))}
     </Paper>
   );
 };
