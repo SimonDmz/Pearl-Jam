@@ -42,7 +42,7 @@ const Navigation = ({ match, refs }) => {
   const { detailsRef, identificationRef, lettersRef, contactsRef, commentsRef } = refs;
 
   const openQueen = () => {
-    history.push(`/queen/questionnaire/${surveyUnit.campaign}/survey-unit/${id}`);
+    history.push(`/queen/survey-unit/${id}`);
   };
 
   const scrollTo = ref => {
