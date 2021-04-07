@@ -3,6 +3,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 const theme = createMuiTheme({
   palette: {
     primary: {
+      light: '#eeeeee',
       main: '#ffffff',
       dark: '#cdcdcd',
       darker: '#666666',
@@ -16,8 +17,14 @@ const theme = createMuiTheme({
       default: '#ffffff',
     },
   },
-  typography: {
-    // fontSize: '16',
+  overrides: {
+    MuiInput: {
+      underline: {
+        '&:after,.Mui-focused&:after': {
+          transform: 'scaleX(0)',
+        },
+      },
+    },
   },
 });
 export default theme;

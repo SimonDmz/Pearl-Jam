@@ -45,6 +45,7 @@ const Form = ({ closeModal, previousValue, save }) => {
         id="lastName"
         name="lastName"
         label={D.surveyUnitLastName}
+        InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
         defaultValue={lastName || ''}
@@ -55,6 +56,7 @@ const Form = ({ closeModal, previousValue, save }) => {
         id="firstName"
         name="firstName"
         label={D.surveyUnitFirstName}
+        InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
         defaultValue={firstName || ''}

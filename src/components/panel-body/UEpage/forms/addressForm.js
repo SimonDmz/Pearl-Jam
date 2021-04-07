@@ -96,6 +96,7 @@ const Form = ({ closeModal, save, previousValue }) => {
         id="deliveryPoint"
         name="deliveryPoint"
         label={D.addressName}
+        InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
         defaultValue={deliveryPoint}
@@ -106,6 +107,7 @@ const Form = ({ closeModal, save, previousValue }) => {
         id="streetType"
         name="streetType"
         label={D.addressFullAddress}
+        InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
         defaultValue={streetType}
@@ -116,6 +118,7 @@ const Form = ({ closeModal, save, previousValue }) => {
         id="postcode"
         name="postcode"
         label={D.addressCity}
+        InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
         defaultValue={postcode}
@@ -126,6 +129,7 @@ const Form = ({ closeModal, save, previousValue }) => {
         id="city"
         name="city"
         label={D.addressCountry}
+        InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
         defaultValue={city}
