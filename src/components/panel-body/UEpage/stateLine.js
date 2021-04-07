@@ -30,7 +30,7 @@ const StateLine = () => {
       height: 'max-content',
       backgroundColor: theme.palette.primary.main,
       position: 'sticky',
-      top: '6em',
+      top: '5em',
     },
   }));
   const classes = useStyles();

@@ -46,7 +46,12 @@ const Navigation = ({ match, refs }) => {
   };
 
   const scrollTo = ref => {
-    ref.current.scrollIntoView({ behavior: 'smooth' });
+    // headers element are 13.5 em high, 'normal' fontSize is 14px
+    const { offsetTop } = ref.current;
+    const fontSize = getComputedStyle(ref.current)['font-style'];
+    const fontValue = fontSize === 'normal' ? 14 : fontSize;
+    const topValue = parseFloat(offsetTop - fontValue * 13.5);
+    window.scrollTo({ behavior: 'smooth', top: topValue });
   };
 
   const transmit = async () => {

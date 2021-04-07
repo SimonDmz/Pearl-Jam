@@ -11,7 +11,6 @@ const useStyles = makeStyles(() => ({
     scrollMarginTop: '3em',
     padding: '1em',
     borderRadius: '15px',
-    minHeight: '400px',
   },
 }));
 

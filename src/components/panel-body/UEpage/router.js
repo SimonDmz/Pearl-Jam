@@ -15,7 +15,7 @@ import UeSubInfoTile from './ueSubInfoTile';
 
 const useStyles = makeStyles(() => ({
   ajustScroll: {
-    height: 'calc(100vh - 3em)',
+    height: 'calc(100vh - 13.5em)',
   },
   modal: {
     display: 'flex',
@@ -30,7 +30,6 @@ const useStyles = makeStyles(() => ({
     boxShadow: 'unset',
     backgroundColor: 'transparent',
   },
-  topSticky: { position: 'sticky', top: '0px' },
 }));
 
 const Router = ({ match, saveUE, refresh }) => {
@@ -85,7 +84,7 @@ const Router = ({ match, saveUE, refresh }) => {
 
   return (
     <>
-      <div className={classes.topSticky}>
+      <div>
         <StateLine />
         <Navigation refs={refs} match={match} />
         <div>
