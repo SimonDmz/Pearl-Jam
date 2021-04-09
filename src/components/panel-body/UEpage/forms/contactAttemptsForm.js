@@ -1,7 +1,8 @@
 import DateFnsUtils from '@date-io/date-fns';
 import { Fab, makeStyles, Paper, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import ScheduleIcon from '@material-ui/icons/Schedule';
+import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import contactAttemptEnum from 'common-tools/enum/ContactAttemptEnum';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { addNewState } from 'common-tools/functions';
@@ -12,7 +13,6 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import ContactAttemptLine from '../contacts/contactAttempts/contactAttemptLine';
 import FormPanel from '../contacts/contactAttempts/formPanel';
-import UpDownCounter from '../contacts/contactAttempts/upDownCounter';
 import SurveyUnitContext from '../UEContext';
 
 const useStyles = makeStyles(theme => ({
@@ -63,7 +63,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    margin: 0,
   },
+  root: { width: '15em', alignSelf: 'center', marginBottom: '2em' },
+  input: { fontSize: 'xxx-large', paddingLeft: '0.5em' },
 }));
 
 class FrLocalizedUtils extends DateFnsUtils {
@@ -211,20 +214,17 @@ const Form = ({ previousValue, save, deleteAction }) => {
             variant="static"
             disableToolbar
           />
+          <KeyboardTimePicker
+            classes={{ root: classes.root }}
+            value={selectedDate}
+            ampm={false}
+            onChange={date => handleDateChange(date)}
+            keyboardIcon={<ScheduleIcon />}
+            cancelLabel="Annuler"
+            okLabel="Valider"
+            inputProps={{ className: classes.input }}
+          />
         </MuiPickersUtilsProvider>
-        <div className={classes.row}>
-          <UpDownCounter
-            selectedDate={selectedDate}
-            handleDateChange={handleDateChange}
-            type="hours"
-          />
-          <Typography className={classes.xxxLarge}>:</Typography>
-          <UpDownCounter
-            selectedDate={selectedDate}
-            handleDateChange={handleDateChange}
-            type="minutes"
-          />
-        </div>
       </FormPanel>
 
       <FormPanel

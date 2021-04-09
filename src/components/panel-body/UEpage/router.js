@@ -24,11 +24,13 @@ const useStyles = makeStyles(() => ({
   },
   row: {
     flexWrap: 'nowrap',
-    padding: '1em',
+    // padding: '1em',
   },
   paperModal: {
     boxShadow: 'unset',
     backgroundColor: 'transparent',
+    margin: 0,
+    maxWidth: 'unset',
   },
 }));
 

@@ -1,4 +1,3 @@
-import { makeStyles } from '@material-ui/core';
 import { useAuth } from 'common-tools/auth/initAuth';
 import useServiceWorker from 'common-tools/hooks/useServiceWorker';
 import Preloader from 'components/common/loader';
@@ -10,24 +9,14 @@ import D from 'i18n';
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-const useStyles = makeStyles(() => ({
-  pearlContainer: {
-    height: '100%',
-    scrollbarWidth: 'none',
-    '&::-webkit-scrollbar': {
-      display: 'none',
-    },
-  },
-}));
-
 function App() {
   const { authenticated } = useAuth();
   const serviceWorkerInfo = useServiceWorker(authenticated);
-  const classes = useStyles();
+
   return (
     <>
       <Notification serviceWorkerInfo={serviceWorkerInfo} />
-      <div className={classes.pearlContainer}>
+      <div>
         {!authenticated && <Preloader message={D.pleaseWait} />}
         {authenticated && (
           <>
