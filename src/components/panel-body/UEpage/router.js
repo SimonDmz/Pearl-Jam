@@ -24,7 +24,6 @@ const useStyles = makeStyles(() => ({
   },
   row: {
     flexWrap: 'nowrap',
-    // padding: '1em',
   },
   paperModal: {
     boxShadow: 'unset',
