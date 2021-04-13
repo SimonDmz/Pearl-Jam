@@ -125,7 +125,7 @@ const Form = ({ previousValue, save }) => {
   const outcomeValue = findContactOutcomeValueByType(caType);
   const resetForm = () => {
     setSecondPanelVisible(false);
-    setContactOutcome({ date: new Date().getTime(), totalNumberOfContactAttempts: 0 });
+    setContactOutcome(previousValue);
   };
 
   useEffect(() => {

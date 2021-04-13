@@ -15,7 +15,7 @@ import UeSubInfoTile from './ueSubInfoTile';
 
 const useStyles = makeStyles(() => ({
   ajustScroll: {
-    height: 'calc(100vh - 3em)',
+    height: 'calc(100vh - 13.5em)',
   },
   modal: {
     display: 'flex',
@@ -24,11 +24,12 @@ const useStyles = makeStyles(() => ({
   },
   row: {
     flexWrap: 'nowrap',
-    padding: '1em',
   },
   paperModal: {
     boxShadow: 'unset',
     backgroundColor: 'transparent',
+    margin: 0,
+    maxWidth: 'unset',
   },
 }));
 

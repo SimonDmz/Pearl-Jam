@@ -10,6 +10,10 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.primary.dark,
     height: '5em',
   },
+  primaryDarker: {
+    backgroundColor: theme.palette.primary.darker,
+    height: '5em',
+  },
   primaryLight: {
     backgroundColor: theme.palette.primary.light,
     height: '5em',
@@ -45,14 +49,21 @@ const Palette = () => {
 
   return (
     <>
+      <Paper className={classes.primaryDarker}>
+        <Typography color="textPrimary">Primary.darker text.primary</Typography>
+        <Typography color="textSecondary">Primary.darker text.secondary</Typography>
+      </Paper>
       <Paper className={classes.primaryDark}>
-        <Typography>Primary.dark</Typography>
+        <Typography color="textPrimary">Primary.dark text.primary</Typography>
+        <Typography color="textSecondary">Primary.dark text.secondary</Typography>
       </Paper>
       <Paper className={classes.primaryMain}>
-        <Typography>Primary.main</Typography>
+        <Typography color="textPrimary">Primary.main text.primary</Typography>
+        <Typography color="textSecondary">Primary.main text.secondary</Typography>
       </Paper>
       <Paper className={classes.primaryLight}>
-        <Typography>Primary.light</Typography>
+        <Typography color="textPrimary">Primary.light text.primary</Typography>
+        <Typography color="textSecondary">Primary.light text.secondary</Typography>
       </Paper>
       <Paper className={classes.secondaryDark}>
         <Typography>Secondary.dark</Typography>

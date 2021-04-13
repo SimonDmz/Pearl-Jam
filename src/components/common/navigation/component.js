@@ -70,7 +70,7 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
 
   return (
     <>
-      <AppBar position="static" className={classes.appBar} elevation={0}>
+      <AppBar position="sticky" className={classes.appBar} elevation={0}>
         <Toolbar className={classes.appBar}>
           <Tooltip title={`Version : ${version}`}>
             <IconButton

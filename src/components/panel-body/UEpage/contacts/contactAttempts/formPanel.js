@@ -14,6 +14,7 @@ const useStyles = makeStyles(() => ({
     borderRadius: '15px',
     minHeight: '200px',
     minWidth: '300px',
+    width: 'max-content',
   },
   row: {
     display: 'flex',

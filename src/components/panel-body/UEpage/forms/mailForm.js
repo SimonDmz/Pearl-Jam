@@ -36,6 +36,7 @@ const Form = ({ closeModal, save, previousValue }) => {
         id="email"
         name="email"
         label={D.surveyUnitEmail}
+        InputLabelProps={{ color: 'secondary' }}
         type="text"
         fullWidth
         defaultValue={email || ''}

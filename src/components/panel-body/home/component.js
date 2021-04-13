@@ -12,7 +12,7 @@ const Home = ({ location, match }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
-    <div className="home">
+    <div>
       <Navigation
         location={location}
         textSearch={textSearch}

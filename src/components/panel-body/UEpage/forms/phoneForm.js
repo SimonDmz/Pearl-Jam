@@ -51,6 +51,7 @@ const Form = ({ closeModal, save, previousValue }) => {
               id={`phone-${phoneNumber.order}`}
               name={`phone-${phoneNumber.order}`}
               label={`#${phoneNumber.order + 1}`}
+              InputLabelProps={{ color: 'secondary' }}
               type="text"
               fullWidth
               defaultValue={phoneNumber.value}
