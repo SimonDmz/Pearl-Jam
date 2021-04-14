@@ -89,6 +89,7 @@ const Router = ({ match, saveUE, refresh }) => {
         <StateLine />
         <Navigation refs={refs} match={match} />
         <div>
+          {/* TODO utiliser injectableData avec la person correspondante */}
           <UeSubInfoTile reference={detailsRef} title={D.goToContactDetailsPage}>
             <Details selectFormType={selectFormType} />
           </UeSubInfoTile>

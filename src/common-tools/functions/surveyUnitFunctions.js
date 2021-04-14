@@ -1,7 +1,7 @@
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
-import { formatDistanceStrict } from 'date-fns';
+import { differenceInYears, formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
 import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
@@ -271,19 +271,90 @@ export const isSelectable = su => {
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
 
-export const getAddressData = su => [
-  { label: D.addressName, value: su.address.l1 },
-  { label: D.addressFullAddress, value: su.address.l4 },
-  { label: D.addressCity, value: su.address.l6 },
-  { label: D.addressCountry, value: su.address.l7 },
-];
+export const getAddressData = su => {
+  const [postCode, cityName] = su.address.l6.split(' ');
 
-export const getUserData = su => [
-  { label: D.surveyUnitLastName, value: su.lastName },
-  { label: D.surveyUnitFirstName, value: su.firstName },
+  return [
+    { label: D.addressDeliveryPoint, value: su.address.l2 },
+    { label: D.addressAdditionalAddress, value: su.address.l3 },
+    { label: D.addressFullAddress, value: su.address.l4 },
+    { label: D.addressLocality, value: su.address.l5 },
+    { label: D.addressPostcode, value: postCode },
+    { label: D.addressCity, value: cityName },
+  ];
+};
+
+const getAgeGroup = dateOfBirth => {
+  const age = getAge(dateOfBirth);
+  if (age <= 25) return D.ageGroupOne;
+  if (age <= 35) return D.ageGroupTwo;
+  if (age <= 55) return D.ageGroupThree;
+  if (age <= 75) return D.ageGroupFour;
+  return D.ageGroupFive;
+};
+
+const getAge = dateOfBirth => {
+  return differenceInYears(new Date(), new Date(dateOfBirth));
+};
+
+export const getUserData = person => [
+  { label: D.surveyUnitTitle, value: getTitle(person.title) },
+  { label: D.surveyUnitLastName, value: person.lastName },
+  { label: D.surveyUnitFirstName, value: person.firstName },
+  { label: D.surveyUnitAge, value: getAge(person.dateOfBirth) },
 ];
 
 export const getPhoneData = su =>
-  su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
+  // su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
+  su.phoneNumbers;
+
+export const sortPhoneNumbers = phoneNumbers => {
+  let fiscalPhoneNumbers = [];
+  let directoryPhoneNumbers = [];
+  let interviewerPhoneNumbers = [];
+
+  phoneNumbers.forEach(num => {
+    switch (num.source) {
+      case 'fiscal':
+        fiscalPhoneNumbers = [...fiscalPhoneNumbers, num];
+        break;
+      case 'directory':
+        directoryPhoneNumbers = [...directoryPhoneNumbers, num];
+        break;
+      case 'interviewer':
+        interviewerPhoneNumbers = [...interviewerPhoneNumbers, num];
+        break;
+
+      default:
+        break;
+    }
+  });
+
+  return { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers };
+};
 
 export const getMailData = su => [{ label: undefined, value: su.email }];
+
+export const getTitle = title => {
+  switch (title) {
+    case 'Mister':
+      return D.titleMister;
+    case 'Miss':
+      return D.titleMiss;
+    default:
+      return '';
+  }
+};
+
+export const getPhoneSource = type => {
+  switch (type) {
+    case 'fiscal':
+      return D.fiscalSource;
+    case 'directory':
+      return D.directorySource;
+    case 'interviewer':
+      return D.interviewerSource;
+    default:
+      return '';
+  }
+};

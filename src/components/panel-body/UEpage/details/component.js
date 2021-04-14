@@ -1,34 +1,24 @@
 import formEnum from 'common-tools/enum/formEnum';
-import { getAddressData, getMailData, getPhoneData, getUserData } from 'common-tools/functions';
+import { getAddressData } from 'common-tools/functions';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import AtomicInfoTile from '../atomicInfoTile';
 import SurveyUnitContext from '../UEContext';
+import Contact from './contact';
 
 const UEItem = ({ selectFormType }) => {
   const surveyUnit = useContext(SurveyUnitContext);
-
+  const { persons } = surveyUnit;
   return (
     <>
+      {persons.map((person, index) => {
+        return <Contact person={person} index={index + 1} selectFormType={selectFormType} />;
+      })}
+
       <AtomicInfoTile
         iconType="home"
         data={getAddressData(surveyUnit)}
         onClickFunction={() => selectFormType(formEnum.ADDRESS, true)}
-      />
-      <AtomicInfoTile
-        iconType="user"
-        data={getUserData(surveyUnit)}
-        onClickFunction={() => selectFormType(formEnum.USER, true)}
-      />
-      <AtomicInfoTile
-        iconType="mail"
-        data={getMailData(surveyUnit)}
-        onClickFunction={() => selectFormType(formEnum.MAIL, true)}
-      />
-      <AtomicInfoTile
-        iconType="phone"
-        data={getPhoneData(surveyUnit)}
-        onClickFunction={() => selectFormType(formEnum.PHONE, true)}
       />
     </>
   );

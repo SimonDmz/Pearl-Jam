@@ -1,4 +1,5 @@
 import addressMessage from './addressMessage';
+import ageGroupsMessage from './ageGroupsMessage';
 import buttonMessage from './buttonMessage';
 import contactAttemptMessage from './contactAttemptMessage';
 import contactOutcomeMessage from './contactOutcomeMessage';
@@ -6,11 +7,13 @@ import criteriaMessage from './criteriaMessage';
 import detailsMessage from './detailsMessage';
 import errorMessage from './errorMessage';
 import navigationMessage from './navigationMessage';
+import phoneSourceMessage from './phoneSourceMessage';
 import questionnaireStateMessage from './questionnaireStateMessage';
 import searchMessage from './searchMessage';
 import surveyUnitMessage from './surveyUnitMessage';
 import suStateMessage from './suStateMessage';
 import tableHeader from './tableHeaderMessage';
+import titleMessage from './titleMessage';
 import toDoMessage from './toDoMessage';
 import transmissionMessage from './transmissionMessage';
 import waitingMessage from './waitingMessage';
@@ -74,6 +77,9 @@ const dictionary = {
   ...contactAttemptMessage,
   ...contactOutcomeMessage,
   ...criteriaMessage,
+  ...ageGroupsMessage,
+  ...titleMessage,
+  ...phoneSourceMessage,
 };
 
 export default dictionary;

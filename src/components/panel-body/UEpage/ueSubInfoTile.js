@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -19,7 +19,7 @@ const UeSubInfoTile = ({ title, children, reference, className }) => {
   return (
     <div className={`${classes.root} ${className}`} ref={reference}>
       <Typography variant="h5">{title}</Typography>
-      <Grid container>{children}</Grid>
+      {children}
     </div>
   );
 };

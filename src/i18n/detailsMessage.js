@@ -20,6 +20,8 @@ const detailsMessage = {
   surveyUnitNoPhone: { fr: 'Pas de numéro de téléphone', en: 'No phone number' },
   surveyUnitLastName: { fr: 'Nom', en: 'Last name' },
   surveyUnitFirstName: { fr: 'Prénom', en: 'First name' },
+  surveyUnitTitle: { fr: 'Civilité', en: 'Title' },
+  surveyUnitAge: { fr: 'Âge', en: 'Age' },
 };
 
 export default detailsMessage;
