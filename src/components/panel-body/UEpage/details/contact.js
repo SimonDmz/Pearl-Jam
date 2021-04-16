@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core';
 import formEnum from 'common-tools/enum/formEnum';
 import { getMailData, getPhoneData, getUserData } from 'common-tools/functions';
+import D from 'i18n';
 import PropTypes from 'prop-types';
 import React from 'react';
 import AtomicInfoTile from '../atomicInfoTile';
@@ -9,7 +10,7 @@ import PhoneTile from './phoneTile';
 
 const Contact = ({ person, selectFormType, index }) => {
   return (
-    <DetailTile label={`Individu ${index}`}>
+    <DetailTile label={`${D.surveyUnitIndividual} ${index}`}>
       <Grid container>
         <AtomicInfoTile
           iconType="user"

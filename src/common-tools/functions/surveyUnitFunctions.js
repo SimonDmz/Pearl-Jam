@@ -277,7 +277,7 @@ export const getAddressData = su => {
   return [
     { label: D.addressDeliveryPoint, value: su.address.l2 },
     { label: D.addressAdditionalAddress, value: su.address.l3 },
-    { label: D.addressFullAddress, value: su.address.l4 },
+    { label: D.addressStreetName, value: su.address.l4 },
     { label: D.addressLocality, value: su.address.l5 },
     { label: D.addressPostcode, value: postCode },
     { label: D.addressCity, value: cityName },
@@ -301,7 +301,7 @@ export const getUserData = person => [
   { label: D.surveyUnitTitle, value: getTitle(person.title) },
   { label: D.surveyUnitLastName, value: person.lastName },
   { label: D.surveyUnitFirstName, value: person.firstName },
-  { label: D.surveyUnitAge, value: getAge(person.dateOfBirth) },
+  { label: D.surveyUnitAge, value: `${getAge(person.dateOfBirth)} ${D.years}` },
 ];
 
 export const getPhoneData = su =>

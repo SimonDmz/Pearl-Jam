@@ -4,7 +4,7 @@ import MaterialIcons from 'common-tools/icons/materialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {
     padding: 8,
     borderRadius: 15,
@@ -24,23 +24,45 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'row',
   },
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   label: { fontWeight: 'bold', marginRight: '0.5em' },
+  invisible: { color: theme.palette.primary.main },
 }));
 
 const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
   const classes = useStyles();
+  let labels = [];
+  const values = data.reduce((arr, { label, value }) => {
+    const valid = value !== undefined && value !== '';
+    return [
+      ...arr,
+      <Typography key={label} className={valid ? '' : classes.invisible}>
+        {value !== undefined && value !== '' ? value : '-'}
+      </Typography>,
+    ];
+  }, []);
+
+  data.forEach(({ label, value }) => {
+    labels = [
+      ...labels,
+      <Typography key={label} className={classes.label}>
+        {label !== undefined ? label : ''}
+      </Typography>,
+    ];
+  });
 
   return (
     <Paper className={classes.root} onClick={() => onClickFunction()} variant="outlined">
       <div className={classes.firstLine}>
         <MaterialIcons type={iconType} />
       </div>
-      {data.map(({ label, value }) => (
-        <div key={`${label}-${value}`} className={classes.row}>
-          {label !== undefined ? <Typography className={classes.label}>{label}</Typography> : ''}
-          <Typography>{value}</Typography>
-        </div>
-      ))}
+      <div className={classes.row}>
+        <div className={classes.column}>{[...labels]}</div>
+        <div className={classes.column}>{[...values]}</div>
+      </div>
     </Paper>
   );
 };

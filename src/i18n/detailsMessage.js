@@ -22,6 +22,8 @@ const detailsMessage = {
   surveyUnitFirstName: { fr: 'Prénom', en: 'First name' },
   surveyUnitTitle: { fr: 'Civilité', en: 'Title' },
   surveyUnitAge: { fr: 'Âge', en: 'Age' },
+  surveyUnitHousing: { fr: 'Logement', en: 'Housing' },
+  surveyUnitIndividual: { fr: 'Individu', en: 'inidividual' },
 };
 
 export default detailsMessage;

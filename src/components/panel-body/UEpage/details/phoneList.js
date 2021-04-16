@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   },
   center: {
     alignSelf: 'center',
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.text.secondary,
   },
   row: {
     display: 'flex',

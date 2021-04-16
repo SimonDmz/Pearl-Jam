@@ -4,6 +4,7 @@ const ageGroupsMessage = {
   ageGroupThree: { fr: '35 - 55 ans', en: '35-55 years old' },
   ageGroupFour: { fr: '55 - 75 ans', en: '55-75 years old' },
   ageGroupFive: { fr: 'Plus de 75 ans', en: 'Over 75 years old' },
+  years: { fr: 'ans', en: 'years' },
 };
 
 export default ageGroupsMessage;
