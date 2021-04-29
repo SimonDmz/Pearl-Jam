@@ -1,7 +1,9 @@
-import { Button, DialogActions, DialogTitle, makeStyles, TextField } from '@material-ui/core';
+import { Button, DialogActions, DialogTitle, makeStyles } from '@material-ui/core';
+import { sortPhoneNumbers } from 'common-tools/functions';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
+import PhoneTile from '../details/phoneTile';
 import SurveyUnitContext from '../UEContext';
 
 const useStyles = makeStyles(() => ({
@@ -12,30 +14,82 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Form = ({ closeModal, save, previousValue }) => {
+  //previousValue is the person in [persons]
   const surveyUnit = useContext(SurveyUnitContext);
+  const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
+    previousValue.phoneNumbers
+  );
 
-  const indexedPhoneNumbers = previousValue.map((number, index) => ({
-    value: number,
-    order: index,
-  }));
+  const [interviewerPhones, setInterviewerPhones] = useState([...interviewerPhoneNumbers]);
+  const [fiscalPhones, setFiscalPhones] = useState([...fiscalPhoneNumbers]);
+  const [directoryPhones, setDirectoryPhones] = useState([...directoryPhoneNumbers]);
 
-  const cleanPhoneNumbers = numbers => numbers.map(({ value }) => value);
+  const updatePhone = (phoneNumber, newValue) => {
+    const updatedPhones = interviewerPhones.map(phNum => {
+      if (phNum.number === phoneNumber.number) phNum.number = newValue;
+      return phNum;
+    });
+    setInterviewerPhones([...updatedPhones]);
+  };
 
-  const [phone, setPhone] = useState([...indexedPhoneNumbers]);
+  const onChange = phoneNumber => event => {
+    updatePhone(phoneNumber, event.target.value.trim());
+  };
 
-  const onChange = event => {
-    const key = event.target.name;
-    const index = parseInt(key.replace('phone-', ''), 10);
-    phone[index] = { ...phone[index], value: event.target.value };
-    setPhone(phone.slice());
+  const toggleFavoritePhoneNumber = phoneNumber => {
+    switch (phoneNumber.source) {
+      case 'interviewer':
+        const updatedInterviewerPhones = interviewerPhones.map(phNum => {
+          if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
+          return phNum;
+        });
+        setInterviewerPhones([...updatedInterviewerPhones]);
+        break;
+
+      case 'fiscal':
+        const updatedFiscalPhones = fiscalPhones.map(phNum => {
+          if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
+          return phNum;
+        });
+        setFiscalPhones([...updatedFiscalPhones]);
+        break;
+      case 'directory':
+        const updatedDirectoryPhones = directoryPhones.map(phNum => {
+          if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
+          return phNum;
+        });
+        setDirectoryPhones([...updatedDirectoryPhones]);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const anyEmptyPhone = () => {
+    console.log(interviewerPhones.map(phone => phone.number));
+    console.log(interviewerPhones.map(phone => phone.number).filter(num => num.trim() === ''));
+    return interviewerPhones.map(phone => phone.number).filter(num => num.trim() === '').length > 0;
   };
 
   const addPhone = () => {
-    setPhone([...phone, { value: '', order: phone.length }]);
+    if (anyEmptyPhone()) return;
+    setInterviewerPhones([
+      ...interviewerPhones,
+      { source: 'interviewer', favorite: false, number: '' },
+    ]);
+  };
+
+  const deletePhoneNumber = phoneNumber => {
+    console.log('deletion fo # ', phoneNumber);
+    const updatedInterviewerPhones = interviewerPhones.filter(
+      phNum => phNum.number !== phoneNumber
+    );
+    setInterviewerPhones([...updatedInterviewerPhones]);
   };
 
   const saveUE = () => {
-    save({ ...surveyUnit, phoneNumbers: cleanPhoneNumbers(phone) });
+    save({ ...surveyUnit, phoneNumbers: interviewerPhones });
   };
 
   const classes = useStyles();
@@ -44,36 +98,22 @@ const Form = ({ closeModal, save, previousValue }) => {
     <div className={classes.column}>
       <DialogTitle id="form-dialog-title">{D.surveyUnitPhoneChange}</DialogTitle>
       <form onSubmit={save}>
-        {phone &&
-          phone.map(phoneNumber => (
-            <TextField
-              margin="dense"
-              id={`phone-${phoneNumber.order}`}
-              name={`phone-${phoneNumber.order}`}
-              label={`#${phoneNumber.order + 1}`}
-              InputLabelProps={{ color: 'secondary' }}
-              type="text"
-              fullWidth
-              defaultValue={phoneNumber.value}
-              onChange={onChange}
-              variant="outlined"
-            />
-          ))}
+        <PhoneTile
+          phoneNumbers={[...interviewerPhones, ...fiscalPhoneNumbers, ...directoryPhoneNumbers]}
+          editionMode
+          toggleFavoritePhone={number => toggleFavoritePhoneNumber(number)}
+          updatePhoneNumber={onChange}
+          deletePhoneNumber={deletePhoneNumber}
+        ></PhoneTile>
       </form>
       <DialogActions>
         <Button type="button" onClick={addPhone}>
-          <i className="fa fa-plus" aria-hidden="true" />
-          &nbsp;
-          {D.addPhoneNumberButton}
+          {`+ ${D.addPhoneNumberButton}`}
         </Button>
         <Button type="button" onClick={saveUE}>
-          <i className="fa fa-check" aria-hidden="true" />
-          &nbsp;
-          {D.validateButton}
+          {`✔ ${D.validateButton}`}
         </Button>
         <Button type="button" onClick={closeModal}>
-          <i className="fa fa-times" aria-hidden="true" />
-          &nbsp;
           {D.cancelButton}
         </Button>
       </DialogActions>

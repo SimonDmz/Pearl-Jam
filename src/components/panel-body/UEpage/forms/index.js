@@ -15,9 +15,9 @@ export const getForm = (formType, saveFunction, previousValue, closeModal, refre
     refresh();
   };
 
-  const deleteAndClose = (surveyUnit, contactAttemptId) => {
+  const deleteAndClose = (surveyUnit, contactAttempt) => {
     closeModal();
-    deleteContactAttempt(surveyUnit, contactAttemptId);
+    deleteContactAttempt(surveyUnit, contactAttempt);
     refresh();
   };
 
@@ -67,13 +67,13 @@ export const getPreviousValue = (formType, surveyUnit, injectableData) => {
       value = getAddressData(surveyUnit);
       break;
     case formEnum.USER:
-      value = { firstName: surveyUnit.firstName, lastName: surveyUnit.lastName };
+      value = injectableData;
       break;
     case formEnum.MAIL:
-      value = surveyUnit.email;
+      value = injectableData;
       break;
     case formEnum.PHONE:
-      value = surveyUnit.phoneNumbers;
+      value = injectableData;
       break;
     case formEnum.COMMENT:
       value = getCommentByType('INTERVIEWER', surveyUnit);

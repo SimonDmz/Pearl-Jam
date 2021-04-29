@@ -10,7 +10,6 @@ const useStyles = makeStyles(() => ({
   root: {
     padding: 8,
     borderRadius: 15,
-    '&:hover': { cursor: 'pointer' },
     border: ' LightGray solid 1px',
     minHeight: 130,
     width: 'max-content',
@@ -18,6 +17,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     margin: '10px',
+  },
+  clickable: {
+    '&:hover': { cursor: 'pointer' },
   },
   firstLine: {
     alignSelf: 'flex-end',
@@ -29,21 +31,47 @@ const useStyles = makeStyles(() => ({
   label: { fontWeight: 'bold', marginRight: '0.5em' },
 }));
 
-const PhoneTile = ({ phoneNumbers, onClickFunction }) => {
+const PhoneTile = ({
+  phoneNumbers,
+  onClickFunction = () => {},
+  toggleFavoritePhone = () => {},
+  editionMode = false,
+  updatePhoneNumber = () => {},
+  deletePhoneNumber = () => {},
+}) => {
   const classes = useStyles();
   const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
     phoneNumbers
   );
 
   return (
-    <Paper className={classes.root} onClick={() => onClickFunction()} variant="outlined">
+    <Paper
+      className={`${classes.root} ${editionMode ? '' : classes.clickable}`}
+      onClick={() => onClickFunction()}
+      variant="outlined"
+    >
       <div className={classes.firstLine}>
         <MaterialIcons type="phone" />
       </div>
       <div className={classes.row}>
-        <PhoneList numbers={fiscalPhoneNumbers} type="fiscal" />
-        <PhoneList numbers={directoryPhoneNumbers} type="directory" />
-        <PhoneList numbers={interviewerPhoneNumbers} type="interviewer" />
+        <PhoneList
+          numbers={fiscalPhoneNumbers}
+          type="fiscal"
+          toggleFavoritePhone={toggleFavoritePhone}
+        />
+        <PhoneList
+          numbers={directoryPhoneNumbers}
+          type="directory"
+          toggleFavoritePhone={toggleFavoritePhone}
+        />
+        <PhoneList
+          numbers={interviewerPhoneNumbers}
+          type="interviewer"
+          editable={editionMode}
+          toggleFavoritePhone={toggleFavoritePhone}
+          updatePhoneNumber={updatePhoneNumber}
+          deletePhoneNumber={deletePhoneNumber}
+        />
       </div>
     </Paper>
   );
@@ -52,5 +80,9 @@ const PhoneTile = ({ phoneNumbers, onClickFunction }) => {
 export default PhoneTile;
 PhoneTile.propTypes = {
   phoneNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  onClickFunction: PropTypes.func.isRequired,
+  onClickFunction: PropTypes.func,
+  editionMode: PropTypes.bool,
+  toggleFavoritePhone: PropTypes.func,
+  updatePhoneNumber: PropTypes.func,
+  deletePhoneNumber: PropTypes.func,
 };

@@ -34,25 +34,28 @@ const useStyles = makeStyles(theme => ({
 
 const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
   const classes = useStyles();
-  let labels = [];
-  const values = data.reduce((arr, { label, value }) => {
-    const valid = value !== undefined && value !== '';
-    return [
+  const labels = data.reduce(
+    (arr, { label }) => [
       ...arr,
-      <Typography key={label} className={valid ? '' : classes.invisible}>
-        {value !== undefined && value !== '' ? value : '-'}
-      </Typography>,
-    ];
-  }, []);
-
-  data.forEach(({ label, value }) => {
-    labels = [
-      ...labels,
       <Typography key={label} className={classes.label}>
         {label !== undefined ? label : ''}
       </Typography>,
+    ],
+    []
+  );
+  //TODO su fucntions getData for mail => add favorite attribute
+  const values = data.reduce((arr, { label, value, favorite }) => {
+    const valid = value !== undefined && value !== '';
+    return [
+      ...arr,
+      <div className={classes.row}>
+        {favorite !== undefined && <MaterialIcons type={favorite ? 'starFull' : 'starOutlined'} />}
+        <Typography key={label} className={valid ? '' : classes.invisible}>
+          {value !== undefined && value !== '' ? value : '-'}
+        </Typography>
+      </div>,
     ];
-  });
+  }, []);
 
   return (
     <Paper className={classes.root} onClick={() => onClickFunction()} variant="outlined">
@@ -60,8 +63,12 @@ const AtomicInfoTile = ({ iconType, data, onClickFunction }) => {
         <MaterialIcons type={iconType} />
       </div>
       <div className={classes.row}>
-        <div className={classes.column}>{[...labels]}</div>
-        <div className={classes.column}>{[...values]}</div>
+        <div key="labels" className={classes.column}>
+          {[...labels]}
+        </div>
+        <div key="values" className={classes.column}>
+          {[...values]}
+        </div>
       </div>
     </Paper>
   );

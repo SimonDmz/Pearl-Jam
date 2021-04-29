@@ -1,7 +1,7 @@
 import { makeStyles, Paper, Typography } from '@material-ui/core';
 import formEnum from 'common-tools/enum/formEnum';
+import { getSortedContactAttempts } from 'common-tools/functions';
 import D from 'i18n';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import SurveyUnitContext from '../../UEContext';
@@ -28,17 +28,8 @@ const ContactAttempts = ({ selectFormType, setInjectableData }) => {
   const [contactAttempts, setcontactAttempts] = useState([]);
 
   useEffect(() => {
-    const getContactAttempts = async ids => {
-      if (ids === undefined || ids.length === 0) return [];
-      const cat = await contactAttemptDBService.findByIds(ids);
-      cat.sort((a, b) => b.date - a.date);
-      return cat;
-    };
-
-    if (surveyUnit !== undefined) {
-      const contactAttemptsId = surveyUnit.contactAttempts;
-      getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
-    }
+    const sortedContactAttempts = getSortedContactAttempts(surveyUnit);
+    setcontactAttempts(sortedContactAttempts);
   }, [surveyUnit]);
 
   const classes = useStyles();

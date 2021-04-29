@@ -26,11 +26,51 @@ const UESPage = ({ textSearch }) => {
     terminated: false,
   });
 
+  // TODO nasty mock for new data model
+  const persons = {
+    persons: [
+      {
+        id: '1',
+        firstName: 'Cecilia',
+        lastName: 'Ortega',
+        title: 'Miss',
+        email: 'cecilia.ortega@blabla.fr',
+        favoriteEmail: true,
+        phoneNumbers: [
+          { source: 'fiscal', favorite: true, number: '+33666666666' },
+          { source: 'fiscal', favorite: false, number: '+336677777' },
+          { source: 'directory', favorite: false, number: '+336677778' },
+          { source: 'directory', favorite: false, number: '+336677779' },
+          { source: 'interviewer', favorite: true, number: '+336677780' },
+        ],
+        dateOfBirth: 537537329000,
+        privileged: true,
+      },
+      {
+        id: '2',
+        firstName: 'Bob',
+        lastName: 'Ortega',
+        title: 'Mister',
+        email: 'bob.ortega@blabla.fr',
+        favoriteEmail: false,
+        phoneNumbers: [
+          { source: 'fiscal', favorite: true, number: '+33666666666' },
+          { source: 'fiscal', favorite: false, number: '+336677777' },
+          { source: 'directory', favorite: false, number: '+336677778' },
+          { source: 'directory', favorite: false, number: '+336677779' },
+          { source: 'interviewer', favorite: true, number: '+336677780' },
+        ],
+        dateOfBirth: 1477050929000,
+        privileged: false,
+      },
+    ],
+  };
+
   useEffect(() => {
     if (!init) {
       setInit(true);
       surveyUnitDBService.getAll().then(units => {
-        const initializedSU = units.map(su => ({ ...su, selected: false }));
+        const initializedSU = units.map(su => ({ ...su, selected: false, ...persons }));
         setCampaigns([...new Set(units.map(unit => unit.campaign))]);
         setSurveyUnits(initializedSU);
         setSearchEchoes([initializedSU.length, initializedSU.length]);

@@ -36,6 +36,7 @@ const UEPage = ({ match }) => {
                 { source: 'interviewer', favorite: true, number: '+336677780' },
               ],
               dateOfBirth: 537537329000,
+              privileged: true,
             },
             {
               id: '2',
@@ -52,10 +53,11 @@ const UEPage = ({ match }) => {
                 { source: 'interviewer', favorite: true, number: '+336677780' },
               ],
               dateOfBirth: 1477050929000,
+              privileged: false,
             },
           ],
         };
-
+        console.log('refresh with ', { ...ue, ...persons });
         setSurveyUnit({ ...ue, ...persons });
       });
     };

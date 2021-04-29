@@ -13,70 +13,70 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
+const useStyles = makeStyles(() => ({
+  root: {
+    padding: 8,
+    borderRadius: 15,
+    '&:hover': { cursor: 'pointer' },
+    border: ' LightGray solid 1px',
+    height: 165,
+    width: 325,
+  },
+  flexRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  justifyStart: {
+    justifyContent: 'flex-start',
+  },
+  flexColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
+  content: {
+    flex: '1 0 auto',
+    padding: 0,
+    '&:last-child': {
+      paddingBottom: 0,
+    },
+  },
+
+  icon: {
+    verticalAlign: 'bottom',
+    color: 'LightGray',
+  },
+  inactive: {
+    backgroundColor: 'grey',
+    '&:hover': { cursor: 'not-allowed' },
+  },
+  paddingTop: {
+    height: 'max-content',
+    paddingTop: '10px',
+    fontSize: 'xxx-large',
+  },
+  stateIcon: {
+    color: 'green',
+    verticalAlign: 'center',
+  },
+  rounded: {
+    border: '1px solid',
+    borderRadius: '50%',
+    width: '1.8em',
+    height: '1.8em',
+  },
+  negativeLeftMargin: { marginLeft: '-5px' },
+  hidden: { visibility: 'hidden' },
+  maxWidth: {
+    maxWidth: '180px',
+  },
+  leftMargin: {
+    marginLeft: '2px',
+  },
+}));
+
 const SurveyUnitCard = ({ surveyUnit }) => {
-  const useStyles = makeStyles(() => ({
-    root: {
-      padding: 8,
-      borderRadius: 15,
-      '&:hover': { cursor: 'pointer' },
-      border: ' LightGray solid 1px',
-      height: 165,
-      width: 325,
-    },
-    flexRow: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    justifyStart: {
-      justifyContent: 'flex-start',
-    },
-    flexColumn: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-end',
-    },
-    content: {
-      flex: '1 0 auto',
-      padding: 0,
-      '&:last-child': {
-        paddingBottom: 0,
-      },
-    },
-
-    icon: {
-      verticalAlign: 'bottom',
-      color: 'LightGray',
-    },
-    inactive: {
-      backgroundColor: 'grey',
-      '&:hover': { cursor: 'not-allowed' },
-    },
-    paddingTop: {
-      height: 'max-content',
-      paddingTop: '10px',
-      fontSize: 'xxx-large',
-    },
-    stateIcon: {
-      color: 'green',
-      verticalAlign: 'center',
-    },
-    rounded: {
-      border: '1px solid',
-      borderRadius: '50%',
-      width: '1.8em',
-      height: '1.8em',
-    },
-    negativeLeftMargin: { marginLeft: '-5px' },
-    hidden: { visibility: 'hidden' },
-    maxWidth: {
-      maxWidth: '180px',
-    },
-    leftMargin: {
-      marginLeft: '2px',
-    },
-  }));
-
   const classes = useStyles();
 
   const history = useHistory();
@@ -85,15 +85,18 @@ const SurveyUnitCard = ({ surveyUnit }) => {
 
   const {
     id,
-    firstName,
-    lastName,
+    // firstName,
+    // lastName,
     address: { l6 },
     campaign,
     sampleIdentifiers: { ssech },
     states,
     priority,
+    persons,
   } = surveyUnit;
 
+  const privilegedPerson = persons.find(p => p.privileged);
+  const { firstName, lastName } = privilegedPerson;
   const lastState = convertSUStateInToDo(states[states.length - 1].type).value;
   const nbJoursRestant = intervalInDays(surveyUnit);
 

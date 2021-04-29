@@ -3,7 +3,6 @@ import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
 import { differenceInYears, formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 export const getCommentByType = (type, ue) => {
@@ -23,10 +22,11 @@ export const getLastState = ue => {
 
 export const intervalInDays = su => {
   const { collectionEndDate } = su;
-
+  if (new Date().getTime() > new Date(collectionEndDate).getTime()) return 0;
   const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
     roundingMethod: 'ceil',
     unit: 'day',
+    addSuffix: true,
   });
 
   return remainingDays.split(' ')[0];
@@ -37,26 +37,31 @@ export const isValidForTransmission = ue =>
   return contactOutcome !== null; */
   ue !== undefined;
 
-const getContactAttempts = async surveyUnit => {
+export const getSortedContactAttempts = surveyUnit => {
+  if (surveyUnit === undefined) return [];
+
   const { contactAttempts } = surveyUnit;
-  return contactAttemptDBService.findByIds(contactAttempts);
+
+  if (contactAttempts === undefined || contactAttempts.length === 0) return [];
+
+  contactAttempts.sort((a, b) => b.date - a.date);
+  return contactAttempts;
 };
 
-export const deleteContactAttempt = (surveyUnit, contactAttemptId) => {
-  const newSu = surveyUnit;
-  const { contactAttempts } = newSu;
-  const newCA = contactAttempts.filter(ca => ca !== contactAttemptId);
-  newSu.contactAttempts = newCA;
-  surveyUnitDBService.update(newSu);
-  contactAttemptDBService.delete(contactAttemptId);
+export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
+  const { contactAttempts } = surveyUnit;
+  const newCA = contactAttempts.filter(ca => ca !== contactAttempt);
+  surveyUnitDBService.update({ ...surveyUnit, newCA });
 };
+export const areCaEqual = (ca, anotherCa) =>
+  ca.date === anotherCa.date && ca.status === anotherCa.status;
 
 export const getContactAttemptNumber = surveyUnit =>
   surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
     .length;
 
-const lastContactAttemptIsSuccessfull = async surveyUnit => {
-  const contactAttempts = await getContactAttempts(surveyUnit);
+const lastContactAttemptIsSuccessfull = surveyUnit => {
+  const { contactAttempts } = surveyUnit;
   let lastContactAttempt;
   if (Array.isArray(contactAttempts) && contactAttempts.length > 1) {
     lastContactAttempt = contactAttempts.reduce((a, b) => (a.date > b.date ? a : b));
@@ -284,7 +289,7 @@ export const getAddressData = su => {
   ];
 };
 
-const getAgeGroup = dateOfBirth => {
+export const getAgeGroup = dateOfBirth => {
   const age = getAge(dateOfBirth);
   if (age <= 25) return D.ageGroupOne;
   if (age <= 35) return D.ageGroupTwo;
@@ -293,7 +298,7 @@ const getAgeGroup = dateOfBirth => {
   return D.ageGroupFive;
 };
 
-const getAge = dateOfBirth => {
+export const getAge = dateOfBirth => {
   return differenceInYears(new Date(), new Date(dateOfBirth));
 };
 
@@ -329,11 +334,12 @@ export const sortPhoneNumbers = phoneNumbers => {
         break;
     }
   });
-
   return { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers };
 };
 
-export const getMailData = su => [{ label: undefined, value: su.email }];
+export const getMailData = person => [
+  { label: undefined, value: person.email, favorite: person.favoriteEmail },
+];
 
 export const getTitle = title => {
   switch (title) {

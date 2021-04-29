@@ -8,14 +8,23 @@ import SurveyUnitContext from '../UEContext';
 import Contact from './contact';
 import DetailTile from './detailTile';
 
-const UEItem = ({ selectFormType }) => {
+const UEItem = ({ selectFormType, setInjectableData }) => {
   const surveyUnit = useContext(SurveyUnitContext);
   const { persons } = surveyUnit;
   return (
     <>
-      {persons.map((person, index) => {
-        return <Contact person={person} index={index + 1} selectFormType={selectFormType} />;
-      })}
+      {persons
+        .sort((a, b) => b.privileged - a.privileged)
+        .map((person, index) => {
+          return (
+            <Contact
+              person={person}
+              index={index + 1}
+              selectFormType={selectFormType}
+              setInjectableData={setInjectableData}
+            />
+          );
+        })}
       <DetailTile label={D.surveyUnitHousing}>
         <AtomicInfoTile
           iconType="home"
@@ -28,4 +37,7 @@ const UEItem = ({ selectFormType }) => {
 };
 
 export default UEItem;
-UEItem.propTypes = { selectFormType: PropTypes.func.isRequired };
+UEItem.propTypes = {
+  selectFormType: PropTypes.func.isRequired,
+  setInjectableData: PropTypes.func.isRequired,
+};
