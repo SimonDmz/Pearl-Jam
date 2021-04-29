@@ -57,7 +57,6 @@ const UEPage = ({ match }) => {
             },
           ],
         };
-        console.log('refresh with ', { ...ue, ...persons });
         setSurveyUnit({ ...ue, ...persons });
       });
     };

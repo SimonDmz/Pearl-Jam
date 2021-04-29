@@ -67,8 +67,6 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const anyEmptyPhone = () => {
-    console.log(interviewerPhones.map(phone => phone.number));
-    console.log(interviewerPhones.map(phone => phone.number).filter(num => num.trim() === ''));
     return interviewerPhones.map(phone => phone.number).filter(num => num.trim() === '').length > 0;
   };
 
@@ -81,7 +79,6 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const deletePhoneNumber = phoneNumber => {
-    console.log('deletion fo # ', phoneNumber);
     const updatedInterviewerPhones = interviewerPhones.filter(
       phNum => phNum.number !== phoneNumber
     );
