@@ -28,7 +28,7 @@ const Form = ({ closeModal, save, previousValue }) => {
     previousData[D.addressAdditionalAddress] ? previousData[D.addressAdditionalAddress] : ''
   );
   const [streetName, setStreetName] = useState(
-    previousData[D.addressCountry] ? previousData[D.addressCountry] : ''
+    previousData[D.addressStreetName] ? previousData[D.addressStreetName] : ''
   );
   const [locality, setLocality] = useState(
     previousData[D.addressLocality] ? previousData[D.addressLocality] : ''
@@ -52,7 +52,7 @@ const Form = ({ closeModal, save, previousValue }) => {
 
   const onChange = event => {
     const key = event.target.name;
-    const value = event.target.value;
+    const value = event.target.value.trim();
     switch (key) {
       case 'deliveryPoint':
         setDeliveryPoint(value);
