@@ -18,7 +18,7 @@ const UEPage = ({ match }) => {
   useEffect(() => {
     const updateSurveyUnit = async () => {
       await surveyUnitDBService.getById(id).then(ue => {
-        setSurveyUnit(ue);
+        setSurveyUnit({ ...ue });
       });
     };
     if (shouldRefresh) {

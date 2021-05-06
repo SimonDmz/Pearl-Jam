@@ -1,4 +1,8 @@
+import DateFnsUtils from '@date-io/date-fns';
 import { Button, DialogActions, DialogTitle, makeStyles, TextField } from '@material-ui/core';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { getTitle } from 'common-tools/functions';
+import frLocale from 'date-fns/locale/fr';
 import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
@@ -8,6 +12,10 @@ const useStyles = makeStyles(() => ({
   column: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  title: {
+    width: 'max-content',
   },
 }));
 
@@ -16,15 +24,22 @@ const Form = ({ closeModal, previousValue, save }) => {
 
   const [lastName, setLastName] = useState(previousValue.lastName);
   const [firstName, setFirstName] = useState(previousValue.firstName);
+  const [dateOfBirth, setDateOfBirth] = useState(previousValue.birthdate);
+  const [title, setTitle] = useState(previousValue.title);
 
-  const onChange = event => {
-    const key = event.target.name;
-    switch (key) {
+  const onChange = type => event => {
+    switch (type) {
       case 'lastName':
         setLastName(event.target.value);
         break;
       case 'firstName':
         setFirstName(event.target.value);
+        break;
+      case 'title':
+        setTitle(event.target.value === getTitle('Mister') ? 'Miss' : 'Mister');
+        break;
+      case 'age':
+        setDateOfBirth(event.getTime());
         break;
       default:
         break;
@@ -32,14 +47,39 @@ const Form = ({ closeModal, previousValue, save }) => {
   };
 
   const saveUE = () => {
-    save({ ...surveyUnit, lastName, firstName });
+    const { id } = previousValue;
+    const { persons } = surveyUnit;
+    const newPersons = persons.map(person => {
+      if (person.id === id) person = { ...person, lastName, firstName, title };
+      return person;
+    });
+    save({ ...surveyUnit, persons: newPersons });
   };
 
   const classes = useStyles();
 
+  class FrLocalizedUtils extends DateFnsUtils {
+    getDatePickerHeaderText(date) {
+      return this.format(date, 'd MMM yyyy', { locale: this.locale });
+    }
+  }
+
   return (
     <div className={classes.column}>
       <DialogTitle id="form-dialog-title">{D.surveyUnitNameChange}</DialogTitle>
+
+      <TextField
+        margin="dense"
+        id="title"
+        name="title"
+        label={D.surveyUnitTitle}
+        InputLabelProps={{ color: 'secondary' }}
+        type="text"
+        fullWidth
+        value={getTitle(title) || ''}
+        onClick={onChange('title')}
+      />
+
       <TextField
         margin="dense"
         id="lastName"
@@ -49,7 +89,7 @@ const Form = ({ closeModal, previousValue, save }) => {
         type="text"
         fullWidth
         defaultValue={lastName || ''}
-        onChange={onChange}
+        onChange={onChange('lastName')}
       />
       <TextField
         margin="dense"
@@ -60,8 +100,20 @@ const Form = ({ closeModal, previousValue, save }) => {
         type="text"
         fullWidth
         defaultValue={firstName || ''}
-        onChange={onChange}
+        onChange={onChange('firstName')}
       />
+      <MuiPickersUtilsProvider utils={FrLocalizedUtils} locale={frLocale}>
+        <DatePicker
+          disableFuture
+          openTo="date"
+          format="dd/MM/yyyy"
+          label={D.surveyUnitDateOfBirth}
+          views={['date', 'month', 'year']}
+          InputLabelProps={{ color: 'secondary' }}
+          value={dateOfBirth}
+          onChange={onChange('age')}
+        />
+      </MuiPickersUtilsProvider>
 
       <DialogActions>
         <Button type="button" onClick={saveUE}>

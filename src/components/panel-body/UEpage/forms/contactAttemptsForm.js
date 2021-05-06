@@ -5,10 +5,9 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import { DatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import contactAttemptEnum from 'common-tools/enum/ContactAttemptEnum';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
-import { addNewState } from 'common-tools/functions';
+import { addNewState, areCaEqual, getSortedContactAttempts } from 'common-tools/functions';
 import frLocale from 'date-fns/locale/fr';
 import D from 'i18n';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import ContactAttemptLine from '../contacts/contactAttempts/contactAttemptLine';
@@ -80,24 +79,15 @@ const Form = ({ previousValue, save, deleteAction }) => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [contactAttempt, setContactAttempt] = useState(previousValue);
   const [visiblePanel, setVisiblePanel] = useState(undefined);
-
   const [contactAttempts, setcontactAttempts] = useState([]);
-  const [idToDelete, setIdToDelete] = useState(undefined);
+  const [contactAttemptToDelete, setContactAttemptToDelete] = useState(undefined);
 
   const [selectedDate, handleDateChange] = useState(new Date());
+  const isEditionMode = previousValue.status !== undefined;
 
   useEffect(() => {
-    const getContactAttempts = async ids => {
-      if (ids === undefined || ids.length === 0) return [];
-      const cat = await contactAttemptDBService.findByIds(ids);
-      cat.sort((a, b) => b.date - a.date);
-      return cat;
-    };
-
-    if (surveyUnit !== undefined) {
-      const contactAttemptsId = surveyUnit.contactAttempts;
-      getContactAttempts(contactAttemptsId).then(cA => setcontactAttempts(cA));
-    }
+    const sortedContactAttempts = getSortedContactAttempts(surveyUnit);
+    setcontactAttempts(sortedContactAttempts);
   }, [surveyUnit]);
 
   const onChange = newStatus => {
@@ -118,33 +108,28 @@ const Form = ({ previousValue, save, deleteAction }) => {
   }, [contactAttempt, formIsValid]);
 
   const saveUE = async () => {
-    let { id } = contactAttempt;
-    const newSu = surveyUnit;
-    const { contactAttempts: suContactAttempts } = surveyUnit;
+    let { contactAttempts: suContactAttempts } = surveyUnit;
 
-    if (id === undefined) {
-      id = await contactAttemptDBService.insert({
-        ...contactAttempt,
-        date: selectedDate.getTime(),
-      });
-    } else {
-      await contactAttemptDBService.update({ ...contactAttempt, date: selectedDate.getTime() });
+    if (isEditionMode) {
+      // remove previous contactAttempt
+      suContactAttempts = suContactAttempts.filter(ca => !areCaEqual(ca, previousValue));
     }
-    if (!suContactAttempts.includes(id)) {
-      suContactAttempts.push(id);
-      newSu.contactAttempts = suContactAttempts;
-    }
+    // add new/edited contactAttempt
+    suContactAttempts.push({
+      ...contactAttempt,
+      date: selectedDate.getTime(),
+    });
 
     // lifeCycle update
     await addNewState(surveyUnit, surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type);
-    save(newSu);
+    save({ ...surveyUnit, contactAttempts: suContactAttempts });
   };
 
   const isSelected = type => contactAttempt && contactAttempt.status === type;
 
-  const selectContactAttemptToDelete = id => {
+  const selectContactAttemptToDelete = contactAttempt => {
     setVisiblePanel('DELETION');
-    setIdToDelete(id);
+    setContactAttemptToDelete(contactAttempt);
   };
 
   const classes = useStyles();
@@ -153,7 +138,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
     setVisiblePanel(value);
     setContactAttempt(undefined);
     setFormIsValid(false);
-    setIdToDelete(undefined);
+    setContactAttemptToDelete(undefined);
   };
 
   return (
@@ -163,18 +148,17 @@ const Form = ({ previousValue, save, deleteAction }) => {
         {Array.isArray(contactAttempts) &&
           contactAttempts.length > 0 &&
           contactAttempts.map(contAtt => {
-            const { id } = contAtt;
-            const deleteById = () => {
+            const deleteContactAttempt = () => {
               setContactAttempt(contAtt);
-              selectContactAttemptToDelete(id);
+              selectContactAttemptToDelete(contAtt);
             };
-            const deleteParams = { deleteIsAvailable: true, deleteFunction: deleteById };
+            const deleteParams = { deleteIsAvailable: true, deleteFunction: deleteContactAttempt };
             return (
               <ContactAttemptLine
                 contactAttempt={contAtt}
                 deleteParams={deleteParams}
-                key={id}
-                selected={id === idToDelete}
+                key={contAtt.date}
+                selected={areCaEqual(contAtt, contactAttemptToDelete)}
               />
             );
           })}
@@ -231,7 +215,7 @@ const Form = ({ previousValue, save, deleteAction }) => {
         title={D.contactAttemptDeletion}
         hidden={visiblePanel !== 'DELETION'}
         backFunction={() => resetForm(undefined)}
-        actionFunction={() => deleteAction(surveyUnit, idToDelete)}
+        actionFunction={() => deleteAction(surveyUnit, contactAttemptToDelete)}
         actionLabel={D.delete}
       >
         <ContactAttemptLine contactAttempt={contactAttempt} />
@@ -247,7 +231,6 @@ Form.propTypes = {
   previousValue: PropTypes.shape({
     date: PropTypes.number.isRequired,
     status: PropTypes.string.isRequired,
-    id: PropTypes.string,
   }),
 };
 Form.defaultProps = { deleteAction: undefined, previousValue: { date: new Date().getTime() } };

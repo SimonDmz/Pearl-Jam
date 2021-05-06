@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
     boxShadow: 'unset',
     border: 'LightGray solid 1px',
     marginTop: '1em',
+    width: 'max-content',
   },
 }));
 

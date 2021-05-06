@@ -64,6 +64,34 @@ const theme = createMuiTheme({
         '&:hover': { backgroundColor: '#aaaaaa' },
       },
     },
+    MuiPickersYear: {
+      yearSelected: {
+        backgroundColor: '#555555',
+        fontWeight: 'bolder',
+      },
+    },
+    MuiPickersMonth: {
+      monthSelected: {
+        backgroundColor: '#555555',
+        color: '#ffffff',
+        '&:hover': { backgroundColor: '#aaaaaa' },
+      },
+    },
+    MuiPickersToolbarButton: {
+      toolbarBtn: {
+        background: 'transparent',
+        border: 'transparent solid 1px',
+        color: '#ffffff',
+        '&:hover': {
+          background: '#cdcdcd',
+          color: '#000000',
+          border: 'black solid 1px',
+        },
+        '&:disabled': {
+          background: '#cdcdcd',
+        },
+      },
+    },
   },
 });
 export default theme;

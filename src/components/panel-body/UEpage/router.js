@@ -90,7 +90,7 @@ const Router = ({ match, saveUE, refresh }) => {
         <Navigation refs={refs} match={match} />
         <div>
           <UeSubInfoTile reference={detailsRef} title={D.goToContactDetailsPage}>
-            <Details selectFormType={selectFormType} />
+            <Details selectFormType={selectFormType} setInjectableData={setInjectableData} />
           </UeSubInfoTile>
           <UeSubInfoTile reference={identificationRef} title={D.goToSpottingPage}>
             <Identification selectFormType={selectFormType} />

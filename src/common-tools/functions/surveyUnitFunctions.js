@@ -1,9 +1,8 @@
 import { CONTACT_RELATED_STATES, CONTACT_SUCCESS_LIST } from 'common-tools/constants';
 import surveyUnitStateEnum from 'common-tools/enum/SUStateEnum';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
-import { formatDistanceStrict } from 'date-fns';
+import { differenceInYears, formatDistanceStrict } from 'date-fns';
 import D from 'i18n';
-import contactAttemptDBService from 'indexedbb/services/contactAttempt-idb-service';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
 export const getCommentByType = (type, ue) => {
@@ -23,10 +22,11 @@ export const getLastState = ue => {
 
 export const intervalInDays = su => {
   const { collectionEndDate } = su;
-
+  if (new Date().getTime() > new Date(collectionEndDate).getTime()) return 0;
   const remainingDays = formatDistanceStrict(new Date(), new Date(collectionEndDate), {
     roundingMethod: 'ceil',
     unit: 'day',
+    addSuffix: true,
   });
 
   return remainingDays.split(' ')[0];
@@ -37,26 +37,31 @@ export const isValidForTransmission = ue =>
   return contactOutcome !== null; */
   ue !== undefined;
 
-const getContactAttempts = async surveyUnit => {
+export const getSortedContactAttempts = surveyUnit => {
+  if (surveyUnit === undefined) return [];
+
   const { contactAttempts } = surveyUnit;
-  return contactAttemptDBService.findByIds(contactAttempts);
+
+  if (contactAttempts === undefined || contactAttempts.length === 0) return [];
+
+  contactAttempts.sort((a, b) => b.date - a.date);
+  return contactAttempts;
 };
 
-export const deleteContactAttempt = (surveyUnit, contactAttemptId) => {
-  const newSu = surveyUnit;
-  const { contactAttempts } = newSu;
-  const newCA = contactAttempts.filter(ca => ca !== contactAttemptId);
-  newSu.contactAttempts = newCA;
-  surveyUnitDBService.update(newSu);
-  contactAttemptDBService.delete(contactAttemptId);
+export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
+  const { contactAttempts } = surveyUnit;
+  const newCA = contactAttempts.filter(ca => ca !== contactAttempt);
+  surveyUnitDBService.update({ ...surveyUnit, newCA });
 };
+export const areCaEqual = (ca, anotherCa) =>
+  ca.date === anotherCa.date && ca.status === anotherCa.status;
 
 export const getContactAttemptNumber = surveyUnit =>
   surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
     .length;
 
-const lastContactAttemptIsSuccessfull = async surveyUnit => {
-  const contactAttempts = await getContactAttempts(surveyUnit);
+const lastContactAttemptIsSuccessfull = surveyUnit => {
+  const { contactAttempts } = surveyUnit;
   let lastContactAttempt;
   if (Array.isArray(contactAttempts) && contactAttempts.length > 1) {
     lastContactAttempt = contactAttempts.reduce((a, b) => (a.date > b.date ? a : b));
@@ -205,11 +210,12 @@ export const applyFilters = (surveyUnits, filters) => {
       .toLowerCase();
 
   const filterBySearch = su => {
+    const { firstName, lastName } = getprivilegedPerson(su);
     if (searchFilter !== '') {
       const normalizedSearchFilter = normalize(searchFilter);
       return (
-        normalize(su.firstName).includes(normalizedSearchFilter) ||
-        normalize(su.lastName).includes(normalizedSearchFilter) ||
+        normalize(firstName).includes(normalizedSearchFilter) ||
+        normalize(lastName).includes(normalizedSearchFilter) ||
         su.id
           .toString()
           .toLowerCase()
@@ -271,19 +277,111 @@ export const isSelectable = su => {
   return endTime > instantTime && instantTime > identificationPhaseStartTime;
 };
 
-export const getAddressData = su => [
-  { label: D.addressName, value: su.address.l1 },
-  { label: D.addressFullAddress, value: su.address.l4 },
-  { label: D.addressCity, value: su.address.l6 },
-  { label: D.addressCountry, value: su.address.l7 },
+export const getAddressData = su => {
+  const [postCode, cityName] = su.address.l6.split(' ');
+
+  return [
+    { label: D.addressDeliveryPoint, value: su.address.l2 },
+    { label: D.addressAdditionalAddress, value: su.address.l3 },
+    { label: D.addressStreetName, value: su.address.l4 },
+    { label: D.addressLocality, value: su.address.l5 },
+    { label: D.addressPostcode, value: postCode },
+    { label: D.addressCity, value: cityName },
+  ];
+};
+
+export const getAgeGroup = birthdate => {
+  const age = getAge(birthdate);
+  if (age <= 25) return D.ageGroupOne;
+  if (age <= 35) return D.ageGroupTwo;
+  if (age <= 55) return D.ageGroupThree;
+  if (age <= 75) return D.ageGroupFour;
+  return D.ageGroupFive;
+};
+
+export const getAge = birthdate => {
+  if (birthdate === '') return ' ';
+  return differenceInYears(new Date(), new Date(birthdate));
+};
+
+export const getUserData = person => [
+  { label: D.surveyUnitTitle, value: getTitle(person.title) },
+  { label: D.surveyUnitLastName, value: person.lastName },
+  { label: D.surveyUnitFirstName, value: person.firstName },
+  { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
 ];
 
-export const getUserData = su => [
-  { label: D.surveyUnitLastName, value: su.lastName },
-  { label: D.surveyUnitFirstName, value: su.firstName },
+export const getPhoneData = person =>
+  // su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
+  person.phoneNumbers;
+
+export const sortPhoneNumbers = phoneNumbers => {
+  let fiscalPhoneNumbers = [];
+  let directoryPhoneNumbers = [];
+  let interviewerPhoneNumbers = [];
+
+  phoneNumbers.forEach(num => {
+    switch (num.source.toLowerCase()) {
+      case 'fiscal':
+        fiscalPhoneNumbers = [...fiscalPhoneNumbers, num];
+        break;
+      case 'directory':
+        directoryPhoneNumbers = [...directoryPhoneNumbers, num];
+        break;
+      case 'interviewer':
+        interviewerPhoneNumbers = [...interviewerPhoneNumbers, num];
+        break;
+
+      default:
+        break;
+    }
+  });
+  return { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers };
+};
+
+export const getMailData = person => [
+  { label: undefined, value: person.email, favorite: person.favoriteEmail },
 ];
 
-export const getPhoneData = su =>
-  su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
+export const getTitle = title => {
+  switch (title.toLowerCase()) {
+    case 'mister':
+      return D.titleMister;
+    case 'miss':
+      return D.titleMiss;
+    default:
+      return '';
+  }
+};
 
-export const getMailData = su => [{ label: undefined, value: su.email }];
+export const getPhoneSource = type => {
+  switch (type.toLowerCase()) {
+    case 'fiscal':
+      return D.fiscalSource;
+    case 'directory':
+      return D.directorySource;
+    case 'interviewer':
+      return D.interviewerSource;
+    default:
+      return '';
+  }
+};
+
+export const personPlaceholder = {
+  title: 'MISTER',
+  firstName: '',
+  lastName: '',
+  email: '',
+  birthdate: '',
+  favoriteEmail: false,
+  privileged: true,
+  phoneNumbers: [],
+};
+
+export const getprivilegedPerson = surveyUnit => {
+  const { persons } = surveyUnit;
+  if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
+
+  const privilegedPerson = persons.find(p => p.privileged);
+  return privilegedPerson ? privilegedPerson : persons[0];
+};
