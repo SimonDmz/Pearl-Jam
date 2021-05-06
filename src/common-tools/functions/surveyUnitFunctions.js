@@ -379,6 +379,7 @@ export const personPlaceholder = {
 };
 
 export const getprivilegedPerson = surveyUnit => {
+  if (!surveyUnit) return personPlaceholder;
   const { persons } = surveyUnit;
   if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
 

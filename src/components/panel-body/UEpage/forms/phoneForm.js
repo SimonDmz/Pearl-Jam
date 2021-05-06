@@ -91,10 +91,9 @@ const Form = ({ closeModal, save, previousValue }) => {
       if (p.id !== previousValue.id) return p;
       return {
         ...p,
-        phoneNumbers: [...fiscalPhoneNumbers, ...directoryPhoneNumbers, ...interviewerPhoneNumbers],
+        phoneNumbers: [...fiscalPhones, ...directoryPhones, ...interviewerPhones],
       };
     });
-
     save({ ...surveyUnit, persons: newPersons });
   };
 
