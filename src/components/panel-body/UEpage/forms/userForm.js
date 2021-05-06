@@ -36,7 +36,7 @@ const Form = ({ closeModal, previousValue, save }) => {
         setFirstName(event.target.value);
         break;
       case 'title':
-        setTitle(event.target.value === getTitle('Mister') ? 'Miss' : 'Mister');
+        setTitle(event.target.value === getTitle('Mister') ? 'MISS' : 'MISTER');
         break;
       case 'age':
         setDateOfBirth(event.getTime());
