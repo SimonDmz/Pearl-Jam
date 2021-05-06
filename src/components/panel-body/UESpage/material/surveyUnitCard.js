@@ -8,7 +8,7 @@ import RadioButtonUncheckedSharpIcon from '@material-ui/icons/RadioButtonUncheck
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import { intervalInDays } from 'common-tools/functions';
 import { convertSUStateInToDo } from 'common-tools/functions/convertSUStateInToDo';
-import { isSelectable } from 'common-tools/functions/surveyUnitFunctions';
+import { getprivilegedPerson, isSelectable } from 'common-tools/functions/surveyUnitFunctions';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -85,8 +85,6 @@ const SurveyUnitCard = ({ surveyUnit }) => {
 
   const {
     id,
-    // firstName,
-    // lastName,
     address: { l6 },
     campaign,
     sampleIdentifiers: { ssech },
@@ -95,8 +93,9 @@ const SurveyUnitCard = ({ surveyUnit }) => {
     persons,
   } = surveyUnit;
 
-  const privilegedPerson = persons.find(p => p.privileged);
-  const { firstName, lastName } = privilegedPerson;
+  const privilegedPerson = getprivilegedPerson(surveyUnit);
+  // persons.find(p => p.privileged);
+  const { firstName, lastName } = privilegedPerson ? privilegedPerson : persons[0];
   const lastState = convertSUStateInToDo(states[states.length - 1].type).value;
   const nbJoursRestant = intervalInDays(surveyUnit);
 

@@ -210,11 +210,12 @@ export const applyFilters = (surveyUnits, filters) => {
       .toLowerCase();
 
   const filterBySearch = su => {
+    const { firstName, lastName } = getprivilegedPerson(su);
     if (searchFilter !== '') {
       const normalizedSearchFilter = normalize(searchFilter);
       return (
-        normalize(su.firstName).includes(normalizedSearchFilter) ||
-        normalize(su.lastName).includes(normalizedSearchFilter) ||
+        normalize(firstName).includes(normalizedSearchFilter) ||
+        normalize(lastName).includes(normalizedSearchFilter) ||
         su.id
           .toString()
           .toLowerCase()
@@ -289,8 +290,8 @@ export const getAddressData = su => {
   ];
 };
 
-export const getAgeGroup = dateOfBirth => {
-  const age = getAge(dateOfBirth);
+export const getAgeGroup = birthdate => {
+  const age = getAge(birthdate);
   if (age <= 25) return D.ageGroupOne;
   if (age <= 35) return D.ageGroupTwo;
   if (age <= 55) return D.ageGroupThree;
@@ -298,20 +299,21 @@ export const getAgeGroup = dateOfBirth => {
   return D.ageGroupFive;
 };
 
-export const getAge = dateOfBirth => {
-  return differenceInYears(new Date(), new Date(dateOfBirth));
+export const getAge = birthdate => {
+  if (birthdate === '') return ' ';
+  return differenceInYears(new Date(), new Date(birthdate));
 };
 
 export const getUserData = person => [
   { label: D.surveyUnitTitle, value: getTitle(person.title) },
   { label: D.surveyUnitLastName, value: person.lastName },
   { label: D.surveyUnitFirstName, value: person.firstName },
-  { label: D.surveyUnitAge, value: `${getAge(person.dateOfBirth)} ${D.years}` },
+  { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
 ];
 
-export const getPhoneData = su =>
+export const getPhoneData = person =>
   // su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
-  su.phoneNumbers;
+  person.phoneNumbers;
 
 export const sortPhoneNumbers = phoneNumbers => {
   let fiscalPhoneNumbers = [];
@@ -319,7 +321,7 @@ export const sortPhoneNumbers = phoneNumbers => {
   let interviewerPhoneNumbers = [];
 
   phoneNumbers.forEach(num => {
-    switch (num.source) {
+    switch (num.source.toLowerCase()) {
       case 'fiscal':
         fiscalPhoneNumbers = [...fiscalPhoneNumbers, num];
         break;
@@ -342,10 +344,10 @@ export const getMailData = person => [
 ];
 
 export const getTitle = title => {
-  switch (title) {
-    case 'Mister':
+  switch (title.toLowerCase()) {
+    case 'mister':
       return D.titleMister;
-    case 'Miss':
+    case 'miss':
       return D.titleMiss;
     default:
       return '';
@@ -353,7 +355,7 @@ export const getTitle = title => {
 };
 
 export const getPhoneSource = type => {
-  switch (type) {
+  switch (type.toLowerCase()) {
     case 'fiscal':
       return D.fiscalSource;
     case 'directory':
@@ -363,4 +365,23 @@ export const getPhoneSource = type => {
     default:
       return '';
   }
+};
+
+export const personPlaceholder = {
+  title: 'MISTER',
+  firstName: '',
+  lastName: '',
+  email: '',
+  birthdate: '',
+  favoriteEmail: false,
+  privileged: true,
+  phoneNumbers: [],
+};
+
+export const getprivilegedPerson = surveyUnit => {
+  const { persons } = surveyUnit;
+  if (!persons || !persons.length || persons.length === 0) return personPlaceholder;
+
+  const privilegedPerson = persons.find(p => p.privileged);
+  return privilegedPerson ? privilegedPerson : persons[0];
 };

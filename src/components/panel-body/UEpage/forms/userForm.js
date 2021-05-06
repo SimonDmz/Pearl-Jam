@@ -24,7 +24,7 @@ const Form = ({ closeModal, previousValue, save }) => {
 
   const [lastName, setLastName] = useState(previousValue.lastName);
   const [firstName, setFirstName] = useState(previousValue.firstName);
-  const [dateOfBirth, setDateOfBirth] = useState(previousValue.dateOfBirth);
+  const [dateOfBirth, setDateOfBirth] = useState(previousValue.birthdate);
   const [title, setTitle] = useState(previousValue.title);
 
   const onChange = type => event => {
