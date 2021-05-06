@@ -86,7 +86,16 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const saveUE = () => {
-    save({ ...surveyUnit, phoneNumbers: interviewerPhones });
+    // todo : map on surveyUnit.persons to update the previousValue person
+    const newPersons = surveyUnit.persons.map(p => {
+      if (p.id !== previousValue.id) return p;
+      return {
+        ...p,
+        phoneNumbers: [...fiscalPhoneNumbers, ...directoryPhoneNumbers, ...interviewerPhoneNumbers],
+      };
+    });
+
+    save({ ...surveyUnit, persons: newPersons });
   };
 
   const classes = useStyles();
