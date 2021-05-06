@@ -35,7 +35,7 @@ const PhoneList = ({
   deletePhoneNumber = () => {},
 }) => {
   const classes = useStyles();
-  const isEditable = editable && type === 'interviewer';
+  const isEditable = editable && type === 'INTERVIEWER';
   return (
     <div className={classes.root}>
       <Typography className={classes.center}>{getPhoneSource(type)}</Typography>

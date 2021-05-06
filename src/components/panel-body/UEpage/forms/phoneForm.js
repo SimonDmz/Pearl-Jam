@@ -37,7 +37,7 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const toggleFavoritePhoneNumber = phoneNumber => {
-    switch (phoneNumber.source) {
+    switch (phoneNumber.source.toLowerCase()) {
       case 'interviewer':
         const updatedInterviewerPhones = interviewerPhones.map(phNum => {
           if (phNum.number === phoneNumber.number) phNum.favorite = !phNum.favorite;
@@ -74,7 +74,7 @@ const Form = ({ closeModal, save, previousValue }) => {
     if (anyEmptyPhone()) return;
     setInterviewerPhones([
       ...interviewerPhones,
-      { source: 'interviewer', favorite: false, number: '' },
+      { source: 'INTERVIEWER', favorite: false, number: '' },
     ]);
   };
 
