@@ -48,13 +48,16 @@ export const getSortedContactAttempts = surveyUnit => {
   return contactAttempts;
 };
 
+export const areCaEqual = (ca, anotherCa) => {
+  if (!ca || !anotherCa) return false;
+  return ca.date === anotherCa.date && ca.status === anotherCa.status;
+};
+
 export const deleteContactAttempt = (surveyUnit, contactAttempt) => {
   const { contactAttempts } = surveyUnit;
-  const newCA = contactAttempts.filter(ca => ca !== contactAttempt);
-  surveyUnitDBService.update({ ...surveyUnit, newCA });
+  const newCA = contactAttempts.filter(ca => !areCaEqual(ca, contactAttempt));
+  surveyUnitDBService.update({ ...surveyUnit, contactAttempts: newCA });
 };
-export const areCaEqual = (ca, anotherCa) =>
-  ca.date === anotherCa.date && ca.status === anotherCa.status;
 
 export const getContactAttemptNumber = surveyUnit =>
   surveyUnit.states.filter(state => state.type === surveyUnitStateEnum.AT_LEAST_ONE_CONTACT.type)
