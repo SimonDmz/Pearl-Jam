@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Form = ({ closeModal, save, previousValue }) => {
-  //previousValue is the person in [persons]
+  // previousValue is the person in [persons]
   const surveyUnit = useContext(SurveyUnitContext);
   const { fiscalPhoneNumbers, directoryPhoneNumbers, interviewerPhoneNumbers } = sortPhoneNumbers(
     previousValue.phoneNumbers
@@ -86,7 +86,6 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const saveUE = () => {
-    // todo : map on surveyUnit.persons to update the previousValue person
     const newPersons = surveyUnit.persons.map(p => {
       if (p.id !== previousValue.id) return p;
       return {
@@ -102,7 +101,7 @@ const Form = ({ closeModal, save, previousValue }) => {
   return (
     <div className={classes.column}>
       <DialogTitle id="form-dialog-title">{D.surveyUnitPhoneChange}</DialogTitle>
-      <form onSubmit={save}>
+      <form>
         <PhoneTile
           phoneNumbers={[...interviewerPhones, ...fiscalPhoneNumbers, ...directoryPhoneNumbers]}
           editionMode

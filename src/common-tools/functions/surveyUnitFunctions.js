@@ -284,12 +284,12 @@ export const getAddressData = su => {
   const [postCode, cityName] = su.address.l6.split(' ');
 
   return [
-    { label: D.addressDeliveryPoint, value: su.address.l2 },
-    { label: D.addressAdditionalAddress, value: su.address.l3 },
-    { label: D.addressStreetName, value: su.address.l4 },
-    { label: D.addressLocality, value: su.address.l5 },
-    { label: D.addressPostcode, value: postCode },
-    { label: D.addressCity, value: cityName },
+    { label: D.addressDeliveryPoint, value: su.address.l2 || '' },
+    { label: D.addressAdditionalAddress, value: su.address.l3 || '' },
+    { label: D.addressStreetName, value: su.address.l4 || '' },
+    { label: D.addressLocality, value: su.address.l5 || '' },
+    { label: D.addressPostcode, value: postCode || '' },
+    { label: D.addressCity, value: cityName || '' },
   ];
 };
 
