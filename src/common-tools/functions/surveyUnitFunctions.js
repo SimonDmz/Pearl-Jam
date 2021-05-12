@@ -303,7 +303,7 @@ export const getAgeGroup = birthdate => {
 };
 
 export const getAge = birthdate => {
-  if (birthdate === '') return ' ';
+  if (birthdate === '' || !birthdate) return ' ';
   return differenceInYears(new Date(), new Date(birthdate));
 };
 
