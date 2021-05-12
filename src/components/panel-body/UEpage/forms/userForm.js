@@ -50,7 +50,8 @@ const Form = ({ closeModal, previousValue, save }) => {
     const { id } = previousValue;
     const { persons } = surveyUnit;
     const newPersons = persons.map(person => {
-      if (person.id === id) person = { ...person, lastName, firstName, title };
+      if (person.id === id)
+        person = { ...person, lastName, firstName, title, birthdate: dateOfBirth };
       return person;
     });
     save({ ...surveyUnit, persons: newPersons });
