@@ -69,7 +69,6 @@ const PhoneList = ({
             ) : (
               <Typography className={classes.label}>{phoneNumber.number}</Typography>
             )}
-            {/* <Typography className={classes.label}>{phoneNumber.number}</Typography> */}
           </div>
         );
       })}

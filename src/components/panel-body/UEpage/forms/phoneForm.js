@@ -86,6 +86,7 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const saveUE = () => {
+    console.log('save in phone form');
     const newPersons = surveyUnit.persons.map(p => {
       if (p.id !== previousValue.id) return p;
       return {
@@ -101,15 +102,13 @@ const Form = ({ closeModal, save, previousValue }) => {
   return (
     <div className={classes.column}>
       <DialogTitle id="form-dialog-title">{D.surveyUnitPhoneChange}</DialogTitle>
-      <form>
-        <PhoneTile
-          phoneNumbers={[...interviewerPhones, ...fiscalPhoneNumbers, ...directoryPhoneNumbers]}
-          editionMode
-          toggleFavoritePhone={number => toggleFavoritePhoneNumber(number)}
-          updatePhoneNumber={onChange}
-          deletePhoneNumber={deletePhoneNumber}
-        ></PhoneTile>
-      </form>
+      <PhoneTile
+        phoneNumbers={[...interviewerPhones, ...fiscalPhones, ...directoryPhones]}
+        editionMode
+        toggleFavoritePhone={number => toggleFavoritePhoneNumber(number)}
+        updatePhoneNumber={onChange}
+        deletePhoneNumber={deletePhoneNumber}
+      ></PhoneTile>
       <DialogActions>
         <Button type="button" onClick={addPhone}>
           {`+ ${D.addPhoneNumberButton}`}

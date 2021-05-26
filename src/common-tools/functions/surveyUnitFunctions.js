@@ -314,9 +314,7 @@ export const getUserData = person => [
   { label: D.surveyUnitAge, value: `${getAge(person.birthdate)} ${D.years}` },
 ];
 
-export const getPhoneData = person =>
-  // su.phoneNumbers.map(phoneNumber => ({ label: undefined, value: phoneNumber }));
-  person.phoneNumbers;
+export const getPhoneData = person => person.phoneNumbers;
 
 export const sortPhoneNumbers = phoneNumbers => {
   let fiscalPhoneNumbers = [];
@@ -324,15 +322,16 @@ export const sortPhoneNumbers = phoneNumbers => {
   let interviewerPhoneNumbers = [];
 
   phoneNumbers.forEach(num => {
+    const copiedNum = JSON.parse(JSON.stringify(num));
     switch (num.source.toLowerCase()) {
       case 'fiscal':
-        fiscalPhoneNumbers = [...fiscalPhoneNumbers, num];
+        fiscalPhoneNumbers = [...fiscalPhoneNumbers, copiedNum];
         break;
       case 'directory':
-        directoryPhoneNumbers = [...directoryPhoneNumbers, num];
+        directoryPhoneNumbers = [...directoryPhoneNumbers, copiedNum];
         break;
       case 'interviewer':
-        interviewerPhoneNumbers = [...interviewerPhoneNumbers, num];
+        interviewerPhoneNumbers = [...interviewerPhoneNumbers, copiedNum];
         break;
 
       default:
