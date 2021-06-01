@@ -9,7 +9,7 @@ import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-const InfoTile = () => {
+const InfoTile = ({ refresh }) => {
   const [surveyUnit, setSurveyUnit] = useState(undefined);
 
   const { id } = useParams();
@@ -18,7 +18,7 @@ const InfoTile = () => {
     surveyUnitDBService.getById(id).then(ue => {
       setSurveyUnit(ue);
     });
-  }, [id]);
+  }, [id, refresh]);
 
   const useStyles = makeStyles({
     root: { paddingRight: '3em' },

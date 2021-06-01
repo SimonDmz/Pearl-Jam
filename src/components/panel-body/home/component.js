@@ -10,6 +10,11 @@ import LateralMenu from '../lateralMenu';
 const Home = ({ location, match }) => {
   const [textSearch, setTextSearch] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [shouldRefresh, setShouldRefresh] = useState(false);
+
+  const refresh = () => {
+    setShouldRefresh(prev => !prev);
+  };
 
   return (
     <div>
@@ -19,10 +24,14 @@ const Home = ({ location, match }) => {
         setTextSearch={setTextSearch}
         setOpenDrawer={setOpenDrawer}
         version={version}
+        refresh={shouldRefresh}
       />
       <LateralMenu openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
 
-      <Route path="/survey-unit/:id" render={routeProps => <UEPage {...routeProps} />} />
+      <Route
+        path="/survey-unit/:id"
+        render={routeProps => <UEPage {...routeProps} refresh={refresh} />}
+      />
       <Route
         exact
         path={`${match.url}`}

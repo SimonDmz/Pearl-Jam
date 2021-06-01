@@ -13,7 +13,7 @@ import { NavLink, Route } from 'react-router-dom';
 import OnlineStatus from '../online-status';
 import SearchBar from '../search/component';
 
-const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawer }) => {
+const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawer, refresh }) => {
   const [disabled, setDisable] = useState(location.pathname.startsWith('/queen'));
 
   useEffect(() => {
@@ -104,7 +104,10 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
                 <SearchBar {...routeProps} textSearch={textSearch} setTextSearch={setTextSearch} />
               )}
             />
-            <Route path="/survey-unit/:id" render={routeProps => <InfoTile {...routeProps} />} />
+            <Route
+              path="/survey-unit/:id"
+              render={routeProps => <InfoTile {...routeProps} refresh={refresh} />}
+            />
           </div>
           <div className={classes.column}>
             <OnlineStatus />
@@ -121,10 +124,11 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
 export default Navigation;
 Navigation.propTypes = {
   location: PropTypes.shape({
-    pathname: PropTypes.shape({ startsWith: PropTypes.func.isRequired }).isRequired,
+    pathname: PropTypes.string.isRequired,
   }).isRequired,
   textSearch: PropTypes.string.isRequired,
   setTextSearch: PropTypes.func.isRequired,
   version: PropTypes.string.isRequired,
   setOpenDrawer: PropTypes.func.isRequired,
+  refresh: PropTypes.bool.isRequired,
 };
