@@ -21,6 +21,7 @@ const UEItem = ({ selectFormType, setInjectableData }) => {
               <Contact
                 person={person}
                 index={index + 1}
+                key={index + 1}
                 selectFormType={selectFormType}
                 setInjectableData={setInjectableData}
               />

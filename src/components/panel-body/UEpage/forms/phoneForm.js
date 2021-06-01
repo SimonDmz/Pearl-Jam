@@ -86,7 +86,6 @@ const Form = ({ closeModal, save, previousValue }) => {
   };
 
   const saveUE = () => {
-    console.log('save in phone form');
     const newPersons = surveyUnit.persons.map(p => {
       if (p.id !== previousValue.id) return p;
       return {
