@@ -161,7 +161,6 @@ export const addNewState = async (surveyUnit, stateType) => {
     case surveyUnitStateEnum.WAITING_FOR_SYNCHRONIZATION.type:
     case surveyUnitStateEnum.TO_BE_REVIEWED.type:
     case surveyUnitStateEnum.FINALIZED.type:
-    case surveyUnitStateEnum.QUESTIONNAIRE_NOT_AVAILABLE.type:
       // TODO : peut-être d'autres états  gérer ici
       if (CONTACT_RELATED_STATES.includes(stateType)) {
         newSu = await addContactState(newSu, newState);
@@ -196,7 +195,12 @@ export const updateStateWithDates = surveyUnit => {
   return result;
 };
 
-export const isQuestionnaireAvailable = su => getLastState(su).type !== 'QNA';
+export const isQuestionnaireAvailable = su => {
+  const { collectionEndDate, collectionStartDate } = su;
+  const now = new Date().getTime();
+
+  return now >= collectionStartDate && now <= collectionEndDate;
+};
 
 export const applyFilters = (surveyUnits, filters) => {
   const {
