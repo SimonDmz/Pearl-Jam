@@ -7,13 +7,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { PEARL_USER_KEY } from 'common-tools/constants';
 import Synchronize from 'components/common/synchronize';
 import InfoTile from 'components/panel-body/UEpage/infoTile';
+import D from 'i18n';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { NavLink, Route } from 'react-router-dom';
 import OnlineStatus from '../online-status';
 import SearchBar from '../search/component';
 
-const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawer, refresh }) => {
+const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refresh }) => {
   const [disabled, setDisable] = useState(location.pathname.startsWith('/queen'));
 
   useEffect(() => {
@@ -72,7 +73,7 @@ const Navigation = ({ location, textSearch, setTextSearch, version, setOpenDrawe
     <>
       <AppBar position="sticky" className={classes.appBar} elevation={0}>
         <Toolbar className={classes.appBar}>
-          <Tooltip title={`Version : ${version}`}>
+          <Tooltip title={D.goToHomePage}>
             <IconButton
               className={classes.noVisibleFocus}
               edge="start"
@@ -128,7 +129,7 @@ Navigation.propTypes = {
   }).isRequired,
   textSearch: PropTypes.string.isRequired,
   setTextSearch: PropTypes.func.isRequired,
-  version: PropTypes.string.isRequired,
+
   setOpenDrawer: PropTypes.func.isRequired,
   refresh: PropTypes.bool.isRequired,
 };

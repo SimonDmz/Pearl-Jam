@@ -23,10 +23,9 @@ const Home = ({ location, match }) => {
         textSearch={textSearch}
         setTextSearch={setTextSearch}
         setOpenDrawer={setOpenDrawer}
-        version={version}
         refresh={shouldRefresh}
       />
-      <LateralMenu openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+      <LateralMenu openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} version={version} />
 
       <Route
         path="/survey-unit/:id"
