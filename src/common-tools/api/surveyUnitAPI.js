@@ -1,11 +1,11 @@
 import Axios from 'axios';
 import { authentication, getHeader } from './utils';
 
-export const getSurveyUnits = (urlPearApi, authenticationMode) =>
+export const getSurveyUnits = (urlPearlApi, authenticationMode) =>
   new Promise((resolve, reject) => {
     authentication(authenticationMode)
       .then(() => {
-        Axios.get(`${urlPearApi}/api/survey-units`, {
+        Axios.get(`${urlPearlApi}/api/survey-units`, {
           headers: getHeader(authenticationMode),
         })
           .then(res => resolve(res))
@@ -18,11 +18,11 @@ export const getSurveyUnits = (urlPearApi, authenticationMode) =>
       });
   });
 
-export const getSurveyUnitById = (urlPearApi, authenticationMode) => id =>
+export const getSurveyUnitById = (urlPearlApi, authenticationMode) => id =>
   new Promise((resolve, reject) => {
     authentication(authenticationMode)
       .then(() => {
-        Axios.get(`${urlPearApi}/api/survey-unit/${id}`, {
+        Axios.get(`${urlPearlApi}/api/survey-unit/${id}`, {
           headers: getHeader(authenticationMode),
         })
           .then(res => resolve(res))
@@ -31,11 +31,11 @@ export const getSurveyUnitById = (urlPearApi, authenticationMode) => id =>
       .catch(e => reject(new Error(`Error during refreshToken : ${e.message}`)));
   });
 
-export const putDataSurveyUnitById = (urlPearApi, authenticationMode) => (id, su) =>
+export const putDataSurveyUnitById = (urlPearlApi, authenticationMode) => (id, su) =>
   new Promise((resolve, reject) => {
     authentication(authenticationMode)
       .then(() => {
-        Axios.put(`${urlPearApi}/api/survey-unit/${id}`, su, {
+        Axios.put(`${urlPearlApi}/api/survey-unit/${id}`, su, {
           headers: getHeader(authenticationMode),
         })
           .then(res => resolve(res))
