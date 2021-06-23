@@ -1,4 +1,5 @@
 import * as api from 'common-tools/api';
+import { getConfiguration } from 'common-tools/api/utils';
 import { getLastState } from 'common-tools/functions';
 import surveyUnitDBService from 'indexedbb/services/surveyUnit-idb-service';
 
@@ -28,13 +29,6 @@ export const synchronizeQueen = async history => {
   window.dispatchEvent(event);
 
   setTimeout(() => removeQueenEventListener(), 2000);
-};
-
-const getConfiguration = async () => {
-  const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-  const response = await fetch(`${publicUrl.origin}/configuration.json`);
-  const configuration = await response.json();
-  return configuration;
 };
 
 const sendData = async (urlPearlApi, authenticationMode) => {

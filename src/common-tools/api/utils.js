@@ -56,3 +56,10 @@ export const getIdep = () => {
   const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
   return interviewerFromLocalStorage ? JSON.parse(interviewerFromLocalStorage).id : '';
 };
+
+export const getConfiguration = async () => {
+  const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
+  const response = await fetch(`${publicUrl.origin}/configuration.json`);
+  const configuration = await response.json();
+  return configuration;
+};

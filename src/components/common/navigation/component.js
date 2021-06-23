@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
-import { PEARL_USER_KEY } from 'common-tools/constants';
+import { getName } from 'common-tools/api/utils';
 import Synchronize from 'components/common/synchronize';
 import InfoTile from 'components/panel-body/UEpage/infoTile';
 import D from 'i18n';
@@ -20,15 +20,6 @@ const Navigation = ({ location, textSearch, setTextSearch, setOpenDrawer, refres
   useEffect(() => {
     setDisable(location.pathname.startsWith('/queen'));
   }, [location]);
-
-  const getName = () => {
-    const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
-    return interviewerFromLocalStorage
-      ? `${JSON.parse(interviewerFromLocalStorage).firstName} ${
-          JSON.parse(interviewerFromLocalStorage).lastName
-        }`
-      : '';
-  };
 
   const useStyles = makeStyles(theme => ({
     appBar: {
