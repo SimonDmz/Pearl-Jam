@@ -42,3 +42,17 @@ export const getHeader = mode => {
       };
   }
 };
+
+export const getName = () => {
+  const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
+  return interviewerFromLocalStorage
+    ? `${JSON.parse(interviewerFromLocalStorage).firstName} ${
+        JSON.parse(interviewerFromLocalStorage).lastName
+      }`
+    : '';
+};
+
+export const getIdep = () => {
+  const interviewerFromLocalStorage = window.localStorage.getItem(PEARL_USER_KEY);
+  return interviewerFromLocalStorage ? JSON.parse(interviewerFromLocalStorage).id : '';
+};
